@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block icerik %}
+<center>
+    <div class="content-section">
+        <h1>
+            {{_('Sayfayı bulamadık')}}
+        </h1>
+        <br>
+        <img src="{{url_for('static', filename='/icons/kayip.gif')}}" style="max-width: 100%;">
+        
+        <p>
+            <br>
+            {{_('Sayfa bulunamadı, aradığınız gönderi silinmiş olabilir, ya da adresi yanlış girmiş olabilirsiniz')}}.
+        </p>
+    </div>
+</center>
+{% endblock icerik %}

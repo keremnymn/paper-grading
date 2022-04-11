@@ -1,0 +1,334 @@
+{% extends 'layout.html' %}
+{% block betikozel %}
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6" id="degistir">
+            <h1 class="text-center">{{ sinav.baslik }}</h1>
+            <a onclick="window.history.back()" type="button" id="geri" class="float-left"><- Geri Dön</a>
+            <div class="dp-body" style="margin-top:40px;">
+                <div class="row">
+                    <div class="col-2" id="sol">
+                        <img class="rounded-circle" id="pp" width="80px" height="80px" loading="lazy" src="{{ config['S3_BUCKET_NAME'] }}{{ sinav.sinavi_hazirlayan.image_file }}">
+                    </div>
+                    <div class="col">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                              </svg> {{ sinav.sinavi_hazirlayan.username }} hazırladı</li>
+                            <li class="list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-book" viewBox="0 0 16 16">
+                                <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                              </svg> {{ sinav.ders_adi.name }} Sınavı</li>
+                            <li class="list-group-item text-muted" style="font-size:14px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-bar-chart" viewBox="0 0 16 16">
+                                <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+                              </svg>{% for tag in sinav.tags %} {{ tag.name }}{{ '' if loop.last else ',' }} {% endfor %}</li>
+                            <li class="list-group-item text-muted" style="font-size:14px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-bookmarks" viewBox="0 0 16 16">
+                                <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z"/>
+                                <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z"/>
+                              </svg>{% for konu in sinav.konular %} {{ konu.name }}{{ '' if loop.last else ',' }} {% endfor %}</li>
+                            <li class="list-group-item text-muted" style="font-size:14px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upc" viewBox="0 0 16 16">
+                                <path d="M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-7zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7z"/>
+                              </svg> Sınav Kodu: {{ sinav.uuid }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <h5 class="text-center mb-3">Sınav açıklaması</h5>
+            <div class="dp-body">
+                {{ sinav.aciklama }}
+            </div>
+            <h5 class="text-center mb-3">Bu sınavı alkışlayın, indirin veya bir kopyasını oluşturun.</h5>
+            <div class="dp-body col" id="butonlar" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                <div type="button" onclick="func('alkis')" class="{% if not alkislanmis_mi %}votearrow{% else %}votearrow-alkislanmis{% endif %}" data-toggle="tooltip" data-placement="top" title="{{_('Alkışla')}}"> </div>
+                <h4 class="mr-3 mt-1" id="alkis_sayi" >{{ sinav.alkis_sayi }}</h4>
+                <div type="button" onclick="func('indir')" class="indir" data-toggle="tooltip" data-placement="top" title="İndir"></div>
+                <h4 class="mr-3 mt-1" id="indirme_sayi">{{ sinav.indirme_sayi }}</h4>
+                <div type="button" onclick="func('kopya')" class="duzenle" data-toggle="tooltip" data-placement="top" title="Bir Kopya Oluştur ve Düzenle"></div>
+                <h4 class="mr-3 mt-1" id="kopyalama_sayi">{{ sinav.kopyalama_sayi }}</h4>
+            </div>
+        </div>
+        <div class="col-6" id="sakla">
+            <div id="nav" class="row d-flex justify-content-center mb-1" style="width: 740px;">
+                <div type="button" id="prev"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill mb-1" viewBox="0 0 16 16">
+                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                  </svg></div>
+            
+                <span class="mb-2 mx-2">Sayfa: <span id="page_num"></span> / <span id="page_count"></span></span>
+
+                <div type="button" id="next"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill mb-1" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                  </svg></div>
+            </div>
+            <div id="wrapper">
+                <canvas id="pdf-example" class="dp-body" style="padding:0 !important; margin:0 !important;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="uyari" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="col-12 modal-title text-center" id="exampleModalLongTitle"><center>Kopyalanıyor</center></h5>
+        </div>
+        <div class="modal-body text-center">
+          <p>Lütfen bekleyin</p>
+          <div class="spinner-border text-info" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script>
+    function func (e) {
+        if (e == 'alkis') {
+            let alkis_button = document.getElementById('butonlar').childNodes[1]
+            let _alkis_sayi = document.getElementById('alkis_sayi').innerHTML
+            $.ajax({
+                url: "/sinav_puan",
+                data: {id: '{{ sinav.id }}', tip: e, user_id: '{{ current_user.id }}'},
+                dataType: "text",
+                type: 'POST',
+                success: function(data) {
+                    if (data == '+1') {
+                    toastr.options.timeOut = 1500; // 1.5s
+                    toastr.options = {
+                            "positionClass": "toast-bottom-right",
+                            "preventDuplicates": true
+                        }
+                            toastr.success('Bu sınavı alkışladınız.');
+                            alkis_button.style = 'background: url("/static/icons/clap-hands.svg")'
+                            document.getElementById('alkis_sayi').innerHTML = parseInt(_alkis_sayi) + 1
+                        }
+                    else if(data == '-1') {
+                        toastr.options.timeOut = 1500; // 1.5s
+                        toastr.options = {
+                                "positionClass": "toast-bottom-right",
+                                "preventDuplicates": true
+                            }
+                                toastr.info('Bu sınavı alkışlamaktan vazgeçtiniz.');
+                                alkis_button.style = 'background: url("/static/icons/clap.svg")'
+                                document.getElementById('alkis_sayi').innerHTML = parseInt(_alkis_sayi) - 1
+                    }
+                    }
+                }
+            )}
+        else if (e == 'indir'){
+            let indir_button = document.getElementById('butonlar').childNodes[3]
+            let _indir_sayi = document.getElementById('indirme_sayi').innerHTML
+            $.ajax({
+                url: "/sinav_puan",
+                data: {id: '{{ sinav.id }}', tip: e, user_id: '{{ current_user.id }}'},
+                dataType: "text",
+                type: 'POST',
+                success: function(data) {
+                    const link = document.createElement('a')
+                    link.href = data
+                    link.target = '_blank'
+                    link.click()
+                    document.getElementById('indirme_sayi').innerHTML = parseInt(_indir_sayi) + 1
+                    link.remove()
+                    }
+                })
+        }
+        else if(e == 'kopya') {
+            $('#uyari').modal('show')
+            $.ajax({
+                url: "/sinav_puan",
+                data: {id: '{{ sinav.id }}', tip: e, user_id: '{{ current_user.id }}'},
+                dataType: "text",
+                type: 'POST',
+                success: function(data) {
+                    window.location.href = data
+                    },
+                error: () => {
+                        setTimeout(() => {$('#uyari').modal('hide');}, 500)
+                        toastr.options = {
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": true
+                        }
+                        toastr.error('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
+                    }
+                })
+            }
+        }
+    
+    $(document).ready(function() {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    });
+    var url = '{{ url }}'
+    url = url + '?origin='+ window.location.host;
+
+    var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+    var pdfDoc = null,
+        pageNum = 1,
+        pageRendering = false,
+        pageNumPending = null,
+        scale = 3,
+        canvas = document.getElementById('pdf-example'),
+        ctx = canvas.getContext('2d');
+
+
+    function renderPage(num) {
+    pageRendering = true;
+
+    pdfDoc.getPage(num).then(function(page) {
+        var viewport = page.getViewport({scale: scale});
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        canvas.width = viewport.width;
+        //canvas.height = viewport.height;
+        canvas.style.width = "90%";
+        //canvas.style.height = "100%";
+        wrapper.style.width = '740px';
+        //wrapper.style.height = Math.floor(viewport.height/scale) + 'pt';
+
+        var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport
+        };
+        var renderTask = page.render(renderContext);
+
+        renderTask.promise.then(function() {
+        pageRendering = false;
+        if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
+        }
+        });
+    });
+
+    document.getElementById('page_num').textContent = num;
+    }
+
+
+    function queueRenderPage(num) {
+    if (pageRendering) {
+        pageNumPending = num;
+    } else {
+        renderPage(num);
+    }
+    }
+
+    /**
+     * show previous page
+     */
+    function onPrevPage() {
+    if (pageNum > 1) {
+        pageNum--;
+        queueRenderPage(pageNum);
+    }
+    }
+
+    document.getElementById('prev').addEventListener('click', onPrevPage);
+
+    /**
+     * show next page
+     */
+    function onNextPage() {
+    if (pageNum < pdfDoc.numPages) {
+        pageNum++;
+        queueRenderPage(pageNum);
+    }
+    }
+
+    document.getElementById('next').addEventListener('click', onNextPage);
+
+    /**
+     * PDF async "download".
+     */
+    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+    //Set loaded PDF to main pdfDoc variable
+    pdfDoc = pdfDoc_;
+
+    //Show number of pages in document
+    document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+    renderPage(pageNum);
+    });
+    var mq = window.matchMedia( "(max-width: 768px)" );
+    if (mq.matches) {
+        var degistir = document.getElementById('degistir')
+        degistir.removeAttribute('class')
+    }
+</script>
+
+<style>
+    .indir {
+        width:      30px;
+        height:     30px;
+        border:     0px;
+        margin:     3px 2px 6px;
+        margin-right: 10px;
+        background: url("/static/icons/cloud-computing.svg")
+        no-repeat;
+    }
+    .indir:hover {
+        background: url("/static/icons/cloud-computing-black.svg");
+    }
+
+    .duzenle {
+        width:      30px;
+        height:     30px;
+        border:     0px;
+        margin:     3px 2px 6px;
+        margin-right: 10px;
+        background: url("/static/icons/edit.svg")
+        no-repeat;
+    }
+    .duzenle:hover {
+        background: url("/static/icons/edit-black.svg");
+    }
+
+    #geri:hover {
+        color: blueviolet;
+        text-decoration: underline;
+    }
+    #sol {
+        align-self: center;
+        width: 100%;
+        text-align: center;
+        margin-left: 0px;
+    }
+    #sol.img {
+        margin: auto;
+    }
+
+    @media only screen and (max-width: 768px) {
+        #sakla {display:none;}
+        #sol.img {width: 20px; margin-left: 0;}
+        #pp {width: 50px !important; height: 50px !important;}
+    }
+    .votearrow {
+      width:      30px;
+      height:     30px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      margin-right: 10px;
+      background: url("/static/icons/clap.svg")
+      no-repeat;
+    }
+  
+    .votearrow-alkislanmis {
+      width:      30px;
+      height:     30px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      margin-right: 10px;
+      background: url("/static/icons/clap-hands.svg")
+      no-repeat;
+    }
+  
+    .votearrow:hover {
+      background: url("/static/icons/clap-hands.svg");
+    }
+</style>
+
+{% endblock betikozel %}

@@ -1,0 +1,128 @@
+{% extends 'layout.html' %}
+{% block betikozel %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js" integrity="sha256-bC3LCZCwKeehY6T4fFi9VfOU0gztUa+S4cnkIhVPZ5E=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jsler/rapor/base.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jsler/rapor/ogrenci.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.2/b-2.0.0/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.2/b-2.0.0/datatables.min.js"></script>
+
+<div id="content">
+    
+    {% include 'main/sidebar.html' %}
+    <div class="idocs-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-left-primary dp-body">
+                    <div class="card-body kucuk-card">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    {{_('Bu öğrenci')}}</div>
+                                {% if session['lang_code'] == 'tr' %}
+                                    <div class="h6 mb-0 font-weight-bold text-gray-800" id="puan">{{ ogrenci.toplam_puan }} puan aldı</div>
+                                {% else %}
+                                <div class="h6 mb-0 font-weight-bold text-gray-800" id="puan">got {{ ogrenci.toplam_puan }} points</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+                                    <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                                    </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-left-success dp-body">
+                    <div class="card-body kucuk-card">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div id="ders-adi" class="text-xs font-weight-bold text-success text-uppercase mb-1">{% if ogrenci.toplam_puan != ortalama %}{{_('Sınıf ortalamasından')}} {% else%} {{_('Ortalama ile')}} {% endif %}</div>
+                                <div class="h6 mb-0 font-weight-bold text-gray-800" ortalama="{{ ortalama }}" id="kagit-sayisi">{% if ogrenci.toplam_puan == ortalama %} {{_('Aynı puan')}} {% else %} {% set fark = ogrenci.toplam_puan - ortalama %}{% if fark < 0 %} {{ fark | replace('-', '') }} {{_('puan aşağıda')}} {% else %} {{ fark }} {{_('puan yukarıda')}} {% endif %}{% endif %}</div>
+                            </div>
+                            <div class="col-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-line" viewBox="0 0 16 16">
+                                    <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"/>
+                                    </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <a onclick="window.history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+                </svg> {{_('Geri Dön')}}</a>
+            <div class="row">
+                <svg xmlns="http://www.w3.org/2000/svg" id="editBtn" width="24" height="24" fill="currentColor" style="display:none;" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg>
+                <img src="{{ ogrenci.ad_soyad }}" loading=lazy>
+            </div>
+        </div>
+        <ul class="nav nav-tabs justify-content-center" style="margin-top: -20px;">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="sinif-tab" data-toggle="tab" href="#sinif" role="tab" aria-controls="sinif" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-list-ol" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z"/>
+                    <path d="M1.713 11.865v-.474H2c.217 0 .363-.137.363-.317 0-.185-.158-.31-.361-.31-.223 0-.367.152-.373.31h-.59c.016-.467.373-.787.986-.787.588-.002.954.291.957.703a.595.595 0 0 1-.492.594v.033a.615.615 0 0 1 .569.631c.003.533-.502.8-1.051.8-.656 0-1-.37-1.008-.794h.582c.008.178.186.306.422.309.254 0 .424-.145.422-.35-.002-.195-.155-.348-.414-.348h-.3zm-.004-4.699h-.604v-.035c0-.408.295-.844.958-.844.583 0 .96.326.96.756 0 .389-.257.617-.476.848l-.537.572v.03h1.054V9H1.143v-.395l.957-.99c.138-.142.293-.304.293-.508 0-.18-.147-.32-.342-.32a.33.33 0 0 0-.342.338v.041zM2.564 5h-.635V2.924h-.031l-.598.42v-.567l.629-.443h.635V5z"/>
+                  </svg> {{_('Detaylı Sonuç')}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link{% if not sinav.kazanim_analizi %} disabled {% endif %}" id="kazanim-tab" data-toggle="tab" href="#kazanim" role="tab" aria-controls="kazanim" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-pie-chart" viewBox="0 0 16 16">
+                    <path d="M7.5 1.018a7 7 0 0 0-4.79 11.566L7.5 7.793V1.018zm1 0V7.5h6.482A7.001 7.001 0 0 0 8.5 1.018zM14.982 8.5H8.207l-4.79 4.79A7 7 0 0 0 14.982 8.5zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+                  </svg> {{_('Kazanım Analizleri')}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="rapor-tab" data-toggle="tab" href="#rapor" role="tab" aria-controls="rapor" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-file-bar-graph" viewBox="0 0 16 16">
+                    <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z"/>
+                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                  </svg> {{_('Rapor Çıktısı')}}</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="sinif" role="tabpanel" aria-labelledby="sinif-tab">
+                <div class="row">
+                    <div class="col dp-body cell-border compact" style="overflow-x: auto; width:100%">
+                        <table id="data" class="table">
+                            <thead>
+                                <tr>
+                                    <th>{{_('Soru')}}</th>
+                                    <th>{{_('Soru Tipi')}}</th>
+                                    <th>{{_('Soru Değeri')}}</th>
+                                    <th>{{_('Beklenen Cevaplar')}}</th>
+                                    <th>{{_('Öğrenci Cevapları')}}</th>
+                                    <th>{{_('Sonuç')}}</th>
+                                    <th>{{_('Önizleme')}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade d-flex justify-content-center" id="kazanim" role="tabpanel" aria-labelledby="kazanim-tab">
+                <div class="col dp-body" id="canvas-div">
+                    <h4>{{_('En çok doğru yanıt verilen kazanımlar')}}</h4>
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="rapor" role="tabpanel" aria-labelledby="rapor-tab">
+                <div class="col dp-body text-center" id="rapor-div">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<style>
+     .bgcheck {
+        width: 16px;
+        height: 16px;
+    }
+</style>
+{% endblock betikozel %}

@@ -1,0 +1,2633 @@
+{% extends 'layout.html' %}
+{% block betikozel %}
+<!-- static'te değiştirilecek -->
+<script src="{{ url_for('static', filename='jsler/editor.js') }}"></script>
+<script src="{{ url_for('static', filename='jsler/sinav_olustur_utils.js') }}" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/tr.min.js"></script>
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/lang/summernote-tr-TR.js" defer></script>
+<script src="https://www.wiris.net/demo/hand/hand.js" defer></script>
+<link href="{{ url_for('static', filename='cssler/sinav_olusturma.css') }}" rel="stylesheet">
+
+{% if kilavuz_onay %}
+    {% include 'kredi/_kilavuz_onay.html' %}
+{% endif %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6" id="degistir">
+            <center><h1>{{_('Sınav Oluşturma')}}</h1></center>
+            <ul class="breadcrumb justify-content-center">
+                <li><a href="/">Paper Grading</a></li>
+                <li><a href="{{_('/pg/sinavlar')}}">{{_('Sınavlar')}}</a></li>
+                <!-- <li><a href="#">Summer 15</a></li> hazırladıklarım gelebilir -->
+                <li>{% if sinav %} {{ sinav.baslik }} {% else %} {{_('Yeni Sınav')}} {% endif %}</li>
+            </ul>
+            <div id="editorjs">
+                <div id="editorContainer"></div>
+                <form method="POST">
+                    <div class="form-group dp-body">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="hidden" id="kademelerDataHidden" value ="">
+                        <input type="hidden" id="logo-secimi" value={% if sinav %} {{sinav.logo_id}} {% else %}''{% endif %}>
+                        {% if not sinav %}
+                        <label for="sinavbasligi">{{_('Bu sınava özgü bir başlık girin')}} <small class="text-muted font-weight-light font-italic">({{_('Zorunlu')}})</small></label>
+                        <input class="form-control" id="sinavbasligi" type="text" placeholder="{{_('Sınav Başlığı')}}">
+                        <label for="kademeler" style="margin-top: 5px;">{{_('Sınıf')}} <small class="text-muted font-weight-light font-italic">({{_('Zorunlu')}})</small></label>
+                        <select id="kademeler" style="width: 100%;"></select>
+                        <label for="autocomplete" style="margin-top: 5px;">{{_('Ders seçiniz')}} <small class="text-muted font-weight-light font-italic">({{_('Zorunlu')}})</small></label>
+                        <select id="autocomplete" class="mb-2" style="width: 100%;"></select>
+                        <label for="tags" id="tags_label" style="margin-top: 5px;">{{_('Konu etiketleyiniz')}} <small class="text-muted font-weight-light font-italic">({{_('Zorunlu')}})</small></label>
+                        <select id="tags" class="mb-2" style="width: 100%;"></select>
+                        {% endif %}
+                        {% if sinav %}<p class="text-center text-muted" style="margin-bottom: -10px; margin-top: -5px;">{{_('Sınav Kodu')}}: {{ sinav.uuid }}</p><hr/>{% endif %}
+                        <label for="ust_yazi" class="my-2">{{_('Üst bilgi')}}</label>
+                        <input class="form-control" id="ust_yazi" type="text" placeholder="{{_('Ör. 2021-2022 Fizik Yazılısı')}}" {% if sinav and sinav.ust_yazi != '' and sinav.ust_yazi != None %} value='{{ sinav.ust_yazi }}' {% endif %}>
+                        <small id="characterLeft" class="form-text text-muted"></small>
+                        <label for="alt_yazi" class="my-2">{{_('Alt bilgi')}}</label>
+                        <input class="form-control" id="alt_yazi" type="text" placeholder="{{_('Ör.')}} {% if current_user.ders_adi %} {{ current_user.ders_adi.name }} {% else %} ______ {% endif %}{{_('Öğretmeni')}} {{ current_user.username }}" {% if sinav and sinav.ust_yazi != '' and sinav.ust_yazi != None %} value='{{ sinav.alt_yazi }}' {% endif %}>
+                        <small id="characterLeft2" class="form-text text-muted"></small>
+                        <div class="input-group mt-3">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-info" data-toggle="modal" data-target="#logoModal" type="button" id="button-addon1">{{_('Logo Seç')}}</button>
+                            </div>
+                            <input type="text" class="form-control" id="logo-secilen-ph" readonly placeholder="{{_('Seçilen Logo')}}: {% if sinav and sinav.logo != None %} {{ sinav.logo.okul_ad }} {%else %}{{_('Yok')}}{% endif %}" aria-describedby="basic-addon1">
+                          </div>
+                        <div class="collapse" id="collapseExample" aria-expanded="false">
+                            {% if sinav %}
+                            <label for="kademeler" style="margin-top: 5px;">{{_('Sınıf')}}</label>
+                            <select id="kademeler" style="width: 100%;"></select>
+                            <label for="autocomplete" style="margin-top: 5px;">{{_('Ders')}}</label>
+                            <select id="autocomplete" class="mb-2" style="width: 100%;"></select>
+                            <label for="tags" id="tags_label" style="margin-top: 5px;">{{_('Konular')}}</label>
+                            <select id="tags" class="mb-2" style="width: 100%;"></select>
+                            {% endif %}
+                            <p class="mt-3">{{_('Sayfa düzeni')}}:</p>
+                            <div class="cc-selector-2">
+                                <input type="hidden" id="sayfa-duzeni-hidden" {% if sinav %} value="{{ sinav.sayfa_duzeni }}" {% else %} value = "cift-sutun" {% endif %}>
+                                <input {% if sinav and sinav.sayfa_duzeni == 'tek-sutun' %} checked="checked" {% endif %} id="tek-sutun" onchange="sayfaDuzeni(this)" type="radio" name="sayfa-duzeni" value="" />
+                                <label class="sutun tek" for="tek-sutun"></label>
+                                <input {% if sinav and sinav.sayfa_duzeni == 'cift-sutun' %} checked="checked" {% endif %} onchange="sayfaDuzeni(this)" id="cift-sutun" type="radio" name="sayfa-duzeni" value="" />
+                                <label class="sutun cift"for="cift-sutun"></label>
+                            </div>
+                            {% if sinav %}
+                                <label class="mt-4" for="sinavbasligi">{{_('Sınavın adını değiştirin')}}</label>
+                                <div style="display:flex; flex-direction: row; justify-content: left;">
+                                    <input class="form-control" type="text" style="float: right; width: 100%;" id="sinavbasligi" value="{{ sinav.baslik }}" aria-label="Disabled input example" disabled>
+                                    <a href="#" type="button" role="button" class="btn btn-info">{{_('Değiştir')}}</a>
+                                </div>
+                            {% endif %}
+                                <div class="mt-4 custom-control custom-switch" id="customswitchdiv" style="padding-block: 10px; margin-bottom: -10px;">
+                                    <input type="checkbox" value="false" class="custom-control-input" id="customSwitch1">
+                                    <label class="custom-control-label" for="customSwitch1">{{_('Bu sınavı herkes görebilir')}}</label>
+                                    <p><small class="text-muted font-italic"><label for="customSwitch1">{{_('Diğer öğretmenlerin de bu sınavı görebilmesini istiyorsanız bu seçeneği işaretleyin')}}.</label></small></p>
+                                </div>
+                            {% if sinav %}
+                                <button type="button" onclick="sil_modal()" class="mt-4 btn btn-danger btn-block"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg> {{_('Bu sınavı sil')}}</button>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a role="button" id="ayarlar" class="mt-4 d-flex justify-content-between collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <p>{{_('Ayarlar')}}</p><div class="hr-line"><hr></div></a>
+                        </div>
+                    </div>
+                    <p id="asagi"> + {{_('Soru ekle')}}</p>
+                </form>
+            </div>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    {{_('Sınav Oluşturma platformu hâlâ geliştirme aşamasındadır.
+                    Fark ettiğiniz hataları lütfen ekran 
+                    görüntüsü alarak e-posta atınız') | safe}}.
+                </small>
+            </div>
+        </div>
+        <div class="col-6" id="sakla">
+            <div id="pdf-sutun">
+                <button class="btn btn-info" style="width: 600px; margin-bottom: 0.5rem;" id="save-button" onclick="disableButton()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+                  </svg> {{_("Güncelle")}}</button>
+                {% if url %}
+                    <object id="pdfgoster" data="https://docs.google.com/gview?url={{ url }}&embedded=true" style="width:600px; height:600px;" type="application/pdf" frameborder="0"></object>
+                {% else %}
+                    <object id="pdfgoster" data='https://docs.google.com/gview?url={{ url_for("static", filename="fpdf/sample_en.pdf") }}&embedded=true' style="width:600px; height:600px;" type="application/pdf" frameborder="0"></object>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Modal -->
+    <div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{_('Logo Seç')}}</h5>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+                <div class="col" id="logo-hazir-sec">
+                    <label for="logo-sec">{{_('önceden yüklediklerinizden seçin')}}</label>
+                    <select id="logo-sec" style="width: 100%;"></select>
+                </div>
+                <div class="col text-center" id="logo-file-col">
+                    <label id="logo-file-label" for="logo-file">{{_('ya da yeni logo yükleyin')}} <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                      </svg></label>
+                    <input type="file" id="logo-file" hidden>
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer" id="logo-modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">{{_('Vazgeç')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg></button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="sil_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{_('Sınavı Sil')}}</h5>
+            </div>
+            <div class="modal-body">
+            {{_('Bu sınavı silmek istiyor musunuz? Bu işlem geri alınamaz')}}.
+            </div>
+            <div class="modal-footer">
+            <button type="button" id="sil" class="btn btn-secondary" onclick="sinav_sil(this)">{{_('Evet, sınavı sil')}}. </button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">{{_('Vazgeç')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg></button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- MathType Modal -->
+    <div class="modal fade modal-lg" id="m_type_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">{{_('Matematik / Kimya Formülü Ekle')}}</h5>
+            </div>
+            <div class="modal-body" style="width:100%;height:300px">
+            </div>
+            <div class="modal-footer">
+            <button type="button" id="sil" class="btn btn-secondary" onclick="" disabled>{{_('Ekle')}} </button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">{{_('Vazgeç')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg></button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+        <!-- MathType Modal Şıklar İçin -->
+        <div class="modal fade" id="m_type_modal_siklar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{_('Matematik / Kimya Formülü Ekle')}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" style="width:100%;;height:300px">
+                </div>
+                <div class="modal-footer">
+                <div class="dropdown">
+                    <a id="vazgec" class="btn btn-primary" type="button" style="color:white;" data-content="{{_('Şıkları temizle')}}." rel="popover" data-placement="bottom" data-trigger="hover">{{_('Tümünü sil')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                      </svg></a>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="siklar_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                       {{_('Şuna Ekle')}}
+                    </button>
+                        <div class="dropdown-menu" aria-labelledby="siklar_dropdown">
+                            <a class="dropdown-item" type="button">{{_('A Şıkkına')}}</a>
+                            <a class="dropdown-item" type="button">{{_('B Şıkkına')}}</a>
+                            <a class="dropdown-item" type="button">{{_('C Şıkkına')}}</a>
+                            <a class="dropdown-item" type="button">{{_('D Şıkkına')}}</a>
+                            <a class="dropdown-item" type="button">{{_('E Şıkkına')}}</a>
+                        </div>
+                    </div>
+                  <button type="button" id="kaydet" class="btn btn-info" disabled>{{_('Tümünü Kaydet')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                  </svg></button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- Boş Modal Kazanımlar İçin -->
+        <div class="modal fade bd-example-modal-lg" id="bosModal" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="bosModalBaslik"></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div id="bosModalIcerik" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bosModalKapat">{{_('Kaydet')}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    {% if session['lang_code'] == 'en' %}
+        <style>
+            .tek{background-image:url('/static/icons/tek-sutun_en.webp');}
+            .cift{background-image:url('/static/icons/cift-sutun_en.webp');}
+        </style>
+    {% else %}
+        <style>
+            .tek{background-image:url('/static/icons/tek-sutun.webp');}
+            .cift{background-image:url('/static/icons/cift-sutun.webp');}
+        </style>
+    {% endif %}
+<script defer>
+
+let guncelleBtn = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg>'
+switch (document.documentElement.lang) {
+    case 'tr':
+        guncelleBtn += ' Güncelle'
+        break;
+    case 'en':
+        guncelleBtn += ' Update'
+        break;
+}
+
+$("#customSwitch1").change(function(){
+    this.value = this.checked
+    if (this.value == 'true') {
+        let aciklama_div = document.createElement('div')
+        aciklama_div.className = 'form-group'
+        aciklama_div.id = 'anaaciklamadiv'
+        let aciklama = document.createElement('textarea')
+        let aciklama_label = document.createElement('label')
+        let aciklama_uyari = document.createElement('small')
+        aciklama_uyari.className = 'text-muted'
+        aciklama_uyari.id = 'anaaciklamauyari'
+        aciklama_uyari.style = 'display:none;'
+        aciklama.id = 'anaaciklama'
+        aciklama_label.htmlFor = 'anaaciklama'
+        switch(document.documentElement.lang) {
+            case 'tr':
+                aciklama_label.innerHTML = 'Açıklama <small class="text-muted">(Zorunlu)</small>'
+                aciklama.placeholder = 'Diğer öğretmenler için bir açıklama giriniz.'
+                break;
+            case 'en':
+                aciklama_label.innerHTML = 'Comment <small class="text-muted">(Required)</small>'
+                aciklama.placeholder = 'Please add a comment for other teachers to understand.'
+                break;
+        }
+        aciklama.className = 'form-control'
+        {% if sinav %} aciklama.value = '{{ sinav.aciklama }}' {% endif %}
+        aciklama_div.appendChild(aciklama_label)
+        aciklama_div.appendChild(aciklama)
+        aciklama_div.appendChild(aciklama_uyari)
+        document.getElementById('customswitchdiv').appendChild(aciklama_div)
+        const uyari1 = {'tr': 'Daha fazla yazamazsınız', 'en': "You can't write anymore."}
+        const uyari2 = {'tr': 'karakter kaldı', 'en': 'characters left'}
+        aciklama.addEventListener("input", event => {
+            const target = event.currentTarget;
+            const maxLength = 120;
+            const currentLength = target.value.length;
+            let gonder_dugme = document.getElementById('save-button');
+            if (currentLength < 10) {
+                $('#anaaciklama').attr('class', 'form-control is-invalid')
+                gonder_dugme.setAttribute('disabled', '');
+            }
+            else if (currentLength >= maxLength) {
+                $('#anaaciklama').attr('class', 'form-control is-invalid')
+                gonder_dugme.setAttribute('disabled', '');
+                return $('#anaaciklamauyari').html(uyari1[document.documentElement.lang]);
+            }
+            else if (currentLength <= maxLength && currentLength > 10){
+                gonder_dugme.removeAttribute('disabled');
+                $('#anaaciklama').attr('class', 'form-control is-valid')
+            }
+            $('#anaaciklamauyari').attr('style', 'display:block;')
+            $('#anaaciklamauyari').html(`${maxLength - currentLength} ${uyari2[document.documentElement.lang]}`);
+        });
+
+        aciklama.addEventListener("focusout", event => {
+            $('#anaaciklamauyari').attr('style', 'display:none;')
+        })
+
+    }
+    else {
+        document.getElementById('anaaciklamadiv').remove()
+    }
+});
+
+var dersler = {{ dersler | safe }}
+
+var select = document.getElementById("autocomplete"); 
+var options = dersler; 
+var konular = {{ konular | safe }}
+
+for(var i = 0; i < options.length; i++) {
+    var opt = options[i];
+    select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+}
+
+$('#tags').select2({
+    multiple:true,
+    maximumSelectionLength: 4,
+    language: "tr"
+});
+
+$('#autocomplete').val(null);
+$('#autocomplete').trigger('change');
+
+$('#autocomplete').on("change", function () {
+    
+    let secilen = $('#autocomplete').val()
+    let konular_label = document.getElementById('tags_label');
+    let konular_input = document.getElementById("tags");
+    
+    if (! secilen.trim()) {
+        //pass
+    }
+    else if (konular[secilen].length == 0) {
+        if ($('#tags').data('select2')) {
+            $("#tags").select2('destroy');
+        }
+        konular_input.value = ''
+        $('#tags_label').attr('style', 'display:none;')
+        $('#tags').attr('style', 'display:none;')
+    }
+    else {
+        konular_input.innerHTML = ''
+        konular[secilen].sort();
+        for(var i = 0; i < konular[secilen].length; i++) {
+            var opt = konular[secilen][i];
+            konular_input.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+        }
+        if (konular_input.hasAttribute('bekle')) {
+            konular_input.removeAttribute('bekle')
+            $('#tags').val({{ bu_sinav_konular | safe }})
+        }
+        konular_label.style = 'margin-top:5px;display:inline-block;'
+        konular_input.style = 'display:inline-block;width:100%;'
+        $('#tags').select2({
+            multiple:true,
+            maximumSelectionLength: 4,
+            language: "tr"
+        });
+    }
+})
+
+function kazanimlariAl(istek) {
+    let kazanim_sayilar = document.getElementsByClassName('kazanim-sayi')
+    $.ajax({
+        url:'/kazanimlari_al',
+        type:'post',
+        data:istek,
+        success:function(data) {
+            _kazanimlar = data
+            for (i=0; i<kazanim_sayilar.length; i++) {
+                kazanim_sayilar[i].innerText = kazanim_sayilar[i].previousSibling.value.split(',').filter(i => i).length + ' {{_("kazanımla ilişkili")}}'
+            }
+        },
+        error: function() {
+            for (i=0; i<kazanim_sayilar.length; i++) {
+                kazanim_sayilar[i].innerText = '{{_("Bu ders için kazanım bulunamadı")}}'
+            }
+            _kazanimlar = false;
+        }
+        })
+    }
+
+var kademeler = {{ kademeler | safe }}
+
+var select2 = document.getElementById("kademeler"); 
+
+for(var i = 0; i < kademeler.length; i++) {
+    var opt = kademeler[i];
+    select2.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+}
+
+$('#kademeler').select2({
+    multiple:true,
+    maximumSelectionLength: 4,
+    language: "tr"
+});
+$('#kademeler').val(null);
+$('#kademeler').trigger('change');
+$('#kademeler').on('change', () => {
+    if ($('#kademeler').val().length != 0 && $('#autocomplete').val() != null){
+        let sinif = $('#kademeler').val()
+        let ders = $('#autocomplete').val()
+        data = {'sinif': sinif, 'ders': ders}
+        kazanimlariAl(data)
+    }
+})
+
+var kademelerData = document.getElementById('kademelerDataHidden')
+
+$('#kademeler').on('change.select2', function (e) {
+    var kademeler = $(this).select2("data");
+    var kademelerArray = []
+    for (i=0; i < kademeler.length; i++) {
+        var newItem = kademeler[i].text;
+        kademelerArray.push(newItem)
+        }
+    kademelerData.value = kademelerArray
+});
+
+$('#autocomplete').select2({
+    multiple:false,
+    language: "tr",
+    
+});
+
+{% if sinav %}
+let bu_sinav_kademeler = {{ bu_sinav_kademeler | safe }}
+kazanimlariAl({'sinif':bu_sinav_kademeler,'ders':'{{ sinav.ders_adi.name }}'})
+$("#kademeler").val(bu_sinav_kademeler);
+$("#kademeler").trigger('change');
+
+$("#tags").val(null);
+$("#tags").attr('bekle', '')
+$("#tags").trigger('change');
+
+function sil_modal(){
+    $('#sil_modal').modal('show');
+}
+$("#sinavbasligi").attr('value', '{{ sinav.baslik }}')
+$('#autocomplete').val('{{ sinav.ders_adi.name }}');
+$('#autocomplete').trigger('change')
+
+    {% if sinav.ozel_mi %}
+    $("#customSwitch1").prop("checked", false);
+    {% else %}
+    $("#customSwitch1").val('true')
+    $("#customSwitch1").prop("checked", true);
+    $("#customSwitch1").trigger('change')
+    {% endif %}
+{% endif %}
+$('#autocomplete').on('change', () => {
+    if ($('#kademeler').val().length != 0 && $('#autocomplete').val() != null){
+        let sinif = $('#kademeler').val()
+        let ders = $('#autocomplete').val()
+        data = {'sinif': sinif, 'ders': ders}
+        kazanimlariAl(data)
+    }
+})
+function parseQuery(str)
+    {
+    if(typeof str != "string" || str.length == 0) return {};
+    var s = str.split("&");
+    var s_length = s.length;
+    var bit, query = {}, first, second;
+    for(var i = 0; i < s_length; i++)
+        {
+        bit = s[i].split("=");
+        first = decodeURIComponent(bit[0]);
+        if(first.length == 0) continue;
+        second = decodeURIComponent(bit[1]);
+        if(typeof query[first] == "undefined") query[first] = second;
+        else if(query[first] instanceof Array) query[first].push(second);
+        else query[first] = [query[first], second]; 
+        }
+    return query;
+    }
+function disableButton(){
+    gonder_dugme = document.getElementById("save-button")
+    gonder_dugme.disabled = true;
+    setTimeout(function(){
+            gonder_dugme = document.getElementById("save-button")
+            if (! gonder_dugme.hasAttribute('bekleniyor')) {
+                    gonder_dugme.disabled = false;
+                    gonder_dugme.removeAttribute('bekleniyor')
+                }
+            },
+        5000);
+    }
+
+class CoktanSecmeli {
+constructor({ api, data }){
+    this.api = api
+    this.data = data
+}
+static get toolbox() {
+    return {
+    title: '{{_("Çoktan Seçmeli")}}',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-task" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/><path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/><path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"/></svg>'
+    };
+}
+
+render(){
+    var myform = document.createElement('form');
+    myform.setAttribute('class', 'mt-3 dp-body')
+    myform.id = 'CoktanSecmeliForm' + this.api.blocks.getCurrentBlockIndex()
+
+    var kazanim_idler = document.createElement('input')
+    kazanim_idler.type = 'hidden'
+    kazanim_idler.value = ''
+    kazanim_idler.name = 'kazanim_idler'
+
+    var cs_baslik = document.createElement('h6')
+    cs_baslik.textContent = '{{_("Çoktan Seçmeli Sorusu")}}'
+    
+    var kazanimlar = document.createElement('p')
+    if (! _kazanimlar == false) {
+        kazanimlar.textContent = kazanim_idler.value.split(',').filter(i => i).length + ' {{_("kazanımla ilişkili")}}'
+    }
+    else {
+        kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+    }
+    kazanimlar.className = 'kazanim-sayi text-muted'
+    kazanimlar.type = 'button'
+    kazanimlar.style = 'cursor:pointer;font-size:small;font-style: italic;float:right;'
+    kazanimlar.onclick = () => {
+        const bosModal = document.getElementById('bosModal')
+        const bosModalBaslik = document.getElementById('bosModalBaslik')
+        const bosModalIcerik = document.getElementById('bosModalIcerik')
+            if (_kazanimlar == false) {
+                //pass
+            }
+            else if ($('#autocomplete').val() == null) {
+                toastr.options.timeOut = 1500;
+                toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+                toastr.error('{{_("Lütfen en az bir ders seçiniz")}}.');
+                document.getElementById('autocomplete').focus()
+            }
+            else if($('#kademeler').val().length == 0) {
+                toastr.options.timeOut = 1500;
+                toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+                toastr.error('{{_("Lütfen bir sınıf seçiniz")}}.');
+                document.getElementById('kademeler').focus()
+            }
+            else{
+                let dummy_div = document.createElement('div')
+                dummy_div.className = 'form-group'
+                let kazanim_aciklama = document.createElement('p')
+                switch(document.documentElement.lang) {
+                    case 'tr':
+                        kazanim_aciklama.innerHTML = '<p><b>Hatırlatma: </b>Kazanımları girdikten sonra <b>Güncelle düğmesine tıklayınız,</b> aksi takdirde kazanımlar kaydedilmez.</p>'
+                        break;
+                    case 'en':
+                        kazanim_aciklama.innerHTML = "<p><b>Reminder: </b>After entering learning objectives, <b> click Update button</b> or else learning objectives won't be saved.</p>"
+                        break;
+                }
+                dummy_div.appendChild(kazanim_aciklama)
+                let kazanim_sec = document.createElement('select')
+                kazanim_sec.id = 'kazanim_sec' + Math.floor(Math.random() * 100);
+                kazanim_sec.style = 'width: 100%'
+                dummy_div.appendChild(kazanim_sec)
+                for(i = 0; i < _kazanimlar.length; i++) {
+                    kazanim_sec.innerHTML += "<option value=\"" + _kazanimlar[i]['id'] + "\">" + _kazanimlar[i]['name'] + "</option>";
+                }
+
+                $(kazanim_sec).select2({
+                        multiple:true,
+                        maximumSelectionLength: 3,
+                        language: "tr",
+                    });
+
+                if (kazanim_idler.value == '') {
+                    $(kazanim_sec).val(null)
+                    $(kazanim_sec).trigger('change');
+                }
+                else {
+                    let idler = kazanim_idler.value.split(',').filter(i => i)
+                    $(kazanim_sec).val(idler);
+                    $(kazanim_sec).trigger('change');
+                }
+                bosModalBaslik.innerText = '{{_("Kazanım Ekleyin")}}'
+                bosModalIcerik.innerHTML = ''
+                bosModalIcerik.appendChild(dummy_div)
+                $(bosModal).modal('show')
+                $(bosModal).on('hidden.bs.modal', function (e) {
+                    let idler = $(kazanim_sec).val()
+                    kazanim_idler.value = idler.join()
+                    kazanimlar.textContent = idler.length + ' {{_("kazanımla ilişkili")}}'
+                })
+            }
+    }
+
+    myform.appendChild(kazanim_idler)
+    myform.appendChild(kazanimlar)
+    myform.appendChild(cs_baslik)
+
+    var mydiv = document.createElement('div')
+    mydiv.className = 'form-group'
+    
+    myform.appendChild(mydiv);
+    
+    var mydiv0 = document.createElement('div')
+    mydiv0.className = 'form-group'
+    
+    myform.appendChild(mydiv0);
+
+    var soru_label = document.createElement('p')
+    soru_label.innerHTML = '{{_("Soru Gövdesi (Zorunlu)")}}'
+    soru_label.className = 'text-muted mt-3'
+
+    mydiv0.appendChild(soru_label);
+
+    var soru = document.createElement('TEXTAREA')
+    soru.className = 'form-control'
+    soru.rows = '2'
+    soru.name = 'Soru'
+    soru.label = '{{_("Soru Tümcesi")}}'
+    soru.placeholder = '{{_("Soru Tümcesi (Zorunlu)")}}'
+
+    mydiv0.appendChild(soru);
+
+    if (typeof this.data['input'] !== 'undefined'){
+        var obj = parseQuery(this.data['input'])
+        soru.value = obj['Soru']
+    }
+    var HelloButton = function (context) {
+        var ui = $.summernote.ui;
+
+        // create button
+        var button = ui.button({
+                contents: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16"><path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/><path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-2zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-4z"/></svg>',
+                tooltip: 'Formül',
+                click: function () {
+                    var baslik = document.getElementById('sinavbasligi');
+                    if (!baslik.value.trim()){
+                            saveButton.innerHTML = guncelleBtn
+                            toastr.options.timeOut = 1500; // 1.5s
+                                    toastr.options = {
+                                    "positionClass": "toast-bottom-right",
+                                    "preventDuplicates": true
+                                    }
+                                    toastr.error('{{_("Lütfen bir başlık giriniz")}}.');
+                            baslik.focus()
+                        }
+                        else if (baslik.value.length > 100){
+                            saveButton.innerHTML = guncelleBtn
+                            toastr.options.timeOut = 1500; // 1.5s
+                                    toastr.options = {
+                                    "positionClass": "toast-bottom-right",
+                                    "preventDuplicates": true
+                                    }
+                                    toastr.error('{{_("Başlık 100 karakterden fazla olamaz")}}.');
+                        }
+                        else {
+                            var m_type_modal = document.getElementById('m_type_modal')
+                            $(m_type_modal).modal('show')
+
+                            var m_type_body = m_type_modal.childNodes[1].children[0].childNodes[3]
+                            var ekle_dugmesi = m_type_body.parentNode.children[2].querySelector('#sil')
+                            ekle_dugmesi.setAttribute('disabled', '')
+                            var hand;
+                            
+                            hand = com.wiris.js.JsHand.newInstance();
+                            hand.insertInto(m_type_body);
+                    
+                            hand.addHandListener({
+                                contentChanged: function (instance) {
+                                    ekle_dugmesi.removeAttribute('disabled')
+                                },
+                                recognitionError: function (instance, msg) {
+                                    toastr.options.timeOut = 1500; // 1.5s
+                                    toastr.options = {
+                                        "positionClass": "toast-bottom-right",
+                                        "preventDuplicates": true
+                                    }
+                                    toastr.error("{{_('Formül tanımlanamadı')}}.");
+                                    ekle_dugmesi.setAttribute('disabled', '')
+                                },
+                                strokesChanged: function(instance) {}
+                            });
+                            ekle_dugmesi.onclick = async function () {
+                                        var d = new Date();
+                                        var isim = 'matematik' + d.getTime();
+                                        var im = m_type_body.querySelector('.wrs_previewImage').src;
+
+                                        if (! im.includes('https://www.wiris.net/demo/hand/resources/decoration/loading.gif')) {
+
+                                        let blob = await fetch(im)
+                                        .then(r => r.blob())
+                                        .then(blobFile => new File([blobFile], isim, { type: "image/png" }));
+
+                                        var fd = new FormData();fd.append('fname', isim);
+                                        fd.append('file', blob);
+                                        {% if sinav %} 
+                                            {fd.append('sinav', '{{ sinav.id }}')}; 
+                                        {% endif %}
+                                        {fd.append('baslik', baslik.value)};
+                                        $.ajax(
+                                            {
+                                                url:'/sinav_gorsel_yukle',
+                                                type:'post',
+                                                data:fd,
+                                                processData: false, 
+                                                contentType: false, 
+                                                success:function(data) {
+                                                    context.invoke('editor.insertImage', data);
+                                                    $(m_type_modal).modal('hide')}
+                                                })
+                                            }
+                                        }
+                                        }
+                                    }
+                                });
+                                    return button.render();   // return button as jquery object
+                                }
+    function deleteFile(src) {
+              $.ajax({
+                  data: {src : src, id: '{{ current_user.id }}'},
+                  type: "POST",
+                  url: "/mt_sil",
+                  cache: false,
+                  success: function(resp) {
+                    toastr.options.timeOut = 1500; // 1.5s
+                    toastr.options = {
+                    "positionClass": "toast-bottom-right",
+                    "preventDuplicates": true
+                    }
+                    toastr.success('{{_("Görsel silindi")}}.');
+                  }
+              });
+              }
+    $(soru).summernote({
+            disableDragAndDrop: true,
+            shortcuts: false,
+            buttons: {
+                hello: HelloButton
+            },
+            toolbar: [
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['superscript', 'subscript']],
+                        ['mybutton', ['hello']]
+                    ],
+            popover: {
+            image: [
+                ['remove', ['removeMedia']]
+            ]},
+            callbacks: {
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    document.execCommand('insertText', false, bufferText);
+                },
+                onImageUpload: function (data) {
+                        data.pop();},
+                onMediaDelete : function(target) {
+                    deleteFile(target[0].src);
+        }
+            },
+            height: 30,
+            lang: "{{ session['lang_code'] }}"
+    })
+
+    var dene_div = document.createElement('div')
+    dene_div.className = 'custom-control custom-switch d-flex flex-row-reverse mb-2'
+
+    myform.appendChild(dene_div)
+
+
+    var onizlemeler = document.createElement('div')
+    onizlemeler.className = 'preview'
+    onizlemeler.style = 'display:none;'
+
+    myform.appendChild(onizlemeler)
+
+    var onizleme1 = document.createElement('img')
+    onizleme1.src = ''
+    onizleme1.name = 'Önizleme 1'
+    onizleme1.className = '_onizleme'
+    onizleme1.id = 'img_onizleme1'
+    onizleme1.width = '70'
+    onizleme1.height = '70'
+    onizleme1.style = 'display:inline-block;'
+
+    onizlemeler.appendChild(onizleme1)
+
+    var onizleme2 = document.createElement('img')
+    onizleme2.src = ''
+    onizleme2.name = 'Önizleme 2'
+    onizleme2.className = '_onizleme'
+    onizleme2.id = 'img_onizleme2'
+    onizleme2.width = '70'
+    onizleme2.height = '70'
+    onizleme2.style = 'display:inline-block;'
+
+    onizlemeler.appendChild(onizleme2)
+
+    var onizleme3 = document.createElement('img')
+    onizleme3.src = ''
+    onizleme3.name = 'Önizleme 3'
+    onizleme3.className = '_onizleme'
+    onizleme3.id = 'img_onizleme3'
+    onizleme3.width = '70'
+    onizleme3.height = '70'
+    onizleme3.style = 'display:inline-block;'
+
+    onizlemeler.appendChild(onizleme3)
+
+    var onizleme4 = document.createElement('img')
+    onizleme4.src = ''
+    onizleme4.name = 'Önizleme 4'
+    onizleme4.className = '_onizleme'
+    onizleme4.id = 'img_onizleme4'
+    onizleme4.width = '70'
+    onizleme4.height = '70'
+    onizleme4.style = 'display:inline-block;'
+
+    onizlemeler.appendChild(onizleme4)
+
+    var onizleme5 = document.createElement('img')
+    onizleme5.src = ''
+    onizleme5.name = 'Önizleme 5'
+    onizleme5.className = '_onizleme'
+    onizleme5.id = 'img_onizleme5'
+    onizleme5.width = '70'
+    onizleme5.height = '70'
+    onizleme5.style = 'display:inline-block;'
+
+    onizlemeler.appendChild(onizleme5)
+
+    var butonlar_row = document.createElement('div')
+    butonlar_row.className = 'mt-2 d-flex justify-content-between'
+
+    myform.appendChild(butonlar_row)
+
+    var resimler_label = document.createElement('label');
+    resimler_label.className = 'btn btn-info resimler-label'
+    resimler_label.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z"/></svg> {{_("Görsel Yükleyin")}}'
+    resimler_label.style = 'display:none;'
+    
+    butonlar_row.appendChild(resimler_label)
+
+    var resimler_input = document.createElement('input');
+    resimler_input.type = 'file'
+    resimler_input.multiple = true
+    resimler_input.name = 'dosyalar'
+    resimler_input.accept = 'image/jpg, image/jpeg, image/png,'
+    resimler_input.style = 'display:none;'
+    resimler_input.onchange = function () {
+                            if (this.files.length > 5 || this.files.length < 4) {
+                                toastr.options.timeOut=3000;
+                                toastr.options={"positionClass":"toast-bottom-right","preventDuplicates":true};
+                                toastr.error("{{_('Lütfen 4 veya 5 görsel yükleyiniz')}}.")} 
+                            else {
+                                var d = new Date(); 
+                                var baslik = document.getElementById('sinavbasligi');
+                                var fd=new FormData();
+                                var dosyalar=this.files;
+                                var boyut = 0; 
+                                for (i = 0; i < dosyalar.length; i++){
+                                    boyut += dosyalar[i].size};
+                                    if(dosyalar.length>0&&boyut<8388605.6)
+                                        {for (i = 0; i < dosyalar.length; i++) 
+                                            {fd.append('files',dosyalar[i]);}
+                                        {% if sinav %} 
+                                        {fd.append('sinav', '{{ sinav.id }}')}; 
+                                        {% endif %}{fd.append('baslik', baslik.value)};
+                                        $.ajax({
+                                            url:'/cs_gorsel_yukle',
+                                            type:'post',data:fd,
+                                            contentType:false,
+                                            processData:false,
+                                            success:function(response){
+                                                if(response.status!=404 || response.status != 500){
+                                                    var siklar = [a_hidden, b_hidden, c_hidden, d_hidden, e_hidden];
+                                                    var onizlemeler = [onizleme1, onizleme2, onizleme3, onizleme4, onizleme5];
+                                                    for (i = 0; i < response.length; i++) {
+                                                        gorseller[i] = response[i]; 
+                                                        onizlemeler[i].src = response[i];
+                                                        siklar[i].value = response[i]}; 
+                                                        if (response.length == 4) {
+                                                            var e = '{{config["S3_BUCKET_NAME"]}}pdfs/e.png'; 
+                                                            gorseller[gorseller.length - 1] = e; onizlemeler[onizlemeler.length - 1].src = e; 
+                                                            siklar[siklar.length - 1].value = e;} 
+                                                        } 
+                                                    toastr.options.timeOut=3000;
+                                                    toastr.options={"positionClass":"toast-bottom-right","preventDuplicates":true};
+                                                    toastr.success('{{_("Görseller yüklendi")}}.')
+                                                    }, 
+                                            error: function(response){
+                                                if (response.status == 500) {
+                                                    toastr.options.timeOut=1500;
+                                                    toastr.options={"positionClass":"toast-bottom-right","preventDuplicates":true};
+                                                    toastr.error("{{_('Lütfen bir başlık giriniz')}}.")
+                                                    baslik.focus()
+                                                }
+                                                else{
+                                                    alert('{{_("Dosya yüklenemedi")}}.')
+                                                }}
+                                            })
+                                    }else if(dosyalar.size>8388605.6){
+                                        toastr.options.timeOut=1500;
+                                        toastr.options={"positionClass":"toast-bottom-right","preventDuplicates":true};
+                                        toastr.error("{{_('Her bir dosya maksimum 1.5 MB olabilir')}}.")}
+                            }}
+
+    resimler_label.appendChild(resimler_input)
+
+    var formul_label = document.createElement('label');
+    formul_label.className = 'btn btn-info resimler-label'
+    formul_label.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16"><path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/><path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-2zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-4z"/></svg> {{_("Formül Yükleyin")}}'
+    formul_label.style = 'display:none;'
+    formul_label.onclick = function() {
+        var m_type_modal = document.getElementById('m_type_modal_siklar')
+        $(m_type_modal).modal('show')
+
+        var m_type_body = m_type_modal.childNodes[1].children[0].childNodes[3]
+        var ekle_dugmesi = m_type_body.parentNode.children[2].querySelector('#siklar_dropdown')
+        var kaydet_dugmesi = m_type_body.parentNode.children[2].querySelector('#kaydet')
+        var vazgec_dugmesi = m_type_body.parentNode.children[2].querySelector('#vazgec')
+        kaydet_dugmesi.setAttribute('disabled', '')
+
+        kaydet_dugmesi.onclick = function () {
+            $(m_type_modal).modal('hide')
+        }
+
+        $(vazgec_dugmesi).popover();
+
+        var _siklar = ekle_dugmesi.nextSibling.nextSibling.children
+        var baslik = document.getElementById('sinavbasligi');
+        var siklar = [a_hidden, b_hidden, c_hidden, d_hidden, e_hidden];
+        var onizlemeler = [onizleme1, onizleme2, onizleme3, onizleme4, onizleme5];
+        var say = 0;
+        let orijinaller = ['{{config["S3_BUCKET_NAME"]}}pdfs/a.png', '{{config["S3_BUCKET_NAME"]}}pdfs/b.png', '{{config["S3_BUCKET_NAME"]}}pdfs/c.png', '{{config["S3_BUCKET_NAME"]}}pdfs/d.png', '{{config["S3_BUCKET_NAME"]}}pdfs/e.png']
+        
+        vazgec_dugmesi.onclick = function () {
+            for (i=0; i < orijinaller.length; i++) {
+                gorseller[i] = orijinaller[i];
+                siklar[i] = orijinaller[i];
+                onizlemeler[i].src = orijinaller[i];
+            }
+            $(m_type_modal).modal('hide')
+        }
+
+        function siklarFormulGonder(sik) {
+            sik.onclick = async function () {
+                if (sayi >= 4) {
+                    kaydet_dugmesi.removeAttribute('disabled')
+                }
+                var idx = Array.from(_siklar).indexOf(sik)
+                var d = new Date();
+                var isim = 'matematik' + d.getTime();
+                var im = m_type_body.querySelector('.wrs_previewImage').src;
+
+                if (! im.includes('https://www.wiris.net/demo/hand/resources/decoration/loading.gif')) {
+                
+                    let blob = await fetch(im)
+                    .then(r => r.blob())
+                    .then(blobFile => new File([blobFile], isim, { type: "image/png" }));
+
+                    var fd = new FormData();fd.append('fname', isim);
+                    fd.append('file', blob);
+                    {% if sinav %} 
+                        {fd.append('sinav', '{{ sinav.id }}')}; 
+                    {% endif %}
+                    {fd.append('baslik', baslik.value)};
+                    $.ajax({
+                            url:'/sinav_gorsel_yukle',
+                            type:'post',
+                            data:fd,
+                            processData: false, 
+                            contentType: false, 
+                            success:function(data) {
+                                im = 'https://www.wiris.net/demo/hand/resources/decoration/loading.gif'
+                                m_type_body.childNodes[0].children[1].childNodes[2].click()
+                                sayi += 1
+                                gorseller[idx] = data;
+                                siklar[idx] = data;
+                                onizlemeler[idx].src = data;
+                                toastr.options.timeOut = 1500; // 1.5s
+                                toastr.options = {
+                                    "positionClass": "toast-bottom-right",
+                                    "preventDuplicates": true
+                                }
+                                toastr.success(sik.innerText + " {{_('eklendi')}}.");
+                            }
+                        })
+                    }
+                }
+            }
+        Array.from(_siklar).forEach(siklarFormulGonder)
+        
+        var hand;
+        
+        hand = com.wiris.js.JsHand.newInstance();
+        hand.insertInto(m_type_body);
+
+        hand.addHandListener({
+            contentChanged: function (instance) {
+                ekle_dugmesi.removeAttribute('disabled')
+            },
+            recognitionError: function (instance, msg) {
+                toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                    "positionClass": "toast-bottom-right",
+                    "preventDuplicates": true
+                }
+                toastr.error("{{_('Formül tanımlanamadı')}}.");
+                ekle_dugmesi.setAttribute('disabled', '')
+            },
+            strokesChanged: function(instance) {}
+        });
+        }
+
+    // var formul_input = document.createElement('input')
+    
+    butonlar_row.appendChild(formul_label)
+
+    var gorseller = ['{{config["S3_BUCKET_NAME"]}}pdfs/a.png', '{{config["S3_BUCKET_NAME"]}}pdfs/b.png', '{{config["S3_BUCKET_NAME"]}}pdfs/c.png', '{{config["S3_BUCKET_NAME"]}}pdfs/d.png', '{{config["S3_BUCKET_NAME"]}}pdfs/e.png']
+    var siklar_depo = []
+    var sayi = 0
+
+    var cs_duzeni_div = document.createElement('div')
+    cs_duzeni_div.style = 'display:none;'
+
+    myform.appendChild(cs_duzeni_div)
+
+    var ilk_a = document.createElement('a')
+    ilk_a.setAttribute('role', 'button')
+    ilk_a.setAttribute('data-toggle', 'collapse')
+    ilk_a.setAttribute('aria-expanded', 'false')
+    ilk_a.setAttribute('aria-controls', 'cs_duzeni_alan' + sayi + '-' + this.api.blocks.getCurrentBlockIndex())
+    ilk_a.id = 'ayarlar'
+    ilk_a.style = 'text-decoration:none;'
+    ilk_a.className = 'mt-4 d-flex justify-content-between collapsed'
+    ilk_a.href = '#' + 'cs_duzeni_alan' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+    
+    cs_duzeni_div.appendChild(ilk_a)
+
+    var ilk_a_innerhtml = document.createElement('p')
+    ilk_a_innerhtml.innerHTML = '{{_("Şık Düzeni")}}'
+
+    ilk_a.appendChild(ilk_a_innerhtml)
+
+    var line_div = document.createElement('div')
+    line_div.className = 'hr-line'
+
+    ilk_a.appendChild(line_div)
+
+    var hr = document.createElement('hr')
+
+    line_div.appendChild(hr)
+
+    var cs_duzeni_alan= document.createElement('div')
+    cs_duzeni_alan.setAttribute('aria-expanded', 'false')
+    cs_duzeni_alan.className = 'collapse show'
+    cs_duzeni_alan.id = 'cs_duzeni_alan' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+    
+    cs_duzeni_div.appendChild(cs_duzeni_alan)
+
+    var cs_duzen_selector = document.createElement('div')
+    cs_duzen_selector.className = 'cc-selector-2 d-flex justify-content-between'
+
+    cs_duzeni_alan.appendChild(cs_duzen_selector)
+    
+    var cs_duzen_1 = document.createElement('input')
+    cs_duzen_1.type = 'radio'
+    cs_duzen_1.value = '1'
+    cs_duzen_1.name = 'duzen-secim'
+    cs_duzen_1.setAttribute('checked', 'checked')
+    cs_duzen_1.onchange = function() {var degistir = [cs_duzen_1, cs_duzen_2, cs_duzen_3]; for (let [index, val] of degistir.entries()) {val.value = this.id.split("_")[2][0]} }
+    cs_duzen_1.id = 'cs_duzen_1' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_1)
+
+    var cs_duzen_1_label = document.createElement('label')
+    cs_duzen_1_label.className = '_sutun'
+    cs_duzen_1_label.style = 'background-image: url({{ url_for("static", filename="icons/cs_duzen_1.webp") }})'
+    cs_duzen_1_label.htmlFor = 'cs_duzen_1' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_1_label)
+
+    var cs_duzen_2 = document.createElement('input')
+    cs_duzen_2.type = 'radio'
+    cs_duzen_2.value = '1'
+    cs_duzen_2.name = 'duzen-secim'
+    cs_duzen_2.onchange = function() {var degistir = [cs_duzen_1, cs_duzen_2, cs_duzen_3]; for (let [index, val] of degistir.entries()) {val.value = this.id.split("_")[2][0]} }
+    cs_duzen_2.id = 'cs_duzen_2' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_2)
+
+    var cs_duzen_2_label = document.createElement('label')
+    cs_duzen_2_label.className = '_sutun'
+    cs_duzen_2_label.style = 'background-image: url({{ url_for("static", filename="icons/cs_duzen_2.webp") }})'
+    cs_duzen_2_label.htmlFor = 'cs_duzen_2' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_2_label)
+
+    var cs_duzen_3 = document.createElement('input')
+    cs_duzen_3.type = 'radio'
+    cs_duzen_3.value = '1'
+    cs_duzen_3.name = 'duzen-secim'
+    cs_duzen_3.onchange = function() {var degistir = [cs_duzen_1, cs_duzen_2, cs_duzen_3]; for (let [index, val] of degistir.entries()) {val.value = this.id.split("_")[2][0]} }
+    cs_duzen_3.id = 'cs_duzen_3' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_3)
+
+    var cs_duzen_3_label = document.createElement('label')
+    cs_duzen_3_label.className = '_sutun'
+    cs_duzen_3_label.style = 'background-image: url({{ url_for("static", filename="icons/cs_duzen_3.webp") }})'
+    cs_duzen_3_label.htmlFor = 'cs_duzen_3' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_3_label)
+
+    var cs_duzen_4 = document.createElement('input')
+    cs_duzen_4.type = 'radio'
+    cs_duzen_4.value = '1'
+    cs_duzen_4.name = 'duzen-secim'
+    cs_duzen_4.onchange = function() {var degistir = [cs_duzen_1, cs_duzen_2, cs_duzen_4]; for (let [index, val] of degistir.entries()) {val.value = this.id.split("_")[2][0]} }
+    cs_duzen_4.id = 'cs_duzen_4' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_4)
+
+    var cs_duzen_4_label = document.createElement('label')
+    cs_duzen_4_label.className = '_sutun'
+    cs_duzen_4_label.style = 'background-image: url({{ url_for("static", filename="icons/cs_duzen_4.webp") }})'
+    cs_duzen_4_label.htmlFor = 'cs_duzen_4' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    cs_duzen_selector.appendChild(cs_duzen_4_label)
+
+    var tanim_stil = 'display:inline-block;top:50%;-webkit-transform: translateY(50%);-ms-transform: translateY(50%);transform: translateY(50%);'
+
+    var cs_switch = document.createElement('input')
+    cs_switch.type = 'checkbox'
+    cs_switch.value = 'false'
+    cs_switch.className = 'custom-control-input'
+    cs_switch.name = 'GorselliMi'
+    cs_switch.id = 'cs_switch_switch' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+    cs_switch.onclick = function(e) {
+            var baslik = document.getElementById('sinavbasligi');
+            if (!baslik.value.trim()){
+                e.preventDefault()
+                    toastr.options.timeOut = 1500; // 1.5s
+                            toastr.options = {
+                            "positionClass": "toast-bottom-right",
+                            "preventDuplicates": true
+                            }
+                            toastr.error('{{_("Lütfen bir başlık giriniz")}}.');
+                    baslik.focus()
+                }
+                else if (baslik.value.length > 100){
+                    e.preventDefault()
+                    toastr.options.timeOut = 1500; // 1.5s
+                            toastr.options = {
+                            "positionClass": "toast-bottom-right",
+                            "preventDuplicates": true
+                            }
+                            toastr.error('{{_("Başlık 100 karakterden fazla olamaz")}}.');
+                }
+                else {
+                    //devam
+                }
+    }
+    cs_switch.onchange = function () {
+                            this.value = this.checked; 
+                            var siklar = [a_sikki, b_sikki, c_sikki, d_sikki, e_sikki]; 
+                            var tanimlar = [a_tanim, b_tanim, c_tanim, d_tanim, e_tanim];
+                            var divs = [mydiv2, mydiv3, mydiv4, mydiv5, mydiv6];
+                            if (this.value == 'true') {
+                                resimler_label.style = 'display:inline-block;';
+                                formul_label.style = 'display:inline-block;'
+                                cs_duzeni_div.style = 'display:inline;';
+                                onizlemeler.className = 'd-flex justify-content-between preview'; 
+                                function varsayilanGorsel(item, index){
+                                    onizlemeler.children[index].src = item
+                                };
+                                gorseller.forEach(varsayilanGorsel); 
+                                for (i = 0; i < siklar.length; i++) {
+                                    divs[i].style = 'border:none;display:none;';
+                                    tanimlar[i].style = 'display:none;';
+                                    siklar[i].nextSibling.style = 'display:none;';
+                                    siklar_depo[i] = siklar[i].value;
+                                    siklar[i].value = gorseller[i] 
+                                } 
+                            } 
+                            else {
+                                for (i = 0; i < siklar.length; i++) {
+                                    tanimlar[i].style = tanim_stil;
+                                    tanimlar[tanimlar.length - 1].style = tanim_stil + 'margin-right: 8px';
+                                    siklar[i].nextSibling.style = 'display:inline-block'; 
+                                    siklar[i].value = siklar_depo[i]; 
+                                    divs[i].style = 'border:dashed;border-color: #95c8d841;'}; 
+                                    onizlemeler.className = 'preview';
+                                    onizlemeler.style = 'display:none;'; 
+                                    cs_duzeni_div.style = 'display:none;'; 
+                                    resimler_label.style = 'display:none;',
+                                    formul_label.style = 'display:none;'
+                                }
+                        }
+
+
+    dene_div.appendChild(cs_switch)
+
+    var cs_switch_label = document.createElement('label')
+    cs_switch_label.className = 'custom-control-label'
+    cs_switch_label.innerHTML = '{{_("Diğer seçenekler")}}'
+    cs_switch_label.htmlFor = 'cs_switch_switch' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+
+    dene_div.appendChild(cs_switch_label)
+
+    var hidden_div = document.createElement('div')
+    var a_hidden = document.createElement('input')
+    a_hidden.type = 'hidden'
+    a_hidden.className = 'hidden-sik'
+    a_hidden.name = 'A Şıkkı'
+    
+    var b_hidden = document.createElement('input')
+    b_hidden.type = 'hidden'
+    b_hidden.className = 'hidden-sik'
+    b_hidden.name = 'B Şıkkı'
+
+    var c_hidden = document.createElement('input')
+    c_hidden.type = 'hidden'
+    c_hidden.className = 'hidden-sik'
+    c_hidden.name = 'C Şıkkı'
+
+    var d_hidden = document.createElement('input')
+    d_hidden.type = 'hidden'
+    d_hidden.className = 'hidden-sik'
+    d_hidden.name = 'D Şıkkı'
+
+    var e_hidden = document.createElement('input')
+    e_hidden.type = 'hidden'
+    e_hidden.className = 'hidden-sik'
+    e_hidden.name = 'E Şıkkı'
+
+    hidden_div.append(a_hidden, b_hidden, c_hidden, d_hidden, e_hidden)
+    myform.appendChild(hidden_div)
+
+    var mydiv2 = document.createElement('div')
+    mydiv2.className = 'mydiv d-flex justify-content-between mt-2'
+    
+    myform.appendChild(mydiv2);
+
+    var a_tanim = document.createElement('p')
+    a_tanim.innerText = 'A)*'
+    a_tanim.className = 'text-muted'
+    a_tanim.style = 'display:inline-block;top:50%;-webkit-transform: translateY(50%);-ms-transform: translateY(50%);transform: translateY(50%);'
+
+    mydiv2.appendChild(a_tanim)
+
+    var a_sikki = document.createElement('div')
+    a_sikki.className = 'form-control sik'
+    a_sikki.style = 'diplay:inline-block'
+    a_sikki.contentEditable = true
+
+    mydiv2.appendChild(a_sikki);
+
+    var mydiv3 = document.createElement('div')
+    mydiv3.className = 'mydiv d-flex justify-content-between mt-2'
+    
+    myform.appendChild(mydiv3);
+
+    var b_tanim = document.createElement('p')
+    b_tanim.innerText = 'B)*'
+    b_tanim.className = 'text-muted'
+    b_tanim.style = 'display:inline-block;top:50%;-webkit-transform: translateY(50%);-ms-transform: translateY(50%);transform: translateY(50%);'
+
+    mydiv3.appendChild(b_tanim)
+
+    var b_sikki = document.createElement('div')
+    b_sikki.className = 'form-control sik'
+    b_sikki.style = 'diplay:inline-block'
+    b_sikki.contentEditable = true
+
+    mydiv3.appendChild(b_sikki);
+
+    var mydiv4 = document.createElement('div')
+    mydiv4.className = 'mydiv d-flex justify-content-between mt-2'
+    
+    myform.appendChild(mydiv4);
+
+    var c_tanim = document.createElement('p')
+    c_tanim.innerText = 'C)*'
+    c_tanim.className = 'text-muted'
+    c_tanim.style = 'display:inline-block;top:50%;-webkit-transform: translateY(50%);-ms-transform: translateY(50%);transform: translateY(50%);'
+
+    mydiv4.appendChild(c_tanim)
+
+    var c_sikki = document.createElement('div')
+    c_sikki.className = 'form-control sik'
+    c_sikki.style = 'diplay:inline-block'
+    c_sikki.contentEditable = true
+
+    mydiv4.appendChild(c_sikki);
+
+    var mydiv5 = document.createElement('div')
+    mydiv5.className = 'mydiv d-flex justify-content-between mt-2'
+    
+    myform.appendChild(mydiv5);
+
+    var d_tanim = document.createElement('p')
+    d_tanim.innerText = 'D)*'
+    d_tanim.className = 'text-muted'
+    d_tanim.style = 'display:inline-block;top:50%;-webkit-transform: translateY(50%);-ms-transform: translateY(50%);transform: translateY(50%);'
+    
+    mydiv5.appendChild(d_tanim)
+
+    var d_sikki = document.createElement('div')
+    d_sikki.className = 'form-control sik'
+    d_sikki.style = 'diplay:inline-block'
+    d_sikki.contentEditable = true
+
+    mydiv5.appendChild(d_sikki);
+    
+    var mydiv6 = document.createElement('div')
+    mydiv6.className = 'mydiv d-flex justify-content-between mt-2'
+    
+    myform.appendChild(mydiv6);
+
+    var e_tanim = document.createElement('p')
+    e_tanim.innerText = 'E)'
+    e_tanim.className = 'text-muted'
+    e_tanim.style = 'margin-right:8px;display:inline-block;top:50%;-webkit-transform: translateY(50%);-ms-transform: translateY(50%);transform: translateY(50%);'
+    
+    mydiv6.appendChild(e_tanim)
+
+    var e_sikki = document.createElement('div')
+    e_sikki.className = 'form-control sik'
+    e_sikki.style = 'diplay:inline-block;'
+    e_sikki.contentEditable = true
+
+    mydiv6.appendChild(e_sikki);
+    
+    $([a_sikki, b_sikki, c_sikki, d_sikki, e_sikki]).summernote({
+            airMode:true,
+            popover: { air: [ ['font', ['bold', 'italic','underline', 'clear']], ['font', ['superscript', 'subscript']] ] },
+            disableDragAndDrop: true,
+            shortcuts: false,
+            placeHolder: 'deneme',
+            callbacks: {
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    document.execCommand('insertText', false, bufferText);
+                },
+                onImageUpload: function (data) {
+                            data.pop();
+                        }
+            },
+            height: 30,
+            lang: "{{ session['lang_code'] }}"
+    })
+
+    if (typeof this.data['input'] !== 'undefined'){
+        var obj = parseQuery(this.data['input'])           
+        soru.value = obj['Soru']
+        kazanim_idler.value = obj['kazanim_idler']
+        if (_kazanimlar == false) {
+            kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+        }
+        else if ((obj['kazanim_idler'] != null || obj['kazanim_idler'] != '') && _kazanimlar != false ) {
+            kazanimlar.textContent = kazanim_idler.value.split(',').filter(i => i).length + ' {{_("kazanımla ilişkili")}}'
+        }
+
+        if ('GorselliMi' in obj) {
+            var hidden_siklar = [a_hidden, b_hidden, c_hidden, d_hidden, e_hidden]
+            var siklar = [a_sikki, b_sikki, c_sikki, d_sikki, e_sikki]
+            var divs = [mydiv2, mydiv3, mydiv4, mydiv5, mydiv6]
+            var tanimlar = [a_tanim, b_tanim, c_tanim, d_tanim, e_tanim]
+            a_hidden.value = obj['A Şıkkı']
+            b_hidden.value = obj['B Şıkkı']
+            c_hidden.value = obj['C Şıkkı']
+            d_hidden.value = obj['D Şıkkı']
+            e_hidden.value = obj['E Şıkkı']
+            
+            siklar_depo = ['', '', '', '', '']
+            cs_switch.value = true
+            cs_switch.setAttribute('checked', '')
+            cs_duzeni_div.style = 'display:inline;'
+            onizlemeler.style = 'display:inline;'
+            butonlar_row.style = 'display:inline;'
+            Array.from(butonlar_row.children).forEach(
+                function(label){
+                    label.style = 'display:inline;'
+                }
+            )
+            onizlemeler.className = 'd-flex justify-content-between preview'
+            
+            for (i=0; i < siklar.length; i++) {
+                siklar[i].nextSibling.style = 'display:none;'
+                gorseller[i] = hidden_siklar[i].value
+                onizlemeler.children[i].src = hidden_siklar[i].value
+                divs[i].style = 'display:none;border:none;'
+                tanimlar[i].style = 'display:none;'
+            }
+
+            var degistir = [cs_duzen_4, cs_duzen_3, cs_duzen_2, cs_duzen_1]
+            if (obj['duzen-secim'] == 1) {
+                cs_duzen_1.setAttribute('checked', 'checked')
+            }
+            else if (obj['duzen-secim'] == 2) {
+                cs_duzen_2.setAttribute('checked', 'checked')
+            }
+            else if (obj['duzen-secim'] == 3) {
+                cs_duzen_3.setAttribute('checked', 'checked')
+            }
+            else {
+                cs_duzen_4.setAttribute('checked', 'checked')
+            }
+            for (i=0; i < degistir.length; i++) {
+                degistir[i].value = obj['duzen-secim']
+            }
+        }
+        else {
+            a_sikki.nextSibling.childNodes[1].childNodes[2].innerHTML = obj['A Şıkkı']
+            b_sikki.nextSibling.childNodes[1].childNodes[2].innerHTML = obj['B Şıkkı']
+            c_sikki.nextSibling.childNodes[1].childNodes[2].innerHTML = obj['C Şıkkı']
+            d_sikki.nextSibling.childNodes[1].childNodes[2].innerHTML = obj['D Şıkkı']
+            e_sikki.nextSibling.childNodes[1].childNodes[2].innerHTML = obj['E Şıkkı']
+        }
+    }
+    sayi += 1
+    return myform
+}
+save(blockContent){
+    const gorselli_mi = blockContent.querySelector('.custom-switch').firstChild;
+    const hidden_div = blockContent.querySelectorAll('.hidden-sik')
+    const front_siklar = blockContent.querySelectorAll('.sik')
+    const onizlemeler = blockContent.querySelectorAll('._onizleme')
+
+    if (gorselli_mi.value == 'true') {
+        for (i = 0; i < hidden_div.length; i++) {
+            hidden_div[i].value = onizlemeler[i].src
+        }
+    }
+    else {
+        for (i = 0; i < hidden_div.length; i++) {
+            hidden_div[i].value = front_siklar[i].nextSibling.childNodes[1].childNodes[2].innerHTML
+        }
+    }
+
+    return {coktan_secmeli: $(blockContent).serialize()}
+    }
+}
+
+
+
+class Eslestirme {
+constructor({ api, data }){
+    this.api = api
+    this.data = data
+}
+static get toolbox() {
+    return {
+    title: '{{_("Eşleştirme")}}',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bezier2" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 2.5A1.5 1.5 0 0 1 2.5 1h1A1.5 1.5 0 0 1 5 2.5h4.134a1 1 0 1 1 0 1h-2.01c.18.18.34.381.484.605.638.992.892 2.354.892 3.895 0 1.993.257 3.092.713 3.7.356.476.895.721 1.787.784A1.5 1.5 0 0 1 12.5 11h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H6.866a1 1 0 1 1 0-1h1.711a2.839 2.839 0 0 1-.165-.2C7.743 11.407 7.5 10.007 7.5 8c0-1.46-.246-2.597-.733-3.355-.39-.605-.952-1-1.767-1.112A1.5 1.5 0 0 1 3.5 5h-1A1.5 1.5 0 0 1 1 3.5v-1zM2.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm10 10a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/></svg>'
+    };
+}
+
+
+render(){
+    var eslestirme_form = document.createElement('form');
+    eslestirme_form.setAttribute('class', 'dp-body')
+    eslestirme_form.id = 'EslestirmeForm' + this.api.blocks.getCurrentBlockIndex()
+
+    var kazanim_idler = document.createElement('input')
+    kazanim_idler.type = 'hidden'
+    kazanim_idler.value = ''
+    kazanim_idler.name = 'kazanim_idler'
+
+    var eslestirme_baslik = document.createElement('h6')
+    eslestirme_baslik.textContent = '{{_("Eşleştirme Sorusu")}}'
+    
+    var kazanimlar = document.createElement('p')
+    if (! _kazanimlar == false) {
+        kazanimlar.textContent = kazanim_idler.value.split(',').filter(i => i).length + ' {{_("kazanımla ilişkili")}}'
+    }
+    else {
+        kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+    }
+    kazanimlar.className = 'kazanim-sayi text-muted'
+    kazanimlar.type = 'button'
+    kazanimlar.style = 'cursor:pointer;font-size:small;font-style: italic;float:right;'
+    kazanimlar.onclick = () => {
+    const bosModal = document.getElementById('bosModal')
+    const bosModalBaslik = document.getElementById('bosModalBaslik')
+    const bosModalIcerik = document.getElementById('bosModalIcerik')
+        if (_kazanimlar == false) {
+            //pass
+        }
+        else if ($('#autocomplete').val() == null) {
+            toastr.options.timeOut = 1500;
+            toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+            toastr.error('{{_("Lütfen en az bir ders seçiniz")}}.');
+            document.getElementById('autocomplete').focus()
+        }
+        else if($('#kademeler').val().length == 0) {
+            toastr.options.timeOut = 1500;
+            toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+            toastr.error('{{_("Lütfen bir sınıf seçiniz")}}.');
+            document.getElementById('kademeler').focus()
+        }
+        else{
+            bosModalIcerik.innerHTML = ''
+            let kazanim_aciklama = document.createElement('p')
+            switch(document.documentElement.lang) {
+                case 'tr':
+                    kazanim_aciklama.innerHTML = '<p><b>Hatırlatma: </b>"Geç" seçeneği, kazanımı olmayan soruyu ifade eder. Eğer bir kazanım birden fazla soruya denk geliyorsa, her soru için aynı kazanımı tanımlayınız.</p><p>Tüm kazanımları girdikten sonra <b>Güncelle düğmesine tıklayınız,</b> aksi takdirde kazanımlar kaydedilmez.</p>'
+                    break;
+                case 'en':
+                    kazanim_aciklama.innerHTML = '<p><b>Hatırlatma: </b>"Geç" seçeneği, kazanımı olmayan soruyu ifade eder. Eğer bir kazanım birden fazla soruya denk geliyorsa, her soru için aynı kazanımı tanımlayınız.</p><p>Tüm kazanımları girdikten sonra <b>Güncelle düğmesine tıklayınız,</b> aksi takdirde kazanımlar kaydedilmez.</p>'
+                    break;
+            }
+            let dummy_div = document.createElement('div')
+            dummy_div.className = 'col-12 container'
+            dummy_div.appendChild(kazanim_aciklama)
+            let list_unst = document.createElement('ul')
+            list_unst.className = 'list-unstyled row'
+            const soru_sayisi = eslestirme_form.childElementCount - 5
+            for (let i=0; i < soru_sayisi; i++) {
+                let _ss = document.createElement('li')
+                _ss.className = 'list-item col-4 border-top py-2'
+                _ss.innerText = (i + 1) + '. Soru'
+                list_unst.appendChild(_ss)
+                let list_col = document.createElement('li')
+                list_col.className = 'list-item col-8 border-top py-2'
+                let kazanim_sec = document.createElement('select')
+                kazanim_sec.style = 'width: 100%'
+                list_col.appendChild(kazanim_sec)
+                list_unst.appendChild(_ss)
+                list_unst.appendChild(list_col)
+                dummy_div.appendChild(list_unst)
+                bosModalIcerik.appendChild(dummy_div)
+                $(kazanim_sec).select2();
+                kazanim_sec.innerHTML = "<option value=0>{{_('Geç')}}</option>" 
+                for(let k = 0; k < _kazanimlar.length; k++) {
+                    kazanim_sec.innerHTML += "<option value=\"" + _kazanimlar[k]['id'] + "\">" + _kazanimlar[k]['name'] + "</option>";
+                }
+            }
+            let kazanims = list_unst.querySelectorAll('.list-item.col-8')
+            let idler = kazanim_idler.value.split(',').filter(i => i)
+            if (kazanim_idler.value == '') {
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    select_f.value = 0
+                }
+            }
+            else {
+                while(idler.length < kazanims.length) {
+                    idler.push(0)
+                    kazanim_idler.value = idler
+                }
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    select_f.value = idler[i]
+                    if (select_f.value == '') {
+                        select_f.value = 0
+                    }
+                }
+            }
+            bosModalBaslik.innerText = '{{_("Kazanım Ekleyin")}}'
+            $(bosModal).modal('show')
+            $(bosModal).on('hidden.bs.modal', function () {
+                let kz_liste = []
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    kz_liste.push(select_f.options[select_f.selectedIndex].value)
+                }
+                kazanim_idler.value = kz_liste
+                kazanimlar.textContent = kz_liste.filter(n=>parseInt(n), Number.isFinite).length + ' {{_("kazanımla ilişkili")}}'
+            })
+        }
+}
+    eslestirme_form.appendChild(kazanim_idler)
+    eslestirme_form.appendChild(kazanimlar)
+    eslestirme_form.appendChild(eslestirme_baslik)
+
+    var eslestirme_soru = document.createElement('TEXTAREA')
+    eslestirme_soru.className = 'form-control'
+    eslestirme_soru.rows = '2'
+    eslestirme_soru.name = 'Soru'
+    eslestirme_soru.label = '{{_("Soru Tümcesi")}}'
+    eslestirme_soru.placeholder = '{{_("Soru Tümcesi (Zorunlu)")}}'
+
+    eslestirme_form.appendChild(eslestirme_soru);
+
+    var altalta_div = document.createElement('div')
+    altalta_div.className = 'mt-3 mb-0 custom-control custom-switch d-flex flex-row-reverse mb-2'
+
+    eslestirme_form.appendChild(altalta_div)
+
+    var sayi = 0
+
+    var altalta = document.createElement('input')
+    altalta.type = 'checkbox'
+    altalta.value = 'false'
+    altalta.className = 'custom-control-input'
+    altalta.name = 'Altalta'
+    altalta.id = 'altalta_switch' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+    altalta.onchange = function(){this.value = this.checked}
+
+    altalta_div.appendChild(altalta)
+
+    var altalta_label = document.createElement('label')
+    altalta_label.className = 'custom-control-label'
+    altalta_label.innerHTML = '{{_("Sorular alt alta gelsin")}}'
+    altalta_label.htmlFor = 'altalta_switch' + sayi + '-' + this.api.blocks.getCurrentBlockIndex()
+    altalta_label.onload = sayi = sayi + 1
+
+    altalta_div.appendChild(altalta_label)
+
+    var eslestirme_row = document.createElement('div')
+    eslestirme_row.className = 'row mt-3'
+    eslestirme_row.id = 'eslestirme_esi'
+    
+    eslestirme_form.appendChild(eslestirme_row)
+
+    var eslestirme_col1 = document.createElement('div')
+    eslestirme_col1.className = 'col'
+    
+    eslestirme_row.appendChild(eslestirme_col1)
+
+    var eslestirme_bir = document.createElement('input')
+    eslestirme_bir.className = 'form-control'
+    eslestirme_bir.name = 'İlk Eş'
+    eslestirme_bir.id = 'ilk_es'
+    eslestirme_bir.style = 'width:90%; padding:5px;'
+
+    eslestirme_col1.appendChild(eslestirme_bir)
+
+    var eslestirme_col2 = document.createElement('div')
+    eslestirme_col2.className = 'col'
+    
+    eslestirme_row.appendChild(eslestirme_col2)
+
+    var eslestirme_iki = document.createElement('input')
+    eslestirme_iki.className = 'form-control'
+    eslestirme_iki.name = 'İkinci Eş'
+    eslestirme_iki.id = 'ikinci_es'
+    eslestirme_iki.style = 'width:90%'
+
+    eslestirme_col2.appendChild(eslestirme_iki)
+
+    var sayi = 0  
+
+    var silme_butonu = document.createElement('a')
+    silme_butonu.id = 'silmebutonuid'
+    silme_butonu.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="25" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>'
+    silme_butonu.onclick = function esSil() {var itm = this.parentElement; var tum_form = itm.parentElement.childNodes;let soru_sayisi = tum_form.length - 6; let kazanims = Array.from(kazanim_idler.value.split(',')) ;let guncel_kazanim = kazanims.slice(0, soru_sayisi); kazanim_idler.value = guncel_kazanim; this.parentElement.remove();}
+
+
+    var ekle_butonu = document.createElement('a')
+    ekle_butonu.id = 'eklebutonuid'
+    ekle_butonu.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="25" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>'
+    ekle_butonu.onclick = function esEkle() {var itm = this.parentElement; var tum_form = itm.parentElement.childNodes;if (tum_form.length < 15) {var cln = itm.cloneNode(true);cln.className = 'row mt-1';;cln.children[0].children[0].value = '';cln.children[1].children[0].value = ''; sil = silme_butonu.cloneNode(true); cln.appendChild(sil);cln.children[2].style = 'display:none;';cln.children[3].style = 'display:inline-block';cln.children[3].onclick = function esSil() {this.parentElement.remove()};eslestirme_form.appendChild(cln);}}
+
+    eslestirme_row.appendChild(ekle_butonu)
+    if (typeof this.data['input'] !== 'undefined'){
+        var eslestirme_obj = parseQuery(this.data['input'])
+        let kazanim_array = Array.from(eslestirme_obj['kazanim_idler'].split(','))
+        kazanim_idler.value = eslestirme_obj['kazanim_idler']
+        if (_kazanimlar == false) {
+            kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+        }
+        else if ((eslestirme_obj['kazanim_idler'] != null || eslestirme_obj['kazanim_idler'] != '') && _kazanimlar != false ) {
+            kazanimlar.textContent = kazanim_array.filter(n=>parseInt(n), Number.isFinite).length + ' {{_("kazanımla ilişkili")}}'
+        }
+        if (eslestirme_obj['Altalta'] == 'true') {
+            altalta.value = 'true'
+            altalta.setAttribute('checked', '')
+        }
+        else {
+            altalta.removeAttribute('checked')
+            altalta.value = 'false'
+        }
+
+        if (typeof eslestirme_obj['İlk Eş'] == 'string' || eslestirme_obj['İlk Eş'] instanceof String){
+            var ogeler = []
+            ogeler.push(eslestirme_obj['İlk Eş'])
+            eslestirme_bir.value = ogeler[0]
+            var ogeler2 = []
+            ogeler2.push(eslestirme_obj['İkinci Eş'])
+            eslestirme_iki.value = ogeler2[0]
+        }
+        else {
+            eslestirme_bir.value = eslestirme_obj['İlk Eş'][0]
+            eslestirme_iki.value = eslestirme_obj['İkinci Eş'][0]
+            var i;
+        for (i = 0; i < eslestirme_obj['İlk Eş'].slice(1).length; i++) { 
+            var eslestirme_row_kopya = document.createElement('div')
+            eslestirme_row_kopya.className = 'row mt-1'
+            eslestirme_row_kopya.id = 'eslestirme_esi'+sayi
+            sayi = sayi + 1
+            
+            eslestirme_form.appendChild(eslestirme_row_kopya)
+
+            var eslestirme_col1_kopya = document.createElement('div')
+            eslestirme_col1_kopya.className = 'col'
+            
+            eslestirme_row_kopya.appendChild(eslestirme_col1_kopya)
+
+            var eslestirme_bir_kopya = document.createElement('input')
+            eslestirme_bir_kopya.className = 'form-control'
+            eslestirme_bir_kopya.name = 'İlk Eş'
+            eslestirme_bir_kopya.id = 'ilk_es'
+            eslestirme_bir_kopya.style = 'width:90%; padding:5px;'
+
+            eslestirme_col1_kopya.appendChild(eslestirme_bir_kopya)
+
+            var eslestirme_col2_kopya = document.createElement('div')
+            eslestirme_col2_kopya.className = 'col'
+            
+            eslestirme_row_kopya.appendChild(eslestirme_col2_kopya)
+
+            var eslestirme_iki_kopya = document.createElement('input')
+            eslestirme_iki_kopya.className = 'form-control'
+            eslestirme_iki_kopya.name = 'İkinci Eş'
+            eslestirme_iki_kopya.id = 'ikinci_es'
+            eslestirme_iki_kopya.style = 'width:90%'
+
+            eslestirme_col2_kopya.appendChild(eslestirme_iki_kopya)
+
+            eslestirme_bir_kopya.value = eslestirme_obj['İlk Eş'][i+1]
+            eslestirme_iki_kopya.value = eslestirme_obj['İkinci Eş'][i+1]
+
+            var sil = silme_butonu.cloneNode(true)
+            sil.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="25" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>'
+            sil.onclick = function esSil() {var itm = this.parentElement; var tum_form = itm.parentElement.childNodes;let soru_sayisi = tum_form.length - 6; let kazanims = Array.from(kazanim_idler.value.split(',')) ;let guncel_kazanim = kazanims.slice(0, soru_sayisi); kazanim_idler.value = guncel_kazanim; this.parentElement.remove(); }
+            eslestirme_row_kopya.appendChild(sil)
+
+        }
+        }
+
+        eslestirme_soru.value = eslestirme_obj['Soru']
+    }
+
+    return eslestirme_form
+}
+
+save(blockContent){
+        return {
+            eslestirme: $(blockContent).serialize()
+        }
+    }
+}
+
+
+
+class DogruYanlis {
+constructor({ api, data }){
+    this.api = api
+    this.data = data
+}
+static get toolbox() {
+    return {
+    title: '{{_("Doğru Yanlış")}}',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all" viewBox="0 0 16 16"><path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/></svg>'
+    };
+}
+
+render(){
+    var dogru_yanlis_form = document.createElement('form');
+    dogru_yanlis_form.setAttribute('class', 'dp-body')
+    dogru_yanlis_form.id = 'DogruYanlisForm' + this.api.blocks.getCurrentBlockIndex()
+
+    var kazanim_idler = document.createElement('input')
+    kazanim_idler.type = 'hidden'
+    kazanim_idler.value = ''
+    kazanim_idler.name = 'kazanim_idler'
+
+    var dy_baslik = document.createElement('h6')
+    dy_baslik.textContent = '{{_("Doğru Yanlış Sorusu")}}'
+    
+    var kazanimlar = document.createElement('p')
+    if (! _kazanimlar == false) {
+        kazanimlar.textContent = kazanim_idler.value.split(',').filter(i => i).length + ' {{_("kazanımla ilişkili")}}'
+    }
+    else {
+        kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+    }
+    kazanimlar.className = 'kazanim-sayi text-muted'
+    kazanimlar.type = 'button'
+    kazanimlar.style = 'cursor:pointer;font-size:small;font-style: italic;float:right;'
+    kazanimlar.onclick = () => {
+    const bosModal = document.getElementById('bosModal')
+    const bosModalBaslik = document.getElementById('bosModalBaslik')
+    const bosModalIcerik = document.getElementById('bosModalIcerik')
+        if (_kazanimlar == false) {
+            //pass
+        }
+        else if ($('#autocomplete').val() == null) {
+            toastr.options.timeOut = 1500;
+            toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+            toastr.error('{{_("Lütfen en az bir ders seçiniz")}}.');
+            document.getElementById('autocomplete').focus()
+        }
+        else if($('#kademeler').val().length == 0) {
+            toastr.options.timeOut = 1500;
+            toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+            toastr.error('{{_("Lütfen bir sınıf seçiniz")}}.');
+            document.getElementById('kademeler').focus()
+        }
+        else{
+            bosModalIcerik.innerHTML = ''
+            let kazanim_aciklama = document.createElement('p')
+            switch(document.documentElement.lang) {
+                case 'tr':
+                    kazanim_aciklama.innerHTML = '<p><b>Hatırlatma: </b>"Geç" seçeneği, kazanımı olmayan soruyu ifade eder. Eğer bir kazanım birden fazla soruya denk geliyorsa, her soru için aynı kazanımı tanımlayınız.</p><p>Tüm kazanımları girdikten sonra <b>Güncelle düğmesine tıklayınız,</b> aksi takdirde kazanımlar kaydedilmez.</p>'
+                    break;
+                case 'en':
+                    kazanim_aciklama.innerHTML = "<p><b>Reminder: </b>The option 'Pass' means that question is not associated with a learning object. If a leaning object should go for multiple questions, match that objective for each of those questions.</p><p>After matching all objectives, <b>don't forget to click Update button,</b> or else it won't be saved.</p>"
+                    break;
+            }
+            let dummy_div = document.createElement('div')
+            dummy_div.className = 'col-12 container'
+            dummy_div.appendChild(kazanim_aciklama)
+            let list_unst = document.createElement('ul')
+            list_unst.className = 'list-unstyled row'
+            const soru_sayisi = dogru_yanlis_form.childElementCount - 4
+            for (let i=0; i < soru_sayisi; i++) {
+                let _ss = document.createElement('li')
+                _ss.className = 'list-item col-4 border-top py-2'
+                _ss.innerText = (i + 1) + '. Soru'
+                list_unst.appendChild(_ss)
+                let list_col = document.createElement('li')
+                list_col.className = 'list-item col-8 border-top py-2'
+                let kazanim_sec = document.createElement('select')
+                kazanim_sec.style = 'width: 100%'
+                list_col.appendChild(kazanim_sec)
+                list_unst.appendChild(_ss)
+                list_unst.appendChild(list_col)
+                dummy_div.appendChild(list_unst)
+                bosModalIcerik.appendChild(dummy_div)
+                $(kazanim_sec).select2();
+                kazanim_sec.innerHTML = "<option value=0>{{_('Geç')}}</option>" 
+                for(let k = 0; k < _kazanimlar.length; k++) {
+                    kazanim_sec.innerHTML += "<option value=\"" + _kazanimlar[k]['id'] + "\">" + _kazanimlar[k]['name'] + "</option>";
+                }
+            }
+            let kazanims = list_unst.querySelectorAll('.list-item.col-8')
+            let idler = kazanim_idler.value.split(',').filter(i => i)
+            if (kazanim_idler.value == '') {
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    select_f.value = 0
+                }
+            }
+            else {
+                while(idler.length < kazanims.length) {
+                    idler.push(0)
+                    kazanim_idler.value = idler
+                }
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    select_f.value = idler[i]
+                    if (select_f.value == '') {
+                        select_f.value = 0
+                    }
+                }
+            }
+            bosModalBaslik.innerText = '{{_("Kazanım Ekleyin")}}'
+            $(bosModal).modal('show')
+            $(bosModal).on('hidden.bs.modal', function () {
+                let kz_liste = []
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    kz_liste.push(select_f.options[select_f.selectedIndex].value)
+                }
+                kazanim_idler.value = kz_liste
+                kazanimlar.textContent = kz_liste.filter(n=>parseInt(n), Number.isFinite).length + ' {{_("kazanımla ilişkili")}}'
+            })
+        }
+}
+    dogru_yanlis_form.appendChild(kazanim_idler)
+    dogru_yanlis_form.appendChild(kazanimlar)
+    dogru_yanlis_form.appendChild(dy_baslik)
+
+    var dy_soru = document.createElement('TEXTAREA')
+    dy_soru.className = 'form-control'
+    dy_soru.rows = '1'
+    dy_soru.name = 'Soru Tümcesi'
+    dy_soru.label = 'Soru Tümcesi'
+    dy_soru.placeholder = '{{_("Soru Tümcesi (Zorunlu)")}}'
+
+    dogru_yanlis_form.appendChild(dy_soru);
+
+    var dy_row = document.createElement('div')
+    dy_row.className = 'row mt-3'
+    dy_row.id = 'dogru_yanlis_esi'
+    
+    dogru_yanlis_form.appendChild(dy_row)
+
+    var dy_col = document.createElement('div')
+    dy_col.className = 'col'
+    
+    dy_row.appendChild(dy_col)
+
+    var dy_ifadesi = document.createElement('input')
+    dy_ifadesi.className = 'form-control'
+    dy_ifadesi.name = 'Doğru Yanlış İfadesi'
+
+    dy_col.appendChild(dy_ifadesi)
+
+    var dy_sayi = 0
+
+    var silme_butonu = document.createElement('a')
+    silme_butonu.id = 'silmebutonuid'
+    silme_butonu.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="25" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>'
+    silme_butonu.onclick = function esSil() {var itm = this.parentElement; var tum_form = itm.parentElement.childNodes;let soru_sayisi = tum_form.length - 5; let kazanims = Array.from(kazanim_idler.value.split(',')) ;let guncel_kazanim = kazanims.slice(0, soru_sayisi); kazanim_idler.value = guncel_kazanim; this.parentElement.remove();}
+
+
+    var ekle_butonu = document.createElement('a')
+    ekle_butonu.id = 'eklebutonuid'
+    ekle_butonu.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="25" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>'
+    ekle_butonu.onclick = function esEkle() {var itm = this.parentElement;var tum_form = itm.parentElement.childNodes;if (tum_form.length < 15) {var cln = itm.cloneNode(true);cln.id='dogru_yanlis_esi'+dy_sayi;dy_sayi=dy_sayi+1;cln.children[0].children[0].value = '';cln.children[1].style = 'display: none';dogru_yanlis_form.lastChild.value='';dogru_yanlis_form.appendChild(cln);var sil = silme_butonu.cloneNode(true); cln.appendChild(sil);cln.children[1].style = 'display:none;';cln.children[2].style = 'display:inline-block';cln.children[2].onclick = function esSil() {this.parentElement.remove()};}}
+
+    dy_row.appendChild(ekle_butonu)
+
+    if (typeof this.data['input'] !== 'undefined'){
+        var dy_obj = parseQuery(this.data['input'])
+        dy_soru.value = dy_obj['Soru Tümcesi']
+        var ogeler = dy_obj['Doğru Yanlış İfadesi']
+        if (typeof ogeler == 'string' || ogeler instanceof String){
+            ogeler = []
+            ogeler.push(dy_obj['Doğru Yanlış İfadesi'])
+        }
+        dy_ifadesi.value = ogeler[0]
+        kazanim_idler.value = dy_obj['kazanim_idler']
+        let dy_kazanim_array = Array.from(dy_obj['kazanim_idler'].split(','))
+        if (_kazanimlar == false) {
+            kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+        }
+        else if ((dy_obj['kazanim_idler'] != null || dy_obj['kazanim_idler'] != '') && _kazanimlar != false ) {
+            kazanimlar.textContent = dy_kazanim_array.filter(n=>parseInt(n), Number.isFinite).length + ' kazanımla ilişkili'
+        }
+        if (ogeler.length > 1) {
+            var i;
+            for (i = 0; i < ogeler.slice(1).length; i++) { 
+                var dy_row_kopya = document.createElement('div')
+                dy_row_kopya.className = 'row mt-1'
+                dy_row_kopya.id = 'dogru_yanlis_esi'+dy_sayi
+                dy_sayi = dy_sayi + 1
+                
+                dogru_yanlis_form.appendChild(dy_row_kopya)
+
+                var dy_col_kopya = document.createElement('div')
+                dy_col_kopya.className = 'col'
+                
+                dy_row_kopya.appendChild(dy_col_kopya)
+
+                var dy_ifadesi_kopya = document.createElement('input')
+                dy_ifadesi_kopya.className = 'form-control'
+                dy_ifadesi_kopya.name = 'Doğru Yanlış İfadesi'
+
+                dy_col_kopya.appendChild(dy_ifadesi_kopya)
+
+                dy_ifadesi_kopya.value = dy_obj['Doğru Yanlış İfadesi'][i+1]
+                
+                var sil = silme_butonu.cloneNode(true);
+                sil.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="25" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>'
+                sil.onclick = function esSil() {var itm = this.parentElement; var tum_form = itm.parentElement.childNodes;let soru_sayisi = tum_form.length - 5; let kazanims = Array.from(kazanim_idler.value.split(',')) ;let guncel_kazanim = kazanims.slice(0, soru_sayisi); kazanim_idler.value = guncel_kazanim; this.parentElement.remove();}
+                dy_row_kopya.appendChild(sil)
+
+            }
+        }
+    }
+    
+    return dogru_yanlis_form
+}
+
+save(blockContent){
+    return {
+        dogru_yanlis: $(blockContent).serialize()
+    }
+}
+}
+
+class BoslukDoldurma {
+constructor({ api, data }){
+    this.api = api
+    this.data = data
+}
+static get toolbox() {
+    return {
+    title: '{{_("Boşluk Doldurma")}}',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces" viewBox="0 0 16 16"><path d="M2.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C3.25 2 2.49 2.759 2.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6zM13.886 7.9v.163c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456V7.332c-1.114 0-1.49-.362-1.49-1.456V4.352C13.51 2.759 12.75 2 11.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6z"/></svg>'
+    };
+}
+
+render(){
+    var bosluk_doldurma_form = document.createElement('form');
+    bosluk_doldurma_form.setAttribute('class', 'dp-body')
+    bosluk_doldurma_form.id = 'BoslukDoldurmaForm' + this.api.blocks.getCurrentBlockIndex()
+
+    var kazanim_idler = document.createElement('input')
+    kazanim_idler.type = 'hidden'
+    kazanim_idler.value = ''
+    kazanim_idler.name = 'kazanim_idler'
+
+    var bd_baslik = document.createElement('h6')
+    bd_baslik.textContent = '{{_("Boşluk Doldurma Sorusu")}}'
+    
+    var kazanimlar = document.createElement('p')
+    if (! _kazanimlar == false) {
+        kazanimlar.textContent = kazanim_idler.value.split(',').filter(i => i).length + ' {{_("kazanımla ilişkili")}}'
+    }
+    else {
+        kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+    }
+    kazanimlar.className = 'kazanim-sayi text-muted'
+    kazanimlar.type = 'button'
+    kazanimlar.style = 'cursor:pointer;font-size:small;font-style: italic;float:right;'
+    kazanimlar.onclick = () => {
+    const bosModal = document.getElementById('bosModal')
+    const bosModalBaslik = document.getElementById('bosModalBaslik')
+    const bosModalIcerik = document.getElementById('bosModalIcerik')
+    const soru_sayisi = Array.from(bd_paragraf.value.matchAll('[\_]+[^a-zA-Z0-9?. ,!]+[\_]')).length
+        if (_kazanimlar == false || soru_sayisi == 0) {
+            //pass
+        }
+        else if ($('#autocomplete').val() == null) {
+            toastr.options.timeOut = 1500;
+            toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+            toastr.error('{{_("Lütfen en az bir ders seçiniz")}}.');
+            document.getElementById('autocomplete').focus()
+        }
+        else if($('#kademeler').val().length == 0) {
+            toastr.options.timeOut = 1500;
+            toastr.options = {"positionClass": "toast-bottom-right","preventDuplicates": true}
+            toastr.error('{{_("Lütfen bir sınıf seçiniz")}}.');
+            document.getElementById('kademeler').focus()
+        }
+        else{
+            bosModalIcerik.innerHTML = ''
+            let kazanim_aciklama = document.createElement('p')
+            let boslukIfade;
+            switch(document.documentElement.lang) {
+                case 'tr':
+                    kazanim_aciklama.innerHTML = '<p><b>Hatırlatma: </b>"Geç" seçeneği, kazanımı olmayan soruyu ifade eder. Eğer bir kazanım birden fazla soruya denk geliyorsa, her soru için aynı kazanımı tanımlayınız.</p><p>Tüm kazanımları girdikten sonra <b>Güncelle düğmesine tıklayınız,</b> aksi takdirde kazanımlar kaydedilmez.</p>'
+                    boslukIfade = '. Boşluk'
+                    break;
+                case 'en':
+                    kazanim_aciklama.innerHTML = "<p><b>Reminder: </b>The option 'Pass' means that question is not associated with a learning object. If a leaning object should go for multiple questions, match that objective for each of those questions.</p><p>After matching all objectives, <b>don't forget to click Update button,</b> or else it won't be saved.</p>"
+                    boslukIfade = '. Gap'
+                    break;
+            }
+            let dummy_div = document.createElement('div')
+            dummy_div.className = 'col-12 container'
+            dummy_div.appendChild(kazanim_aciklama)
+            let list_unst = document.createElement('ul')
+            list_unst.className = 'list-unstyled row'
+            for (let i=0; i < soru_sayisi; i++) {
+                let _ss = document.createElement('li')
+                _ss.className = 'list-item col-4 border-top py-2'
+                _ss.innerText = (i + 1) + boslukIfade
+                list_unst.appendChild(_ss)
+                let list_col = document.createElement('li')
+                list_col.className = 'list-item col-8 border-top py-2'
+                let kazanim_sec = document.createElement('select')
+                kazanim_sec.style = 'width: 100%'
+                list_col.appendChild(kazanim_sec)
+                list_unst.appendChild(_ss)
+                list_unst.appendChild(list_col)
+                dummy_div.appendChild(list_unst)
+                bosModalIcerik.appendChild(dummy_div)
+                $(kazanim_sec).select2();
+                kazanim_sec.innerHTML = "<option value=0>{{_('Geç')}}</option>" 
+                for(let k = 0; k < _kazanimlar.length; k++) {
+                    kazanim_sec.innerHTML += "<option value=\"" + _kazanimlar[k]['id'] + "\">" + _kazanimlar[k]['name'] + "</option>";
+                }
+            }
+            let kazanims = list_unst.querySelectorAll('.list-item.col-8')
+            let idler = kazanim_idler.value.split(',').filter(i => i)
+            if(idler.length > kazanims.length) {
+                kazanim_idler.value = idler.slice(0, kazanims.length)
+            }
+            if (kazanim_idler.value == '') {
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    select_f.value = 0
+                }
+            }
+            else {
+                while(idler.length < kazanims.length) {
+                    idler.push(0)
+                    kazanim_idler.value = idler
+                }
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    select_f.value = idler[i]
+                    if (select_f.value == '') {
+                        select_f.value = 0
+                    }
+                }
+            }
+            bosModalBaslik.innerText = '{{_("Kazanım Ekleyin")}}'
+            $(bosModal).modal('show')
+            $(bosModal).on('hidden.bs.modal', function () {
+                let kz_liste = []
+                for (let i=0; i < kazanims.length; i++) {
+                    let select_f = kazanims[i].childNodes[0]
+                    kz_liste.push(select_f.options[select_f.selectedIndex].value)
+                }
+                kazanim_idler.value = kz_liste
+                kazanimlar.textContent = kz_liste.filter(n=>parseInt(n), Number.isFinite).length + ' {{_("kazanımla ilişkili")}}'
+            })
+        }
+}
+    bosluk_doldurma_form.appendChild(kazanim_idler)
+    bosluk_doldurma_form.appendChild(kazanimlar)
+    bosluk_doldurma_form.appendChild(bd_baslik)
+
+    var bd_soru = document.createElement('TEXTAREA')
+    bd_soru.className = 'my-2 form-control'
+    bd_soru.rows = '1'
+    bd_soru.name = 'Soru Tümcesi'
+    bd_soru.label = '{{_("Soru Tümcesi")}}'
+    bd_soru.placeholder = '{{_("Soru Tümcesi (Zorunlu)")}}'
+
+    bosluk_doldurma_form.appendChild(bd_soru)
+
+    var tablo = document.createElement('TEXTAREA')
+    tablo.className = 'mb-2 form-control'
+    tablo.rows = '4'
+    tablo.name = 'Tablo'
+    tablo.label = '{{_("Sözcük Kutucuğu")}}'
+    switch(document.documentElement.lang) {
+                case 'tr':
+                    tablo.placeholder = 'Eğer öğrencilerin kullanabileceği bir sözcük kutucuğu yaratmak istiyorsanız burayı kullanın. Örneğin: "makale - masal - söyleşi - fıkra"'
+                    break;
+                case 'en':
+                    tablo.placeholder = "If you want to help students with some words, you can use this text area. For example: 'article - story - interview - anectode'"
+                    break;
+            }
+    bosluk_doldurma_form.appendChild(tablo)
+
+    var bd_paragraf = document.createElement('TEXTAREA')
+    bd_paragraf.className = 'form-control'
+    bd_paragraf.rows = '4'
+    bd_paragraf.name = 'Paragraf'
+    bd_paragraf.label = '{{_("Paragraf")}}'
+    switch(document.documentElement.lang) {
+                case 'tr':
+                    bd_paragraf.placeholder = 'Lütfen öğrencilerin doldurması gereken yerlere alt tire koyun. Örneğin: "Olağanüstü kişilerin başından geçen hayalî olayların anlatıldığı yazılara _______ denir."'
+                    break;
+                case 'en':
+                    bd_paragraf.placeholder = "Please use underscores for gap-filling questions. For example: 'A short story, typically with animals as characters, conveying a moral is called ___________'."
+                    break;
+            }
+    bd_paragraf.onfocusout = () => {let bosluk_sayisi = Array.from(bd_paragraf.value.matchAll('[\_]+[^a-zA-Z0-9?. ,!]+[\_]')).length; let kazanims = Array.from(kazanim_idler.value.split(',')); let guncel_kazanim = kazanims.slice(0, bosluk_sayisi); kazanim_idler.value = guncel_kazanim }
+
+    bosluk_doldurma_form.appendChild(bd_paragraf)
+
+    if (typeof this.data['input'] !== 'undefined'){
+        var bd_obj = parseQuery(this.data['input'])
+        kazanim_idler.value = bd_obj['kazanim_idler']
+        let bd_kazanim_array = Array.from(bd_obj['kazanim_idler'].split(','))
+        if (_kazanimlar == false) {
+            kazanimlar.textContent = '{{_("Bu ders için kazanım bulunamadı")}}'
+        }
+        else if ((bd_obj['kazanim_idler'] != null || bd_obj['kazanim_idler'] != '') && _kazanimlar != false ) {
+            kazanimlar.textContent = bd_kazanim_array.filter(n=>parseInt(n), Number.isFinite).length + ' {{_("kazanımla ilişkili")}}'
+        }
+        bd_soru.value = bd_obj['Soru Tümcesi']
+        tablo.value = bd_obj['Tablo']
+        bd_paragraf.value = bd_obj['Paragraf']
+    }
+
+    return bosluk_doldurma_form
+}
+
+save(blockContent){
+    return {
+        bosluk_doldurma: $(blockContent).serialize()
+    }
+}
+}
+
+class Gorsel {
+sayi = 0
+constructor({ api, data }){
+    this.api = api
+    this.data = data
+}
+static get toolbox() {
+    return {
+        title: '{{_("Görsel")}}',
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>'
+        };
+    }
+
+    render(){
+        var gorsel_form = document.createElement('form');
+        gorsel_form.setAttribute('class', 'dp-body')
+        gorsel_form.id = 'GorselForm' + this.api.blocks.getCurrentBlockIndex()
+        
+        var gorsel_baslik = document.createElement('h6')
+        gorsel_baslik.textContent = '{{_("Görsel")}}'
+        var ayarlar = document.createElement('p')
+        ayarlar.textContent = '{{_("Ayarlar için tıklayınız")}}'
+        ayarlar.className = 'text-muted'
+        ayarlar.style = 'cursor:pointer;font-size:small;font-style: italic;float:right;'
+
+        gorsel_form.appendChild(ayarlar)
+        gorsel_form.appendChild(gorsel_baslik)
+
+        var onizleme_div = document.createElement('div')
+        onizleme_div.className = 'preview'
+        gorsel_form.appendChild(onizleme_div)
+
+        var hidden = document.createElement('input')
+        hidden.type = 'hidden'
+        hidden.name = 'Görsel'
+        hidden.value = ''
+        hidden.id = 'gorsel' + this.api.blocks.getCurrentBlockIndex()
+
+        gorsel_form.appendChild(hidden)
+
+        var boyut_yazi = document.createElement('p')
+        boyut_yazi.innerHTML = '{{_("Boyut seçin")}}:'
+
+        gorsel_form.appendChild(boyut_yazi)
+
+        var buyukluk_div1 = document.createElement('div')
+        buyukluk_div1.className = "form-check"
+
+        gorsel_form.appendChild(buyukluk_div1)
+
+        var kucuk = document.createElement('input')
+        kucuk.className = "form-check form-check-inline"
+        kucuk.type = "radio"
+        kucuk.name = "boyut"
+        kucuk.value = "kucuk"
+        kucuk.id = "inlineRadio1"+ this.api.blocks.getCurrentBlockIndex()
+
+        buyukluk_div1.appendChild(kucuk)
+
+        var kucuk_label = document.createElement('label')
+        kucuk_label.className = "form-check-label"
+        kucuk_label.htmlFor = "inlineRadio1"+ this.api.blocks.getCurrentBlockIndex()
+        kucuk_label.innerHTML = '{{_("En küçük")}}'
+        
+        buyukluk_div1.appendChild(kucuk_label)
+        
+        var buyukluk_div2 = document.createElement('div')
+        buyukluk_div2.className = "form-check"
+
+        gorsel_form.appendChild(buyukluk_div2)
+
+        var yari = document.createElement('input')
+        yari.className = "form-check form-check-inline"
+        yari.type = "radio"
+        yari.name = "boyut"
+        yari.value = "orta"
+        yari.id = "inlineRadio2"+ this.api.blocks.getCurrentBlockIndex()
+
+        buyukluk_div2.appendChild(yari)
+
+        var yari_label = document.createElement('label')
+        yari_label.className = "form-check-label"
+        yari_label.htmlFor = "inlineRadio2"+ this.api.blocks.getCurrentBlockIndex()
+        yari_label.innerHTML = '{{_("Boyutun yarısı")}}'
+        
+        buyukluk_div2.appendChild(yari_label)
+
+        var buyukluk_div3 = document.createElement('div')
+        buyukluk_div3.className = "form-check"
+
+        gorsel_form.appendChild(buyukluk_div3)
+
+        var tam = document.createElement('input')
+        tam.className = "form-check form-check-inline"
+        tam.type = "radio"
+        tam.name = "boyut"
+        tam.value = "tam"
+        tam.setAttribute('checked', '')
+        tam.id = "inlineRadio3"+ this.api.blocks.getCurrentBlockIndex()
+
+        buyukluk_div3.appendChild(tam)
+
+        var tam_label = document.createElement('label')
+        tam_label.className = "form-check-label"
+        tam_label.htmlFor = "inlineRadio3"+ this.api.blocks.getCurrentBlockIndex()
+        tam_label.innerHTML = '{{_("Tam boyut")}}'
+        
+        buyukluk_div3.appendChild(tam_label)
+
+        var onizleme = document.createElement('img')
+        onizleme.src = ''
+        onizleme.id = 'img_onizleme'+this.api.blocks.getCurrentBlockIndex()
+        onizleme.width = '100'
+        onizleme.height = '100'
+        onizleme.style = 'display:none;'
+
+        onizleme_div.appendChild(onizleme)
+
+        var resim_input = document.createElement('input');
+        resim_input.type = 'file'
+        resim_input.id = 'file'
+        resim_input.accept = 'image/jpg, image/jpeg, image/png,'
+        resim_input.name = 'dosya'
+        resim_input.onchange = function (){
+                var d = new Date(); 
+                var baslik = document.getElementById('sinavbasligi');
+                var fd=new FormData();
+                var files=this.files;
+                var onizleme_id=this.id.replace(/[^0-9]/g,'');
+                if(files.length>0&&files[0].size<1677721.6){
+                    fd.append('file',files[0]);
+                    {fd.append('block', onizleme_id)};
+                    {% if sinav %} 
+                        {fd.append('sinav', '{{ sinav.id }}')}; 
+                    {% endif %}
+                    {
+                        fd.append('baslik', baslik.value)}; 
+                        var thumbnail = this.parentNode.childNodes[2]; 
+                        var hidden = this.parentNode.childNodes[3] ;
+                        $.ajax({
+                            url:'/sinav_gorsel_yukle',
+                            type:'post',
+                            data:fd,
+                            contentType:false,
+                            processData:false,
+                            success:function(response){
+                                if(response.status!=404 || response.status != 500){
+                                    thumbnail.firstChild.style='display:inline-block;';
+                                    thumbnail.firstChild.src=response + "?=ver" + d.getTime();
+                                    hidden.value=response;}
+                                }, 
+                            error: function(response){
+                                if (response.status == 500) {
+                                    toastr.options.timeOut=1500;
+                                    toastr.options={"positionClass":"toast-bottom-right","preventDuplicates":true};
+                                    toastr.error("{{_('Lütfen bir başlık giriniz')}}.")
+                                }
+                                else{
+                                    alert('{{_("Dosya yüklenemedi")}}.')}
+                                }})}
+                                else if(files[0].size>1677721.6){
+                                    toastr.options.timeOut=1500;
+                                    toastr.options={"positionClass":"toast-bottom-right","preventDuplicates":true};
+                                    toastr.error('{{_("Dosya en fazla 1.5 MB olabilir")}}.')}}
+
+        gorsel_form.appendChild(resim_input)
+
+        if (typeof this.data['input'] !== 'undefined'){
+            var gorsel_obj = parseQuery(this.data['input'])
+            var d = new Date();
+            var adres = gorsel_obj['Görsel']
+            hidden.value = adres
+            {% if sinav %}
+            adres = adres.replace('-_yeni_-', '-{{ sinav.id }}-')
+            {% endif %}
+
+            adres = adres + "?=ver" + d.getTime()
+            onizleme.src = adres
+            onizleme.style = 'display:inline-block;'
+            
+            if (gorsel_obj['boyut'] == 'orta'){
+                yari.setAttribute('checked', '')
+            }
+            else if (gorsel_obj['boyut'] == 'kucuk'){
+                kucuk.setAttribute('checked', '')
+            }
+            else {
+                //pass
+            }
+        }
+        
+        return gorsel_form
+    }
+    save(blockContent){
+        return {
+            gorsel: $(blockContent).serialize()
+        }
+    }
+}
+const editor = new EditorJS({
+  autofocus: true,
+  tools: {
+    coktan_secmeli: {class: CoktanSecmeli},
+    eslestirme: Eslestirme,
+    dogru_yanlis: DogruYanlis,
+    bosluk_doldurma: BoslukDoldurma,
+    gorsel: Gorsel
+  },
+  {% if data %}
+  data: {blocks: [ {{data | safe}} ]},
+  {% endif %}
+    onReady: () => {
+        var itm = document.getElementsByClassName('ce-toolbox__button')[0]
+        itm.style = 'display:none'
+        var asagi = document.getElementById('asagi')
+        asagi.style = 'visibility:visible;'
+    },
+  i18n: {
+    messages: {
+        ui: {
+        "blockTunes": {
+            "toggler": {
+                "Click to tune": "Ayarlar"
+            },
+        },
+        "toolbar": {
+            "toolbox": {
+                "Add": "Ekle"
+            }
+        }
+    }
+  }
+  }
+});
+{% if sinav %}
+function sinav_sil(e){
+    e.setAttribute('disabled', '')
+    $.ajax({
+            url: "/sinav_sil",
+            data: {id: '{{ current_user.id }}', sinav:'{{ sinav.id }}'},
+            dataType: "text",
+            type: 'POST',
+            success: function(data) {
+                window.location.href = '/pg/sinavlar'
+            },
+            error: function(){
+                hataToast();
+            }
+    })
+}
+{% endif %}
+
+const saveButton = document.getElementById('save-button');
+const output = document.getElementById('output');
+
+saveButton.addEventListener('click', () => {
+    var konular = {{ konular | safe }};
+    saveButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/><path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/></svg> {{_("Yükleniyor")}}'
+    saveButton.setAttribute('bekleniyor', '')
+    editor.save().then( savedData => {
+    var baslik = document.getElementById('sinavbasligi')
+    var ders = $('#autocomplete').select2('data');
+    var kademelerData = document.getElementById('kademelerDataHidden');
+    var logo_secimi = document.getElementById('logo-secimi');
+    var custom_switch = document.getElementById('customSwitch1');
+
+    if (savedData['blocks'].length == 0 ){
+        saveButton.innerHTML = guncelleBtn
+        saveButton.removeAttribute('bekleniyor')
+        toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true
+                }
+                toastr.error('{{_("Lütfen en az bir soru giriniz")}}.');
+    }
+    else if (!baslik.value.trim()){
+        saveButton.innerHTML = guncelleBtn
+        saveButton.removeAttribute('bekleniyor')
+        toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true
+                }
+                toastr.error('{{_("Lütfen bir başlık giriniz")}}.');
+        baslik.focus()
+    }
+    else if (!kademelerData.value.trim()){
+        saveButton.innerHTML = guncelleBtn
+        saveButton.removeAttribute('bekleniyor')
+        toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true
+                }
+                toastr.error('{{_("Lütfen en az bir sınıf seçiniz")}}.');
+        $('#kademeler').select2('focus');
+    }
+    else if (baslik.value.length > 100){
+        saveButton.innerHTML = guncelleBtn
+        saveButton.removeAttribute('bekleniyor')
+        toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true
+                }
+                toastr.error('{{_("Başlık 100 karakterden fazla olamaz")}}.');
+            baslik.focus()
+    }
+    else if ($('#autocomplete').val() == null) {
+        saveButton.innerHTML = guncelleBtn
+        saveButton.removeAttribute('bekleniyor')
+        toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true
+                }
+                toastr.error('{{_("Lütfen en az bir ders seçiniz")}}.');
+        document.getElementById('autocomplete').focus()
+    }
+    else if (konular[$('#autocomplete').val()].length != 0 && $('#tags').val().length == 0){
+        saveButton.innerHTML = guncelleBtn
+        saveButton.removeAttribute('bekleniyor')
+        toastr.options.timeOut = 1500; // 1.5s
+                toastr.options = {
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true
+                }
+                toastr.error('{{_("Lütfen en az bir konu seçiniz")}}.');
+        document.getElementById('tags').focus()
+    }
+    else if ((custom_switch.value == 'true' && document.getElementById('anaaciklama').value.length < 10) || (custom_switch.value == 'true' && document.getElementById('anaaciklama').value.length > 120 )){
+            saveButton.innerHTML = guncelleBtn
+            saveButton.removeAttribute('bekleniyor')
+            toastr.options.timeOut = 1500; // 1.5s
+                    toastr.options = {
+                    "positionClass": "toast-bottom-right",
+                    "preventDuplicates": true
+                    }
+                    toastr.error('{{_("Lütfen geçerli bir açıklama giriniz")}}.');
+            document.getElementById('anaaciklama').focus()
+    }
+    else{
+        var ust_yazi = document.getElementById('ust_yazi')
+        var alt_yazi = document.getElementById('alt_yazi')
+        var sayfa_duzeni = document.getElementById('sayfa-duzeni-hidden')
+        var tags = String($('#tags').val())
+        if (custom_switch.value == 'true') {
+            savedData['aciklama'] = document.getElementById('anaaciklama').value
+        }
+        else {
+            savedData['aciklama'] = ''
+        }
+        savedData['baslik'] = baslik.value
+        savedData['ders'] = ders[0]['text']
+        savedData['gizli_mi'] = custom_switch.value;
+        savedData['ust_yazi'] = ust_yazi.value;
+        savedData['alt_yazi'] = alt_yazi.value;
+        savedData['kademeler'] = kademelerData.value;
+        savedData['logo_secimi'] = logo_secimi.value;
+        savedData['duzen'] = sayfa_duzeni.value;
+        savedData['konular'] = tags;
+        {% if not sinav %}
+        savedData['yeni_mi'] = true;
+        {% endif %}
+        $.ajax({
+            url: "/pdf_yenile",
+            data: savedData,
+            dataType: "text",
+            type: 'POST',
+            success: function(data) {
+                {% if sinav %}
+                var itm = document.getElementById('pdfgoster')
+                data = data.replace(/['"]+/g, '')
+                var url = "https://docs.google.com/gview?url=" + data + "&embedded=true"
+                // var show_url = url.replace('%22', '')
+                itm.data = data
+                saveButton.innerHTML = guncelleBtn
+                saveButton.removeAttribute('bekleniyor')
+                disableButton()
+                {% else %}
+                var gonder = JSON.parse(data)
+
+                window.location.href = '/pg/sinav/' + gonder['id']
+
+                {% endif %}
+            },
+            error: function(data){
+                saveButton.innerHTML = guncelleBtn
+                saveButton.removeAttribute('bekleniyor')
+                if (data.status === 413){
+                    toastr.options.timeOut = 1500; // 1.5s
+                        toastr.options = {
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": true
+                        }
+                        toastr.error('{{_("Aynı başlığı daha önce kullanmışsınız")}}.');
+                    }
+                else if (data.status == 406) {
+                    saveButton.innerHTML = guncelleBtn
+                    saveButton.removeAttribute('bekleniyor')
+                    toastr.options.timeOut = 1500; // 1.5s
+                        toastr.options = {
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": true
+                        }
+                        toastr.error('{{_("Sınav en fazla 6 sayfa olabilir")}}.');
+                }
+                else{
+                    saveButton.innerHTML = guncelleBtn
+                    saveButton.removeAttribute('bekleniyor')
+                    toastr.options.timeOut = 1500; // 1.5s
+                    toastr.options = {
+                    "positionClass": "toast-bottom-right",
+                    "preventDuplicates": true
+                        }
+                    toastr.error('{{_("Bir hata oluştu, tüm soruları doldurduğunuzdan emin misiniz")}}?');
+                    }
+                }
+            })
+    };
+})
+})
+
+</script>
+{% endblock betikozel %}

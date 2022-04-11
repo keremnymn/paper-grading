@@ -1,0 +1,2908 @@
+# English translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-11-21 20:29+0300\n"
+"PO-Revision-Date: 2021-10-29 19:33+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: src/__init__.py:35
+msgid "Bu sayfayı görüntülemek için giriş yapmanız gerekmektedir."
+msgstr "You need to log in to view this page."
+
+#: src/paper_grading/forms.py:10
+msgid "Sınav kâğıtlarını düzenli bir şekilde seçip yükleyiniz."
+msgstr "Select and upload exam papers in an orderly fashion."
+
+#: src/paper_grading/forms.py:11
+msgid "Sınav, Kaçar Sayfadan Oluşuyor?"
+msgstr "How Many Sides The Exam Paper Has?"
+
+#: src/paper_grading/forms.py:11 src/kredi/forms.py:13
+msgid "Birer"
+msgstr "One"
+
+#: src/paper_grading/forms.py:11 src/kredi/forms.py:13
+msgid "İkişer"
+msgstr "Two"
+
+#: src/paper_grading/forms.py:11 src/kredi/forms.py:13
+msgid "Üçer"
+msgstr "Three"
+
+#: src/paper_grading/forms.py:11 src/kredi/forms.py:13
+msgid "Dörder"
+msgstr "Four"
+
+#: src/paper_grading/forms.py:11 src/kredi/forms.py:13
+msgid "Beşer"
+msgstr "Five"
+
+#: src/paper_grading/forms.py:11 src/kredi/forms.py:13
+msgid "Altışar"
+msgstr "Six"
+
+#: src/paper_grading/forms.py:12
+msgid "Sınav Dili"
+msgstr "Exam Language"
+
+#: src/paper_grading/forms.py:12
+msgid "Türkçe"
+msgstr "Turkish"
+
+#: src/paper_grading/forms.py:12
+msgid "İngilizce"
+msgstr "English"
+
+#: src/paper_grading/forms.py:12
+msgid "Almanca"
+msgstr "German"
+
+#: src/paper_grading/forms.py:13
+msgid "Sınav, Hangi Derse Ait?"
+msgstr "What Is The Subject Of Exam?"
+
+#: src/paper_grading/forms.py:14
+#: src/templates/paper_grading/betik_upload.html:90
+#: src/templates/kredi/sinav_olustur.html:47
+#: src/templates/kredi/sinavlar.html:50
+#: src/templates/kredi/sinavlar_arsiv.html:38
+msgid "Sınav Kodu"
+msgstr "Exam Code"
+
+#: src/paper_grading/forms.py:15
+msgid "Paper Grading Kullanım Koşullarını Kabul Ediyorum"
+msgstr "I Agree With Paper Grading Terms Of Use"
+
+#: src/paper_grading/forms.py:16
+msgid "Sınavı Paper Grading Şablonuna Göre Hazırladım"
+msgstr "I prepared the exam according to the GraidaApp template"
+
+#: src/paper_grading/forms.py:17
+msgid "Yükle ve devam et"
+msgstr "Upload and Continue"
+
+#: src/paper_grading/forms.py:20
+#: src/templates/paper_grading/betik_show_img.html:231
+msgid "Beklenen Yanıt"
+msgstr "Expected Answer"
+
+#: src/paper_grading/forms.py:21 src/templates/rapor/ogrenci.html:95
+msgid "Soru Değeri"
+msgstr "Question Point"
+
+#: src/paper_grading/forms.py:27
+msgid "Adınız ve Soyadınız*"
+msgstr "Name and Surname"
+
+#: src/paper_grading/forms.py:28
+msgid "E-Posta Adresiniz*"
+msgstr "E-Mail"
+
+#: src/paper_grading/forms.py:29
+msgid "Eğitim Kurumu"
+msgstr "Institution"
+
+#: src/paper_grading/forms.py:30
+msgid "Telefon Numaranız"
+msgstr "Phone Number"
+
+#: src/paper_grading/forms.py:31
+msgid "İletiniz"
+msgstr "Your Message"
+
+#: src/paper_grading/forms.py:33 src/dersplanlari/forms.py:33
+#: src/dersplanlari/forms.py:37 src/dersplanlari/forms.py:41
+#: src/posts/forms.py:13 src/posts/forms.py:25
+#: src/posts/forms.py:29
+msgid "Gönder"
+msgstr "Submit"
+
+#: src/paper_grading/routes.py:58
+msgid "Sınav Okut"
+msgstr "Grade"
+
+#: src/paper_grading/routes.py:88
+msgid "Bir anda 500 kâğıttan fazlası yüklenemez."
+msgstr "You can not upload more than 500 papers at once"
+
+#: src/paper_grading/routes.py:114
+msgid "Sınav kâğıtları bulunamadı. Lütfen ilk önce sınav kâğıtlarını yükleyiniz."
+msgstr "No exam paper found. Please upload the papers first."
+
+#: src/paper_grading/routes.py:125
+msgid "Sınav kâğıtlarını Paper Grading kurallarına göre hazırladığınızdan emin olunuz."
+msgstr ""
+"Please make sure that your exam papers were created according to Paper Grading"
+" rules"
+
+#: src/paper_grading/routes.py:147
+#: src/templates/paper_grading/betik_show_img.html:128
+#: src/templates/kredi/sinav_olustur.html:2014
+msgid "Boşluk Doldurma"
+msgstr "Gap Filling"
+
+#: src/paper_grading/routes.py:149
+#: src/templates/kredi/sinav_olustur.html:527
+msgid "Çoktan Seçmeli"
+msgstr "Multiple Choice"
+
+#: src/paper_grading/routes.py:151
+msgid "Eşleştirme/Doğru Yanlış"
+msgstr "Matching/True False"
+
+#: src/paper_grading/routes.py:288 src/templates/posts/post.html:14
+#: src/templates/rapor/sinif.html:242
+msgid "Onayla"
+msgstr "Verify"
+
+#: src/dersplanlari/forms.py:10 src/posts/forms.py:8
+#: src/posts/forms.py:16
+msgid "Başlık"
+msgstr "Title"
+
+#: src/dersplanlari/forms.py:11
+msgid "Ders Süresi"
+msgstr "Lesson Duration"
+
+#: src/dersplanlari/forms.py:12 src/templates/dp/dp.html:81
+msgid "Dersin Kazanımları"
+msgstr "Learning Objectives"
+
+#: src/dersplanlari/forms.py:13 src/templates/dp/dp.html:93
+msgid "Gerekli Materyaller"
+msgstr "Required Materials"
+
+#: src/dersplanlari/forms.py:14
+msgid "Ders Öncesi Yapılması Gerekenler"
+msgstr "Lesson Requirements"
+
+#: src/dersplanlari/forms.py:15
+msgid "Derse Hazırlık Aşaması Süresi"
+msgstr "Icebreakers Duration"
+
+#: src/dersplanlari/forms.py:16
+msgid "Derse Hazırlık/Giriş Aşaması"
+msgstr "Icebreakers"
+
+#: src/dersplanlari/forms.py:17
+msgid "Ana Etkinlik Aşaması Süresi"
+msgstr "Main Activity Duration"
+
+#: src/dersplanlari/forms.py:18
+msgid "Ana Etkinlik Aşaması"
+msgstr "Main Activity"
+
+#: src/dersplanlari/forms.py:19
+msgid "İkinci Etkinlik Aşaması Süresi (Eğer Varsa)"
+msgstr "Second Activity Duration (Optional)"
+
+#: src/dersplanlari/forms.py:20
+msgid "İkinci Etkinlik Aşaması (Eğer Varsa)"
+msgstr "Second Activity (Optional)"
+
+#: src/dersplanlari/forms.py:21
+msgid "Yaşama Yansıtma Etkinlikleri Süresi"
+msgstr "Closing Activities Duration"
+
+#: src/dersplanlari/forms.py:22 src/templates/dp/dp.html:168
+msgid "Yaşama Yansıtma Etkinlikleri"
+msgstr "Closing Activities"
+
+#: src/dersplanlari/forms.py:23
+msgid "Ders Materyalleri (Eğer Varsa)"
+msgstr "Lesson Materials (Optional)"
+
+#: src/dersplanlari/forms.py:24
+msgid "Iframeler (Eğer Varsa)"
+msgstr "Iframe Links (Optional)"
+
+#: src/dersplanlari/forms.py:25
+msgid "Ders Paketini Yükleyiniz (Eğer Varsa)"
+msgstr "Lesson Pack (Optional)"
+
+#: src/dersplanlari/forms.py:29 src/dersplanlari/forms.py:45
+#: src/posts/forms.py:10 src/posts/forms.py:18
+msgid "Kategori"
+msgstr "Category"
+
+#: src/dersplanlari/forms.py:30 src/posts/forms.py:12
+#: src/posts/forms.py:20
+msgid "Özet"
+msgstr "Summary"
+
+#: src/dersplanlari/forms.py:31 src/dersplanlari/forms.py:46
+msgid "Etiketler"
+msgstr "Tags"
+
+#: src/dersplanlari/forms.py:32 src/dersplanlari/forms.py:47
+msgid "Ders Etkinlikleri"
+msgstr "Lesson Activities"
+
+#: src/dersplanlari/forms.py:36 src/posts/forms.py:24
+msgid "Yorum Yazın"
+msgstr "Add A Comment"
+
+#: src/dersplanlari/forms.py:40 src/posts/forms.py:28
+msgid "Yanıtınız"
+msgstr "Your Respond"
+
+#: src/dersplanlari/forms.py:44
+#: src/templates/kredi/sinavlar_arsiv.html:87
+#: src/templates/rapor/sinavlar.html:39
+msgid "Ders Adı"
+msgstr "Lesson Name"
+
+#: src/dersplanlari/forms.py:48 src/posts/forms.py:32
+msgid "Sıralama Ölçütü"
+msgstr "Order By"
+
+#: src/dersplanlari/forms.py:48 src/posts/forms.py:32
+msgid "Tarihe Göre Sırala"
+msgstr "Order By Date"
+
+#: src/dersplanlari/forms.py:48 src/posts/forms.py:32
+msgid "Puana Göre Sırala"
+msgstr "Order By Score"
+
+#: src/dersplanlari/forms.py:49 src/posts/forms.py:34
+#: src/templates/kredi/sinavlar_arsiv.html:97
+msgid "Filtrele"
+msgstr "Filter"
+
+#: src/dersplanlari/routes.py:55 src/posts/routes.py:70
+msgid "Zaten bu başlığı kullanmışsınız."
+msgstr "You have used the same title before."
+
+#: src/dersplanlari/routes.py:60 src/posts/routes.py:77
+msgid "Başlık çok uzun."
+msgstr "Length of the title is too long"
+
+#: src/dersplanlari/routes.py:158
+msgid "Gönderiniz oluşturuldu."
+msgstr "You post has been created."
+
+#: src/dersplanlari/routes.py:161 src/dersplanlari/routes.py:308
+#: src/dersplanlari/routes.py:350 src/dersplanlari/routes.py:463
+#: src/dersplanlari/routes.py:495 src/dersplanlari/routes.py:509
+#: src/dersplanlari/routes.py:536 src/dersplanlari/routes.py:549
+#: src/posts/routes.py:88 src/posts/routes.py:155
+#: src/posts/routes.py:277 src/posts/routes.py:313
+#: src/posts/routes.py:333 src/posts/routes.py:347
+msgid "Bir hata oluştu."
+msgstr "An error occured."
+
+#: src/dersplanlari/routes.py:166
+msgid "Yeni Ders Planı"
+msgstr "New Lesson Plan"
+
+#: src/dersplanlari/routes.py:217
+msgid "Çok büyük bir paket yüklemeye çalıştınız."
+msgstr "You tried to upload too big files."
+
+#: src/dersplanlari/routes.py:230
+msgid ""
+"Yüklemeye çalıştığınız bazı dosyalar desteklenen dosya türleri içerisinde"
+" değil."
+msgstr "The files you tried to upload contains unsupported extensions."
+
+#: src/dersplanlari/routes.py:241
+msgid "Yüklemeye çalıştığınız dosyaların içinde 7MB'dan büyük dosya(lar) var."
+msgstr "There are files that are bigger than 7MB in the files you tried to upload."
+
+#: src/dersplanlari/routes.py:305 src/posts/routes.py:275
+msgid "Gönderiniz güncellendi."
+msgstr "Your post has been updated."
+
+#: src/dersplanlari/routes.py:310
+msgid "Ders Planını Güncelle"
+msgstr "Update The Lesson Plan"
+
+#: src/dersplanlari/routes.py:347
+msgid "Ders planı silinmiştir."
+msgstr "You post has been deleted."
+
+#: src/dersplanlari/routes.py:433 src/templates/dp/dp.html:9
+#: src/templates/dp/dp_home.html:6 src/templates/layout.html:146
+#: src/templates/public_profile.html:73
+msgid "Ders Planları"
+msgstr "Lesson Plans"
+
+#: src/dersplanlari/routes.py:460 src/posts/routes.py:152
+msgid "Yorumunuz başarıyla gönderildi!"
+msgstr "Your comment has been added!"
+
+#: src/dersplanlari/routes.py:466 src/posts/routes.py:158
+msgid "Bugünlük yorum yazma sınırını aştınız."
+msgstr "You can not add any more comment today"
+
+#: src/dersplanlari/routes.py:492 src/posts/routes.py:330
+msgid "Alkışlamaktan vazgeçtiniz."
+msgstr "You've unliked it."
+
+#: src/dersplanlari/routes.py:498 src/posts/routes.py:336
+msgid "Kendinizi alkışlayamazsınız"
+msgstr "You can not like your own post"
+
+#: src/dersplanlari/routes.py:506
+msgid "Bu gönderiyi alkışladınız!"
+msgstr "You've liked it!"
+
+#: src/dersplanlari/routes.py:525 src/posts/routes.py:201
+msgid "Kendinize puan veremezsiniz"
+msgstr "You can not like your own post"
+
+#: src/dersplanlari/routes.py:533 src/posts/routes.py:211
+msgid "Puan vermekten vazgeçtiniz."
+msgstr "You've unliked it."
+
+#: src/dersplanlari/routes.py:546
+msgid "Bu yoruma puan verdiniz"
+msgstr "You have liked this comment"
+
+#: src/dersplanlari/routes.py:574 src/posts/routes.py:168
+msgid "Bu yoruma yanıt veremezsiniz."
+msgstr "You can not reply to this"
+
+#: src/errors/handlers.py:9 src/errors/handlers.py:14
+#: src/errors/handlers.py:19 src/errors/handlers.py:24
+msgid "Hata"
+msgstr "Error"
+
+#: src/kredi/forms.py:8
+msgid "Çoktan Seçmeli Sayısı"
+msgstr "Multiple Choice Questions"
+
+#: src/kredi/forms.py:9
+msgid "Doğru Yanlış Sayısı"
+msgstr "True False Questions"
+
+#: src/kredi/forms.py:10
+msgid "Eşleştirme Sayısı"
+msgstr "Matching Questions"
+
+#: src/kredi/forms.py:11
+msgid "Boşluk Doldurma Sayısı"
+msgstr "Gap Filling Questions"
+
+#: src/kredi/forms.py:12
+msgid "Sınav, Kaç Kişilik?"
+msgstr "For How Many Students?"
+
+#: src/kredi/forms.py:13
+msgid "Sınav, Kaçar Sayfa?"
+msgstr "How Many Sides The Exam Paper Has?"
+
+#: src/kredi/forms.py:14
+msgid "Tahmin:"
+msgstr "Estimation:"
+
+#: src/kredi/routes.py:35
+msgid "Fiyatlar"
+msgstr "Pricing"
+
+#: src/kredi/routes.py:70 src/templates/kredi/sinavlar.html:6
+msgid "Hazırladığınız Sınavlar"
+msgstr "Your Exams"
+
+#: src/kredi/routes.py:132
+msgid "Çok fazla sınav hazırladınız, bazılarını silmeyi deneyin."
+msgstr "You created too many exams, try deleting some."
+
+#: src/kredi/routes.py:137
+msgid "Sınav Oluştur"
+msgstr "Create An Exam"
+
+#: src/kredi/routes.py:469 src/templates/kredi/sinavlar.html:7
+msgid "Sınav Arşivi"
+msgstr "Exam Archive"
+
+#: src/kredi/routes.py:587 src/templates/main/sidebar.html:40
+msgid "Okul Paneli"
+msgstr "Institution Panel"
+
+#: src/kredi/routes.py:700
+msgid "Promosyon İsteği"
+msgstr "Free Credit Request"
+
+#: src/kredi/routes.py:703
+msgid "Daha önce promosyon kredisi kullanmışsınız."
+msgstr "You've used free credits before."
+
+#: src/main/routes.py:45 src/templates/layout.html:129
+#: src/templates/main/sidebar.html:29
+msgid "Nasıl Yapılır?"
+msgstr "Learn How"
+
+#: src/main/routes.py:50 src/templates/layout.html:287
+msgid "Hakkımızda"
+msgstr "About Us"
+
+#: src/main/routes.py:163
+#: src/templates/paper_grading/pg_landing_page.html:298
+#: src/templates/paper_grading/betikonay.html:108
+#: src/templates/layout.html:290 src/templates/layout.html:304
+#: src/templates/main/iletisim.html:9
+#: src/templates/main/sidebar.html:51
+msgid "İletişim"
+msgstr "Contact"
+
+#: src/posts/forms.py:9 src/posts/forms.py:17
+msgid "İçerik"
+msgstr "Content"
+
+#: src/posts/forms.py:11 src/posts/forms.py:19
+#: src/templates/kredi/sinav_olustur.html:2216
+#: src/templates/kredi/sinav_olustur.html:2227
+msgid "Görsel"
+msgstr "Image"
+
+#: src/posts/forms.py:33
+msgid "Konu"
+msgstr "Topic"
+
+#: src/posts/routes.py:39
+msgid "Görsel çok büyük"
+msgstr "Image size is too big"
+
+#: src/posts/routes.py:86
+msgid "Gönderiniz oluşturuldu ve yöneticilerin onayını beklemekte."
+msgstr "You post has been created and pending for admin approval"
+
+#: src/posts/routes.py:92
+msgid "Bugünlük gönderi sınırını aştınız."
+msgstr "You can not post anymore today"
+
+#: src/posts/routes.py:94
+msgid "Yeni Gönderi"
+msgstr "New Post"
+
+#: src/posts/routes.py:129 src/templates/layout.html:145
+#: src/templates/posts/post.html:22
+#: src/templates/public_profile.html:79
+msgid "Yazılar"
+msgstr "Blog"
+
+#: src/posts/routes.py:283
+msgid "Gönderiyi Güncelleyin"
+msgstr "Update Post"
+
+#: src/posts/routes.py:310
+msgid "Gönderiniz silinmiştir."
+msgstr "You post has been deleted."
+
+#: src/posts/routes.py:344
+msgid "Bu gönderiyi alkışladınız."
+msgstr "You've liked it!"
+
+#: src/rapor/routes.py:43 src/templates/main/sidebar.html:17
+#: src/templates/rapor/sinavlar.html:13
+#: src/templates/rapor/siniflar.html:36
+msgid "Yapılan Sınavlar"
+msgstr "Graded Exams"
+
+#: src/rapor/routes.py:63 src/templates/main/sidebar.html:24
+#: src/templates/rapor/siniflar.html:13
+msgid "Sınıflar"
+msgstr "Classes"
+
+#: src/rapor/routes.py:90
+msgid "Paper Grading Panel"
+msgstr "Paper Grading Panel"
+
+#: src/templates/_comment.html:10
+msgid "Puan Ver"
+msgstr "Like"
+
+#: src/templates/_comment.html:28
+msgid "Yanıtla"
+msgstr "Reply"
+
+#: src/templates/_comment.html:35 src/templates/dp/dp.html:345
+#: src/templates/posts/post.html:166
+#: src/templates/rapor/sinav.html:149
+#: src/templates/rapor/sinav.html:226
+#: src/templates/rapor/sinif.html:152
+#: src/templates/rapor/sinif.html:217
+msgid "Sil"
+msgstr "Delete"
+
+#: src/templates/giris.html:11
+msgid "Google ile giriş yapın"
+msgstr "Log in with a Google account"
+
+#: src/templates/paper_grading/betik_upload.html:34
+#: src/templates/giris.html:14 src/templates/kayit.html:14
+msgid "ya da"
+msgstr "or"
+
+#: src/templates/giris.html:15
+msgid "Giriş Yapın"
+msgstr "Log In"
+
+#: src/templates/giris.html:50
+msgid "Şifremi unuttum."
+msgstr "Forgot my password."
+
+#: src/templates/giris.html:57
+msgid "Hesabınız yok mu"
+msgstr "Do you have an account"
+
+#: src/templates/giris.html:57
+msgid "Hemen kaydolun."
+msgstr "Sign up now."
+
+#: src/templates/giris.html:65
+msgid "Hesabınız etkin değil"
+msgstr "Your account is not active"
+
+#: src/templates/giris.html:71
+msgid ""
+"Görünüşe göre hesabınızı etkinleştirmemişsiniz. E-posta adresinize tek "
+"kullanımlık etkinleştirme kodu göndermemizi ister misiniz?"
+msgstr ""
+"Your account seems to be inactive. Do you want us to send a code to "
+"activate your account?"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:20
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:35
+#: src/templates/dp/dp.html:342 src/templates/giris.html:74
+#: src/templates/kredi/sinav_olustur.html:149
+#: src/templates/kredi/sinav_olustur.html:168
+#: src/templates/kredi/sinav_olustur.html:186
+#: src/templates/posts/post.html:163
+#: src/templates/rapor/sinav.html:145
+#: src/templates/rapor/sinav.html:171
+#: src/templates/rapor/sinav.html:196
+#: src/templates/rapor/sinav.html:222
+#: src/templates/rapor/sinif.html:119
+#: src/templates/rapor/sinif.html:148
+#: src/templates/rapor/sinif.html:186
+#: src/templates/rapor/sinif.html:213
+#: src/templates/rapor/sinif.html:239
+#: src/templates/rapor/siniflar.html:72
+msgid "Vazgeç"
+msgstr "Cancel"
+
+#: src/templates/giris.html:75
+msgid "Evet"
+msgstr "Yes"
+
+#: src/templates/kayit.html:8
+msgid "Kayıt Olun"
+msgstr "Sign Up"
+
+#: src/templates/kayit.html:11
+msgid "Google bilgileriniz ile kayıt olun"
+msgstr "Sign up with Google Account"
+
+#: src/templates/kayit.html:70 src/templates/reset_request.html:23
+#: src/templates/reset_token.html:86
+msgid "ReCaptcha doğrulaması geçersiz."
+msgstr "Invalid ReCaptcha"
+
+#: src/templates/kayit.html:80
+msgid "Hesabınız var mı?"
+msgstr "Do you have an account?"
+
+#: src/templates/kayit.html:80
+msgid "Giriş yapın."
+msgstr "Log In"
+
+#: src/templates/layout.html:40
+msgid ""
+"Öğretmenlerin uzaktan eğitimden farklılaştırılmış öğretime kadar\n"
+"  günlük ders planları bulabileceği ve paylaşabileceği tek platform"
+msgstr "A social platform where teachers can post, like or download lesson plans"
+
+#: src/templates/layout.html:43
+msgid ""
+"Öğretmenlerin fikirlerini özgürce dile getirdiği makale paylaşım\n"
+"  platformu."
+msgstr "A social platform that teachers can share their articles or blog posts."
+
+#: src/templates/layout.html:47
+msgid ""
+"Sınav kâğıtlarını okuyabilen yapay zekâ ile tanışın! Paper Grading; doğru "
+"yanlış, eşleştirme, çoktan seçmeli ve boşluk doldurma sorularını "
+"okuyabilir."
+msgstr ""
+"Meet AI that can grade exam papers! Paper Grading can grade; true-false, "
+"matching, multiple choice and gap filling questions on real papers."
+
+#: src/templates/layout.html:57
+msgid "yazilar"
+msgstr "blog"
+
+#: src/templates/layout.html:64
+msgid "dersplanlari"
+msgstr "lessonplans"
+
+#: src/templates/layout.html:90
+msgid ""
+"<b>Çerez Kullanımı</b> &#x1F36A; Sitemizde en iyi deneyimi yaşamanız için"
+" çerez kullanmaktayız."
+msgstr ""
+"<b>Cookie Consent</b> &#x1F36A; We use cookies to help you experience our"
+" website better."
+
+#: src/templates/layout.html:91 src/templates/layout.html:293
+msgid "Gizlilik Politikası"
+msgstr "Privacy Policy"
+
+#: src/templates/layout.html:94
+msgid "Anladım"
+msgstr "Got It"
+
+#: src/templates/kredi/sinav_olustur.html:26
+#: src/templates/kredi/sinavlar_arsiv.html:12
+#: src/templates/layout.html:117
+msgid "/pg/sinavlar"
+msgstr "/pg/exams"
+
+#: src/templates/layout.html:120
+msgid "Hazırla"
+msgstr "Create"
+
+#: src/templates/layout.html:121
+msgid "/pg/giris/"
+msgstr "/pg/grade/"
+
+#: src/templates/layout.html:124
+#: src/templates/rapor/sinavlar.html:23
+msgid "Okut"
+msgstr "Grade"
+
+#: src/templates/paper_grading/pg_landing_page.html:138
+#: src/templates/paper_grading/betik_upload.html:22
+#: src/templates/layout.html:126 src/templates/layout.html:239
+#: src/templates/main/sidebar.html:26
+msgid "/nasilyapilir"
+msgstr "/howto"
+
+#: src/templates/layout.html:142
+msgid "Akademik"
+msgstr "Academic"
+
+#: src/templates/layout.html:145
+msgid "/yazilar"
+msgstr "/blog"
+
+#: src/templates/layout.html:146
+msgid "/dersplanlari"
+msgstr "/lessonplans"
+
+#: src/templates/layout.html:167
+msgid "/profil-guncelle"
+msgstr "/update-profile"
+
+#: src/templates/layout.html:169 src/users/routes.py:138
+msgid "Profil"
+msgstr "Profile"
+
+#: src/templates/layout.html:170
+msgid "/cikis"
+msgstr "/logout"
+
+#: src/templates/layout.html:173
+msgid "Çıkış Yap"
+msgstr "Log Out"
+
+#: src/templates/layout.html:184
+msgid "/giris"
+msgstr "/login"
+
+#: src/templates/layout.html:187
+msgid "Giriş"
+msgstr "Log In"
+
+#: src/templates/layout.html:188 src/templates/layout.html:231
+msgid "/kayit"
+msgstr "/signup"
+
+#: src/templates/layout.html:188 src/templates/layout.html:231
+msgid "Üye Ol"
+msgstr "Sign Up"
+
+#: src/templates/layout.html:225
+msgid "Henüz üye değil misiniz?"
+msgstr "Not signed up yet?"
+
+#: src/templates/layout.html:228
+msgid "Aramıza katılın."
+msgstr "Join us."
+
+#: src/templates/layout.html:229
+msgid ""
+"Sınav, ödev, quiz kâğıtlarını okuyabilen yapay zekâ uygulaması Paper Grading'i"
+" kullanmaya başlayın!"
+msgstr "Start using Paper Grading that can grade exam, quiz, homework papers!"
+
+#: src/templates/layout.html:230
+msgid "Ayrıntılı bilgi için <a href='/nasilyapilir'>tıklayınız."
+msgstr "For more information <a href='/howto'> click here."
+
+#: src/templates/layout.html:236
+msgid "Göz Atın"
+msgstr "Learn How"
+
+#: src/templates/layout.html:237
+msgid "Kılavuzları incelemek ister misiniz?"
+msgstr "Frequently asked questions"
+
+#: src/templates/layout.html:239
+msgid "Paper Grading Nedir?"
+msgstr "What Is Paper Grading?"
+
+#: src/templates/paper_grading/pg_landing_page.html:87
+#: src/templates/layout.html:240
+msgid "/nasilyapilir#sinav_olusturmak"
+msgstr "/howto#creating_exam"
+
+#: src/templates/layout.html:240
+msgid "Nasıl Sınav Hazırlanır?"
+msgstr "How Can I Create An Exam Paper?"
+
+#: src/templates/paper_grading/pg_landing_page.html:99
+#: src/templates/layout.html:241
+msgid "/nasilyapilir#sinav_taratma"
+msgstr "/howto#scanning"
+
+#: src/templates/layout.html:241
+msgid "Nasıl Sınav Okutulur?"
+msgstr "How Can I Grade My Papers Automatically?"
+
+#: src/templates/layout.html:262
+msgid ""
+"Paper Grading; boşluk doldurma, çoktan seçmeli, eşleştirme ve doğru yanlış "
+"sorularını okuyabilen bir yapay zekâ uygulamasıdır."
+msgstr ""
+"Paper Grading is an AI web app that can grade multiple choice, matching, true-"
+"false and gap-filling questions on real papers."
+
+#: src/templates/layout.html:285
+msgid "/hakkimizda"
+msgstr "/about-us"
+
+#: src/templates/paper_grading/pg_landing_page.html:296
+#: src/templates/kredi/fiyatlar.html:84
+#: src/templates/layout.html:288 src/templates/main/sidebar.html:49
+msgid "/iletisim"
+msgstr "/contact"
+
+#: src/templates/layout.html:291
+msgid "/gizlilik-politikasi"
+msgstr "/privacy-policy"
+
+#: src/templates/layout.html:294
+msgid "/iptal-iade-kosullari"
+msgstr "/refund-policy"
+
+#: src/templates/layout.html:296
+msgid "İptal ve İade Koşulları"
+msgstr "Refund Policy"
+
+#: src/templates/layout.html:297
+msgid "/mesafeli-satis-sozlesmesi"
+msgstr "/distant-sales-agreement"
+
+#: src/templates/layout.html:300
+msgid "Mesafeli Satış Sözleşmesi"
+msgstr "Distant Sales Agreement"
+
+#: src/templates/layout.html:305
+msgid ""
+"İletişime geçmek için e-posta adresimizi veya sosyal medya hesaplarımızı "
+"kullanın."
+msgstr "Visit our social media accounts to get in touch with us!"
+
+#: src/templates/layout.html:326
+msgid "Tüm Hakları Saklıdır."
+msgstr "All Rights Reserved"
+
+#: src/templates/profil.html:16
+msgid "Profili Görüntüle"
+msgstr "View Profile"
+
+#: src/templates/profil.html:23
+msgid "Profilinizin Nasıl Gözükeceğini Belirleyin"
+msgstr "Edit Your Profile"
+
+#: src/templates/profil.html:39
+msgid "E-Posta Adresi"
+msgstr "E-Mail"
+
+#: src/templates/kredi/sinav_olustur.html:116
+#: src/templates/posts/post.html:12 src/templates/profil.html:42
+#: src/users/forms.py:38
+msgid "Güncelle"
+msgstr "Update"
+
+#: src/templates/public_profile.html:35
+msgid "İlgi/Uzmanlık Alanları"
+msgstr "Interests/Proficiencies"
+
+#: src/templates/public_profile.html:45
+msgid "Paper Grading Puanı"
+msgstr "Paper Grading Points"
+
+#: src/templates/public_profile.html:85
+msgid "Alkışlanan Gönderiler"
+msgstr "Liked Posts"
+
+#: src/templates/posts/post.html:179
+#: src/templates/public_profile.html:95
+msgid "Yazar"
+msgstr "Author"
+
+#: src/templates/dp/dp_home.html:57
+#: src/templates/posts/home.html:40
+#: src/templates/public_profile.html:100
+msgid "Kişi Alkışladı"
+msgstr "Likes"
+
+#: src/templates/dp/dp.html:315 src/templates/dp/dp_home.html:57
+#: src/templates/posts/home.html:40
+#: src/templates/posts/post.html:134
+#: src/templates/public_profile.html:100
+msgid "Yorum"
+msgstr "Comments"
+
+#: src/templates/reset_request.html:7
+#: src/templates/reset_token.html:8
+msgid "Şifreyi Sıfırlayın"
+msgstr "Reset Password"
+
+#: src/templates/reset_token.html:44
+msgid "E-Posta Adresinizi Güncelleyin"
+msgstr "Update Your E-Mail Address"
+
+#: src/templates/paper_grading/pg_landing_page.html:21
+msgid "Sıraya Alındı"
+msgstr "In The Process"
+
+#: src/templates/paper_grading/pg_landing_page.html:27
+msgid ""
+"Sınav okuma isteğiniz sıraya alındı. Bekleme süresi yoğunluğa göre "
+"değişebilir. İşlem bittiğinde sonuç e-postanıza gönderilecektir. İlginiz "
+"için teşekkürler"
+msgstr ""
+"Your request to grade your papers are beign processed. Waiting duratin "
+"might change according to the number of jobs in the line. We're going to "
+"send a notification to you when it's done. Thank you for your interest"
+
+#: src/templates/paper_grading/pg_landing_page.html:30
+#: src/templates/paper_grading/betik_upload.html:238
+#: src/templates/main/iletisim.html:18
+msgid "Anlaşıldı"
+msgstr "Got It"
+
+#: src/templates/paper_grading/pg_landing_page.html:67
+msgid "Sınav kâğıtlarını okuyabilen yapay zekâ ile tanışın"
+msgstr "Meet AI that can grade exam papers"
+
+#: src/templates/paper_grading/pg_landing_page.html:68
+msgid ""
+"Paper Grading; <b>çoktan seçmeli, doğru yanlış, eşleştirme</b> ve <b>boşluk "
+"doldurma</b> sorularını okuyabilir."
+msgstr ""
+"Paper Grading can grade; <b>multiple-choice, true-false, matching</b> and "
+"<b>gap filling</b> questions."
+
+#: src/templates/paper_grading/pg_landing_page.html:68
+#: src/templates/paper_grading/pg_landing_page.html:129
+msgid "nasilyapilir"
+msgstr "howto"
+
+#: src/templates/paper_grading/pg_landing_page.html:68
+msgid "Hemen Başlayın"
+msgstr "Start Now"
+
+#: src/templates/paper_grading/pg_landing_page.html:79
+msgid "Üç adımda Paper Grading"
+msgstr "Paper Grading in three steps"
+
+#: src/templates/paper_grading/pg_landing_page.html:80
+msgid "Paper Grading'i kullanarak kâğıtlara zaman harcamak yerine işinize odaklanın."
+msgstr ""
+"Focus on your work using Paper Grading instead of wasting your time grading "
+"all those papers."
+
+#: src/templates/paper_grading/pg_landing_page.html:91
+msgid "Sınav Kâğıdını Hazırlayın"
+msgstr "Create An Exam Paper"
+
+#: src/templates/paper_grading/pg_landing_page.html:92
+msgid ""
+"Paper Grading algoritmasını kullanarak <span class=\"vurgu\">birkaç dakika "
+"içinde</span> sınav veya ödev kâğıdınızı platformumuzda hazırlayın."
+msgstr ""
+"Create your exam paper <span class=\"vurgu\">in a few minutes</span> "
+"using Paper Grading algorithm on our platform."
+
+#: src/templates/paper_grading/pg_landing_page.html:103
+msgid "Sınav Kâğıtlarını Taratın"
+msgstr "Scan Exam Papers"
+
+#: src/templates/paper_grading/pg_landing_page.html:104
+msgid ""
+"Sınavı uyguladıktan sonra saatlerinizi harcamak yerine akıllı telefonunuz"
+" ile kâğıtları taratın. <span class=\"vurgu\">Yapmanız gereken her şey bu"
+" kadar.</span>"
+msgstr ""
+"After conducting the exam, scan the papers using your smarthphone instead"
+" of wasting hours. <span class=\"vurgu\">That's all!</span>"
+
+#: src/templates/paper_grading/pg_landing_page.html:111
+msgid "/nasilyapilir#detayli_rapor"
+msgstr "/howto#detailed_report"
+
+#: src/templates/paper_grading/pg_landing_page.html:115
+msgid "Detaylı Raporu Edinin"
+msgstr "Get Detailed Reports"
+
+#: src/templates/paper_grading/pg_landing_page.html:116
+msgid ""
+"Öğrenciler ve sınıf için <span class=\"vurgu\">MEB kazanımlarını "
+"içeren</span> detaylı raporları otomatik olarak elde edin."
+msgstr ""
+"Get automatically generated reports <span class=\"vurgu\">including "
+"learning objectives report</span> in a few minutes."
+
+#: src/templates/paper_grading/pg_landing_page.html:134
+msgid "Nasıl yapıldığını öğrenin"
+msgstr "Learn how"
+
+#: src/templates/paper_grading/pg_landing_page.html:135
+msgid ""
+"Öğretmenler Paper Grading'i kullanarak <b>％95 zaman tasarrufu</b> sağlıyor. "
+"Nasıl olduğunu öğrenmek için aşağıdan bir seçeneğe tıklayın."
+msgstr ""
+"Teachers save <b>95％ of their time</b> using Paper Grading. Click one option "
+"below to see how."
+
+#: src/templates/paper_grading/pg_landing_page.html:141
+msgid "KILAVUZ"
+msgstr "GUIDE"
+
+#: src/templates/paper_grading/pg_landing_page.html:143
+msgid "Ana Kılavuz"
+msgstr "Detailed Guide"
+
+#: src/templates/paper_grading/pg_landing_page.html:144
+msgid "Paper Grading'in nasıl çalıştığını bu yazıda öğrenin."
+msgstr "See how Paper Grading works in this detailed guide."
+
+#: src/templates/paper_grading/pg_landing_page.html:154
+msgid "İZLETİ"
+msgstr "VIDEO"
+
+#: src/templates/paper_grading/pg_landing_page.html:156
+msgid "Kısa Gösterim"
+msgstr "Short Demo"
+
+#: src/templates/paper_grading/pg_landing_page.html:157
+msgid "Bu video ile Paper Grading'in nasıl çalıştığını gösterelim."
+msgstr "Let us show how Paper Grading works in this video."
+
+#: src/templates/paper_grading/pg_landing_page.html:174
+msgid "Şimdiye kadar"
+msgstr "Until now"
+
+#: src/templates/paper_grading/pg_landing_page.html:186
+msgid "Öğretmen Kullandı"
+msgstr "Teachers used"
+
+#: src/templates/paper_grading/pg_landing_page.html:196
+msgid "Kâğıt Okundu"
+msgstr "Papers graded"
+
+#: src/templates/paper_grading/pg_landing_page.html:206
+msgid "Soru Okundu"
+msgstr "Questions graded"
+
+#: src/templates/paper_grading/pg_landing_page.html:218
+msgid "Saat Tasarruf Sağlandı"
+msgstr "Hours saved"
+
+#: src/templates/paper_grading/pg_landing_page.html:229
+msgid "Ne dediler"
+msgstr "What did they say?"
+
+#: src/templates/paper_grading/pg_landing_page.html:230
+msgid ""
+"Paper Grading'i kullanan öğretmenler sınav, ödev ve quiz kâğıtlarına "
+"harcadıkları zamandan ％95 oranında tasarruf sağladılar ve hem "
+"öğrencilerine hem kendilerine daha fazla zaman ayırdılar."
+msgstr ""
+"Teachers who have used Paper Grading saved 95％ of their time wasted in grading"
+" quiz, exam and homework papers and they allocated more time to their "
+"students and themselves."
+
+#: src/templates/paper_grading/pg_landing_page.html:240
+msgid ""
+"Paper Grading'i ödev ve quiz yaparken kullanıyorum. Kâğıtlara ayırdığım zamanı"
+" çok büyük ölçüde azaltıyor."
+msgstr "I use Paper Grading for quizzes and exams. It helps to save most of my time."
+
+#: src/templates/paper_grading/pg_landing_page.html:242
+#: src/templates/paper_grading/pg_landing_page.html:254
+msgid "Ortaokul, İngilizce Öğretmeni"
+msgstr "Secondary school, Foreign Language Teacher"
+
+#: src/templates/paper_grading/pg_landing_page.html:252
+msgid "Uygun ve kullanışlı. Büyük bir zaman ve enerji kaybını önlüyor."
+msgstr "Price is convenient and it's easy to use. Prevents wasted energy and time."
+
+#: src/templates/paper_grading/pg_landing_page.html:264
+msgid ""
+"Kullanım kolaylığı ve zamandan tasarruf sağlaması ile çok memnun kaldığım"
+" bir uygulama."
+msgstr ""
+"I am happy with using Paper Grading since it is very easy to use and saves my "
+"time."
+
+#: src/templates/paper_grading/pg_landing_page.html:266
+msgid "Lise, Türk Dili ve Edebiyatı Öğretmeni"
+msgstr "High School, Language Teacher"
+
+#: src/templates/paper_grading/pg_landing_page.html:293
+#: src/templates/kredi/fiyatlar.html:84
+#: src/templates/main/iletisim.html:42
+msgid "İletişime geçelim"
+msgstr "Let's get in touch"
+
+#: src/templates/paper_grading/pg_landing_page.html:294
+msgid "Paper Grading'i kullanmanız için nasıl yardımcı olabiliriz?"
+msgstr "How can we help you about using Paper Grading?"
+
+#: src/templates/paper_grading/pg_landing_page.html:295
+msgid ""
+"Bizimle aşağıdaki düğmeden iletişim formunu doldurarak iletişime "
+"geçebilir, ya da ekranın sağ alt köşesindeki düğme ile canlı desteğe "
+"başvurabilirsiniz."
+msgstr ""
+"You can get in touch with filling contact form clicking the button below "
+"or you can use live support button at right bottom of your screen."
+
+#: src/templates/paper_grading/pg_landing_page.html:307
+msgid "Destekleyenler"
+msgstr "Supported by"
+
+#: src/templates/paper_grading/betik_show_img.html:38
+#: src/templates/rapor/ogrenci.html:93
+msgid "Soru"
+msgstr "Question"
+
+#: src/templates/paper_grading/betik_show_img.html:47
+msgid "Kazanımlar"
+msgstr "Learning Objectives"
+
+#: src/templates/paper_grading/betik_show_img.html:51
+#: src/templates/paper_grading/betik_show_img.html:56
+msgid "Bir kazanım ile ilişkili değil"
+msgstr "Not associated with a learning objective"
+
+#: src/templates/paper_grading/betik_show_img.html:71
+#: src/templates/kredi/sinav_olustur.html:242
+#: src/templates/rapor/sinav.html:174
+#: src/templates/rapor/sinav.html:199
+#: src/templates/rapor/sinif.html:122
+#: src/templates/rapor/sinif.html:189
+#: src/templates/rapor/siniflar.html:75
+msgid "Kaydet"
+msgstr "Save"
+
+#: src/templates/paper_grading/betik_show_img.html:77
+msgid "Kaydet ve İlerle"
+msgstr "Save and Continue"
+
+#: src/templates/paper_grading/betik_show_img.html:92
+msgid "Cevap Anahtarı Oluşturma"
+msgstr "Creating The Answer Key"
+
+#: src/templates/paper_grading/betik_show_img.html:95
+msgid ""
+"Kâğıt üzerinde yakınlaştırma yaparak <b>tüm sorulara</b> beklediğiniz "
+"yanıtları ve soru değerini girin."
+msgstr ""
+"Enter the answers and question points for <b>all the questions</b> "
+"zooming in and out on the paper."
+
+#: src/templates/paper_grading/betik_show_img.html:96
+msgid "Cevap Anahtarı Girme Kılavuzu"
+msgstr "Creating The Answer Key Guide"
+
+#: src/templates/paper_grading/betik_show_img.html:105
+msgid "MEB Kazanımları Analizi"
+msgstr "Learning Objectives Analysis"
+
+#: src/templates/paper_grading/betik_show_img.html:108
+msgid "Kazanım analizi durumu"
+msgstr "Learning objectives status"
+
+#: src/templates/paper_grading/betik_show_img.html:110
+msgid "Eşleşen sınav bulunamadı"
+msgstr "No exam matched"
+
+#: src/templates/paper_grading/betik_show_img.html:112
+msgid "Girilen sınav kodu kazanımlar ile uyuşmuyor"
+msgstr "Exam code and learning objectives are not compatible"
+
+#: src/templates/paper_grading/betik_show_img.html:116
+msgid "Kazanım analizi yapılacak"
+msgstr "Learning objectives will by analyzed"
+
+#: src/templates/paper_grading/betik_show_img.html:122
+msgid "Lejant"
+msgstr "Legend"
+
+#: src/templates/paper_grading/betik_show_img.html:125
+msgid "Soru tiplerinin kodları"
+msgstr "Question Type Codes"
+
+#: src/templates/paper_grading/betik_show_img.html:127
+#: src/templates/kredi/fiyatlar.html:31
+msgid "Ad Soyad"
+msgstr "Name and Surname"
+
+#: src/templates/paper_grading/betik_show_img.html:129
+msgid "Çoktan seçmeli"
+msgstr "Multiple Choice"
+
+#: src/templates/paper_grading/betik_show_img.html:130
+msgid "Doğru Yanlış / Eşleştirme"
+msgstr "True False / Matching"
+
+#: src/templates/paper_grading/betik_show_img.html:135
+msgid "Kâğıt"
+msgstr "Paper"
+
+#: src/templates/paper_grading/betik_show_img.html:221
+msgid "Birden fazla yanıt doğruysa virgül ile ayırabilirsiniz."
+msgstr "You can divide all the correct answers by a comma"
+
+#: src/templates/paper_grading/betik_upload.html:8
+msgid "Paper Grading Sınav Kâğıdı Okuma"
+msgstr "Grade Exam Papers With Paper Grading"
+
+#: src/templates/paper_grading/betik_upload.html:12
+#: src/templates/paper_grading/betik_upload.html:44
+#: src/templates/main/sidebar.html:8
+msgid "Hoşgeldiniz"
+msgstr "Welcome"
+
+#: src/templates/paper_grading/betik_upload.html:13
+msgid "Paper Grading'e ilgi gösterdiğiniz için teşekkürler"
+msgstr "Thank you for your interest in Paper Grading"
+
+#: src/templates/paper_grading/betik_upload.html:14
+msgid "İlk kullanımınızda size nasıl yardımcı olmamızı isterdiniz"
+msgstr "How can we help you for your first time using Paper Grading"
+
+#: src/templates/paper_grading/betik_upload.html:19
+#: src/templates/main/sidebar.html:46
+msgid "Ücretsiz Kredi"
+msgstr "Free Credits"
+
+#: src/templates/paper_grading/betik_upload.html:26
+msgid "Detaylı Kılavuz"
+msgstr "Detailed Guide"
+
+#: src/templates/paper_grading/betik_upload.html:31
+msgid "Canlı Destek"
+msgstr "Live Support"
+
+#: src/templates/paper_grading/betik_upload.html:37
+#: src/templates/paper_grading/betik_upload.html:53
+msgid ""
+"Paper Grading Kurumsal'dan faydalanmak için okulunuz ile iletişime "
+"geçebilirsiniz."
+msgstr "Contact your institution to get an institutional offer."
+
+#: src/templates/paper_grading/betik_upload.html:43
+#: src/templates/paper_grading/betikonay.html:92
+msgid "Yetersiz Kredi"
+msgstr "Insufficient Credit"
+
+#: src/templates/paper_grading/betik_upload.html:45
+msgid "Üzgünüz fakat krediniz yetersiz. Kredi satın almak için tıklayınız"
+msgstr ""
+"We're sorry but you have insufficient credit. To buy more credits, click "
+"here"
+
+#: src/templates/paper_grading/betik_upload.html:49
+#: src/templates/paper_grading/betik_upload.html:290
+#: src/templates/main/sidebar.html:35
+msgid "Kredi Satın Al"
+msgstr "Buy Credits"
+
+#: src/templates/paper_grading/betik_upload.html:58
+msgid "Üzgünüz ama"
+msgstr "We're sorry but"
+
+#: src/templates/paper_grading/betik_upload.html:59
+msgid "Veritabanına kayıtlı olduğunuz kurumun yeterli kredisi kalmamış"
+msgstr "Your institution has out of credits"
+
+#: src/templates/paper_grading/betik_upload.html:60
+#: src/templates/paper_grading/betikonay.html:97
+msgid "Ne yapabilirsiniz"
+msgstr "What can you do"
+
+#: src/templates/paper_grading/betik_upload.html:63
+#: src/templates/paper_grading/betikonay.html:100
+msgid ""
+"Kurumunuz ile iletişime geçip, yeterli kredinizin kalmadığını "
+"aktarabilirsiniz"
+msgstr "You can contact your institution and tell them the credit has finished."
+
+#: src/templates/paper_grading/betik_upload.html:66
+#: src/templates/paper_grading/betikonay.html:103
+msgid ""
+"Bireysel bir kredi satın alımı yapabilirsiniz. Ayrıntılar için <b><a "
+"href=\"/pg/fiyatlar\">tıklayın"
+msgstr ""
+"You can buy Paper Grading credits individually. <b><a "
+"href=\"/pg/pricing\">For more information, click here."
+
+#: src/templates/paper_grading/betik_upload.html:90
+msgid "İsteğe Bağlı"
+msgstr "Optional"
+
+#: src/templates/paper_grading/betik_upload.html:96
+msgid "Sınav Kâğıtları"
+msgstr "Exam Papers"
+
+#: src/templates/paper_grading/betik_upload.html:101
+msgid "Sınav kâğıtlarını seçin"
+msgstr "Upload exam papers"
+
+#: src/templates/paper_grading/betik_upload.html:102
+msgid "ya da sürükleyip bu alana bırakın"
+msgstr "or drag the papers and drop here"
+
+#: src/templates/paper_grading/betik_upload.html:122
+msgid ""
+"Paper Grading <span class=\"vurgu\" type=\"button\"><a data-toggle=\"modal\" "
+"data-target=\"#kullanimSartlariModal\">kullanım sözleşmesini</a></span> "
+"kabul ediyorum"
+msgstr ""
+"I agree with <span class=\"vurgu\" type=\"button\"><a data-toggle=\"modal"
+"\"data-target=\"#kullanimSartlariModal\">Paper Grading terms of "
+"use.</a></span>"
+
+#: src/templates/paper_grading/betik_upload.html:125
+msgid ""
+"Yüklemek üzere olduğum sınavları <a href=\"/nasilyapilir\">Paper Grading "
+"kurallarına göre</a> hazırladım ve uyguladım"
+msgstr ""
+"I've created and conducted the exam according to <a "
+"href=\"/howto\">Paper Grading guide</a>"
+
+#: src/templates/paper_grading/betik_upload.html:129
+msgid ""
+"Sınav kâğıtlarını öğrencilerin kâğıt sırası bozulmadan yükleyiniz. Bir "
+"seferde <b>en fazla 500 MB</b> büyüklüğünde yükleme yapabilirsiniz"
+msgstr ""
+"Upload the papers in an orderly fashion. You can't upload <b>more than "
+"500 MB</b> at once"
+
+#: src/templates/paper_grading/betik_upload.html:130
+msgid ""
+"Eğer beklenmeyen bir tepki ile karşılaşıyorsanız, lütfen <a "
+"href='/iletisim'><b>iletişime</b></a> geçiniz.</p>"
+msgstr ""
+"If you encounter something unexpected, please <a href='/contact' <b>get "
+"in touch with us.</b></a>"
+
+#: src/templates/paper_grading/betik_upload.html:154
+msgid "Onaylanmamış Sınav Kâğıtları"
+msgstr "Not Processed Papers"
+
+#: src/templates/paper_grading/betik_upload.html:164
+msgid "Bütün Kâğıtları Sil"
+msgstr "Delete All Papers"
+
+#: src/templates/paper_grading/betik_upload.html:168
+msgid "Silmeden Devam Et"
+msgstr "Continue Without Deleting"
+
+#: src/templates/paper_grading/betik_upload.html:190
+msgid "Tüm kâğıtlar başarıyla silindi."
+msgstr "All the papers have been deleted."
+
+#: src/templates/paper_grading/betik_upload.html:209
+#: src/templates/kredi/sinav_olustur.html:2465
+msgid "Yükleniyor"
+msgstr "Loading"
+
+#: src/templates/paper_grading/betik_upload.html:214
+msgid "Sınav kâğıtları yükleniyor"
+msgstr "Uploading the exam papers"
+
+#: src/templates/paper_grading/betik_upload.html:225
+msgid "Sınav Kodu Nedir"
+msgstr "What Is Exam Code"
+
+#: src/templates/paper_grading/betik_upload.html:231
+msgid ""
+"Sınav kodları <span class=\"vurgu\"><b>MEB kazanımlarının</b> analiz "
+"edilmesi için</span> kullanılır"
+msgstr ""
+"Exam Codes are used for <span class=\"vurgu\"><b>learning objectives "
+"analyses</b></span>"
+
+#: src/templates/paper_grading/betik_upload.html:232
+msgid ""
+"Eğer sınavınızı Paper Grading Sınav Oluşturma Platformunu kullanarak "
+"hazırladıysanız, sınav kodunu <b>sınav kâğıdının sol kenarında</b> "
+"bulabilirsiniz"
+msgstr ""
+"If you created your exam paper on our platform, you can find the code "
+"<b>on the left side of your exam papers</b>"
+
+#: src/templates/paper_grading/betik_upload.html:272
+msgid "Hoş geldiniz"
+msgstr "Welcome"
+
+#: src/templates/paper_grading/betik_upload.html:273
+msgid "Kalan krediniz"
+msgstr "Remaining credits"
+
+#: src/templates/paper_grading/betik_upload.html:280
+msgid "Dikkat"
+msgstr "Warning"
+
+#: src/templates/paper_grading/betik_upload.html:281
+msgid "Okulunuzun kredisi kalmadığı için bireysel kredi kullanılıyor"
+msgstr "Using your own credit since your institution is out of credits"
+
+#: src/templates/paper_grading/betik_upload.html:283
+msgid "Kurum Kredisi Kullanılıyor"
+msgstr "Using Institution Credits"
+
+#: src/templates/paper_grading/betik_upload.html:287
+#: src/templates/paper_grading/betikonay.html:115
+#: src/templates/main/sidebar.html:32
+msgid "/pg/fiyatlar"
+msgstr "/pg/pricing"
+
+#: src/templates/paper_grading/betikonay.html:7
+msgid "Cevap anahtarını kontrol edelim"
+msgstr "Let's check the answer key"
+
+#: src/templates/paper_grading/betikonay.html:8
+msgid ""
+"Cevap anahtarını son kez kontrol ediniz. Eğer her şey iyi gözüküyorsa, "
+"devam edebilirsiniz"
+msgstr ""
+"Please check the answer key for the last time. If everything looks okay, "
+"you can proceed"
+
+#: src/templates/paper_grading/betikonay.html:12
+msgid "Yanlışlık var, düzeltmek istiyorum"
+msgstr "I want to fix something"
+
+#: src/templates/paper_grading/betikonay.html:13
+msgid "Her şey yolunda, devam edelim"
+msgstr "Everything seems okay, go on"
+
+#: src/templates/paper_grading/betikonay.html:50
+msgid "Dosyalar İşlemde"
+msgstr "Files are being processed"
+
+#: src/templates/paper_grading/betikonay.html:58
+msgid "Beklettiğimiz için özür dileriz. Birazdan devam edebileceksiniz"
+msgstr "Sorry for making you wait, you can go on soon"
+
+#: src/templates/paper_grading/betikonay.html:96
+msgid "Üzgünüz, veritabanına kayıtlı olduğunuz kurumun yeterli kredisi yok"
+msgstr "Sorry, your institution has out of credits"
+
+#: src/templates/paper_grading/betikonay.html:112
+msgid "Üzgünüz, bu kâğıtları okutmak için yeterli krediniz yok"
+msgstr "Sorry you don't have enough credits to grade these papers"
+
+#: src/templates/paper_grading/betikonay.html:115
+msgid "Fiyatlandırma"
+msgstr "Pricing"
+
+#: src/templates/paper_grading/betikonay.html:162
+msgid "Cevap anahtarları"
+msgstr "Answer keys"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:8
+msgid "Sayın"
+msgstr "Dear"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:14
+msgid "Onaylıyor musunuz"
+msgstr "Do you verify"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:19
+msgid "Onaylıyorum"
+msgstr "Verify"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:21
+msgid "Bir Yanlışlık Var"
+msgstr "Something's wrong"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:32
+msgid "Devam Etmek İstiyor Musunuz"
+msgstr "Do You Want To Proceed"
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:33
+msgid "Eğer bir yanlışlık olduğunu düşünüyorsanız, hesabınızı"
+msgstr "If you think this is wrong, <b>you can delete your account</b> from "
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:33
+msgid ""
+"veritabanından <b>silme talebinde</b> bulunabilirsiniz.</p><p><b>Lütfen "
+"bir yanlışlık olduğundan emin olunuz, aksi takdirde kurum temsilciniz ile"
+" tekrar iletişime geçmeniz gerekir"
+msgstr ""
+".</p><p><b> Please make sure that this is a mistake, or else you need to "
+"contact your institution authority."
+
+#: src/templates/paper_grading/ihtimaller/okulda_ama_onaylanmamis.html:38
+msgid "Hesabımı Veritabanından Sil"
+msgstr "Delete My Account From This Institution"
+
+#: src/templates/dp/dp.html:8 src/templates/posts/post.html:21
+msgid "Ana Sayfa"
+msgstr "Main Page"
+
+#: src/templates/dp/dp.html:76 src/templates/dp/dp_gonder.html:47
+msgid "Ders Hakkında Bilgiler"
+msgstr "About The Lesson"
+
+#: src/templates/dp/dp.html:106
+msgid "Dersten Önce Yapılacaklar"
+msgstr "Before Lesson"
+
+#: src/templates/dp/dp.html:121
+msgid "Derse Hazırlık"
+msgstr "Icebreakers"
+
+#: src/templates/dp/dp.html:121 src/templates/dp/dp.html:136
+#: src/templates/dp/dp.html:152 src/templates/dp/dp_gonder.html:136
+#: src/templates/dp/dp_gonder.html:143
+#: src/templates/dp/dp_gonder.html:164
+#: src/templates/dp/dp_gonder.html:171
+#: src/templates/dp/dp_gonder.html:190
+#: src/templates/dp/dp_gonder.html:197
+#: src/templates/dp/dp_gonder.html:216
+#: src/templates/dp/dp_gonder.html:223
+msgid "Dakika"
+msgstr "Minutes"
+
+#: src/templates/dp/dp.html:136
+msgid "Ana Etkinlik"
+msgstr "Main Activity"
+
+#: src/templates/dp/dp.html:152
+msgid "İkinci Ana Etkinlik"
+msgstr "Second Activity"
+
+#: src/templates/dp/dp.html:182 src/templates/dp/dp.html:186
+#: src/templates/dp/dp_gonder.html:241
+msgid "Ders Materyalleri"
+msgstr "Lesson Materials"
+
+#: src/templates/dp/dp.html:208
+msgid "Ders Paketini İndir"
+msgstr "Download Lesson Pack"
+
+#: src/templates/dp/dp.html:216 src/templates/posts/post.html:35
+msgid "Bu yoruma yanıt veriyorsunuz"
+msgstr "You are replying to this"
+
+#: src/templates/dp/dp.html:221 src/templates/posts/post.html:40
+msgid "Yanıtlayın"
+msgstr "Reply"
+
+#: src/templates/dp/dp.html:261 src/templates/posts/post.html:80
+msgid "Siz de yorum ekleyin"
+msgstr "Add Comment"
+
+#: src/templates/dp/dp.html:310 src/templates/posts/post.html:129
+msgid "Lütfen yorum yapmak için giriş yapın."
+msgstr "Please log in to add a comment."
+
+#: src/templates/dp/dp.html:315 src/templates/posts/post.html:134
+msgid "Toplam"
+msgstr "In Total"
+
+#: src/templates/dp/dp.html:327 src/templates/posts/post.html:147
+msgid "Hiç yorum yazılmamış, ilk yorumu yazan siz olun!"
+msgstr "No comments so far, be the first to talk about this!"
+
+#: src/templates/dp/dp.html:336 src/templates/posts/post.html:157
+msgid "Gönderiyi silmek mi istiyorsunuz?"
+msgstr "Do you want to delete this post?"
+
+#: src/templates/dp/dp.html:378 src/templates/posts/post.html:181
+msgid "Puan"
+msgstr "Points"
+
+#: src/templates/dp/dp.html:380 src/templates/posts/post.html:183
+msgid "Profili Gör"
+msgstr "See The Profile"
+
+#: src/templates/dp/dp.html:385
+#: src/templates/kredi/sinav_incele.html:43
+#: src/templates/posts/post.html:188
+msgid "Alkışla"
+msgstr "Like"
+
+#: src/templates/dp/dp.html:385 src/templates/posts/post.html:188
+msgid "Yorum Ekle"
+msgstr "Add A Comment"
+
+#: src/templates/dp/dp.html:385 src/templates/posts/post.html:188
+msgid "Bağlantıyı Kopyala"
+msgstr "Copy URL"
+
+#: src/templates/dp/dp_gonder.html:43
+msgid "Makaleyi açıklayan 160 karakterlik bir özet yazınız."
+msgstr "Write a summary of 160 characters describing the post."
+
+#: src/templates/dp/dp_gonder.html:90
+msgid "Öğrenciler bu ders sonunda hangi bilgi, beceri veya tutumları kazanacak"
+msgstr "What kind of knowledge, skill or attitude will be gained by students"
+
+#: src/templates/dp/dp_gonder.html:105
+msgid "Ders için hangi materyaller gerekli"
+msgstr "What kind of materials are needed"
+
+#: src/templates/dp/dp_gonder.html:120
+msgid "Öğretmenin ders öncesi yapması, dikkat etmesi gereken şeyler neler"
+msgstr "What are the things that teachers should consider before the lesson"
+
+#: src/templates/dp/dp_gonder.html:132
+msgid "Dersin Aşamaları"
+msgstr "Grades Of The Lesson"
+
+#: src/templates/dp/dp_gonder.html:149
+msgid "Dersin ilk aşaması nasıl başlıyor"
+msgstr "How does the lesson start"
+
+#: src/templates/dp/dp_gonder.html:229
+msgid "Öğrenciler, öğrendiklerini hayatlarına nasıl yansıtabilir"
+msgstr "How can students reflect what they learn to the life"
+
+#: src/templates/dp/dp_gonder.html:272
+msgid "Deneyimli Kullanıcılar İçin"
+msgstr "For Advanced Users"
+
+#: src/templates/dp/dp_gonder.html:277
+msgid "Iframe bağlantılarını \"iframe\" etiketi olmadan buraya yapıştırınız"
+msgstr "Paste iframe links without \"iframe\" tags"
+
+#: src/templates/dp/dp_home.html:25
+msgid "Henüz bu dilde ders planı yok"
+msgstr "No lesson plans for this language yet"
+
+#: src/templates/dp/dp_home.html:26
+#: src/templates/posts/home.html:13
+msgid "Siz eklemek ister misiniz"
+msgstr "Would you like to add one"
+
+#: src/templates/dp/dp_home.html:27
+msgid "/dersplanlari/dp_ekle"
+msgstr "/lessonplans/add_lp"
+
+#: src/templates/dp/dp_home.html:27
+msgid "Ders Planı Ekle"
+msgstr "Add A Lesson Plan"
+
+#: src/templates/dp/dp_home.html:42
+#: src/templates/posts/home.html:30
+msgid "Onay Bekliyor"
+msgstr "Pending"
+
+#: src/templates/dp/dp_home.html:57
+msgid "Tarihinde Yazıldı"
+msgstr "Date"
+
+#: src/templates/dp/dp_home.html:102
+msgid "Ders Planlarını Filtreleyin"
+msgstr "Filter Lesson Plans"
+
+#: src/templates/dp/dp_home.html:180
+msgid "Daha Fazla Filtre"
+msgstr "More Filters"
+
+#: src/templates/dp/dp_home.html:184
+msgid "Daha Az Filtre"
+msgstr "Less Filters"
+
+#: src/templates/errors/403.html:5
+msgid "Bunu yapmak için gerekli izniniz yok"
+msgstr "You're not unauthorized to proceed"
+
+#: src/templates/errors/403.html:8
+msgid "İzniniz olmayan bir işlem gerçekleştirmeyi denediniz"
+msgstr "You've requested something that you're not allowed"
+
+#: src/templates/errors/404.html:6
+msgid "Sayfayı bulamadık"
+msgstr "We couldn't find what you're looking for"
+
+#: src/templates/errors/404.html:13
+msgid ""
+"Sayfa bulunamadı, aradığınız gönderi silinmiş olabilir, ya da adresi "
+"yanlış girmiş olabilirsiniz"
+msgstr ""
+"Page wasn't found. It is possible that it's been deleted or you've "
+"written the wrong address."
+
+#: src/templates/errors/500.html:5
+msgid "Bir şeyler yanlış gitti"
+msgstr "Something went wrong"
+
+#: src/templates/errors/500.html:8
+msgid ""
+"Sorun sizde değil, bizde. Lütfen sorunu anlatan bir maili <a "
+"href=\"mailto:info@app.app\">info@app.app</a> adresine gönderiniz"
+msgstr ""
+"It's not you, it's us. Please send an <a "
+"href=\"mailto:info@app.app\">e-mail</a> to us regarding the error "
+"you've faced"
+
+#: src/templates/kredi/_kilavuz_onay.html:5
+msgid "Nasıl Sınav Hazırlanır"
+msgstr "How Can I Create An Exam Paper"
+
+#: src/templates/kredi/_kilavuz_onay.html:8
+msgid ""
+"Sınav hazırlamadan önce, detaylı <b>sınav oluşturma kılavuzunu</b> "
+"incelemeniz kesinlikle önerilmektedir"
+msgstr ""
+"Before creating an exam, it's important that you read detailed "
+"<b>creating an exam guide</b>"
+
+#: src/templates/kredi/_kilavuz_onay.html:9
+msgid "Kılavuza Göz At"
+msgstr "Read The Guide"
+
+#: src/templates/kredi/_kilavuz_onay.html:16
+msgid "Okudum"
+msgstr "Read It"
+
+#: src/templates/kredi/fiyatlar.html:16
+msgid "Ödeme Bilgileri"
+msgstr "Payment Informations"
+
+#: src/templates/kredi/fiyatlar.html:30
+msgid "Kart Numarası"
+msgstr "Card Number"
+
+#: src/templates/kredi/fiyatlar.html:47
+msgid "Kapat"
+msgstr "Close"
+
+#: src/templates/kredi/fiyatlar.html:55
+msgid "Bireysel Krediler"
+msgstr "Individual Credits"
+
+#: src/templates/kredi/fiyatlar.html:56
+msgid ""
+"Paper Grading için hiçbir ön ödeme yapmadan <b>\"kullandığın kadar öde\"</b> "
+"sistemi ile kredi satın alabilirsiniz"
+msgstr ""
+"You can buy credits for Paper Grading with <b>\"pay-as-you-go\"</b> system "
+"without an upfront"
+
+#: src/templates/kredi/fiyatlar.html:62
+msgid "Kredi Miktarı Belirleyin"
+msgstr "Specify An Amount"
+
+#: src/templates/kredi/fiyatlar.html:66
+msgid "Bir sayı girin"
+msgstr "Enter a number"
+
+#: src/templates/kredi/fiyatlar.html:68
+msgid "kredi: 0₺"
+msgstr "credits: 0$"
+
+#: src/templates/kredi/fiyatlar.html:71
+msgid "Tüm kredi satın alımları 12 ay geçerlidir"
+msgstr "All credits are valid for 12 months"
+
+#: src/templates/kredi/fiyatlar.html:72
+msgid "Satın Al"
+msgstr "Buy"
+
+#: src/templates/kredi/fiyatlar.html:78
+msgid "Karar veremediniz mi"
+msgstr "Not sure"
+
+#: src/templates/kredi/fiyatlar.html:79
+msgid "Örneği inceleyin</a> ve"
+msgstr "Take a look at the example</a> and"
+
+#: src/templates/kredi/fiyatlar.html:79
+msgid "Hesaplama yapın"
+msgstr "Calculate"
+
+#: src/templates/kredi/fiyatlar.html:84
+msgid "Eğitim kurumu temsilcisi misiniz"
+msgstr "Are you an institution authority"
+
+#: src/templates/kredi/fiyatlar.html:90
+msgid "Örnek görmek ister misiniz?"
+msgstr "Want to see an example?"
+
+#: src/templates/kredi/fiyatlar.html:91
+msgid ""
+"Sağdaki görselde 10. Sınıf Fizik sınavı görüyorsunuz. Bu örnek sınavı "
+"teorik bir sınıfa uygulayalım ve kredi giderine bakalım"
+msgstr ""
+"You see an example exam paper on the right. Let's calculate how much "
+"credit we need for this exam theoretically"
+
+#: src/templates/kredi/fiyatlar.html:93
+msgid ""
+"Aşağıdaki düğmeden bir sınıf sayısı seçin ve bu örnek sınav için kredinin"
+" nasıl değiştiğini gözlemleyin"
+msgstr "Choose a number of students and see how credits are changing"
+
+#: src/templates/kredi/fiyatlar.html:97
+msgid "bu örnek sınav kâğıdı"
+msgstr "this example exam for"
+
+#: src/templates/kredi/fiyatlar.html:99
+#: src/templates/kredi/fiyatlar.html:102
+#: src/templates/kredi/fiyatlar.html:103
+#: src/templates/kredi/fiyatlar.html:104
+msgid "Kişilik"
+msgstr "Students"
+
+#: src/templates/kredi/fiyatlar.html:107
+msgid "bir sınıf için"
+msgstr "classroom"
+
+#: src/templates/kredi/fiyatlar.html:117
+#: src/templates/kredi/fiyatlar.html:124
+msgid "Örnek Sınav"
+msgstr "Example Exam"
+
+#: src/templates/kredi/fiyatlar.html:129
+msgid "Tutar Tahmini"
+msgstr "Price Calcuator"
+
+#: src/templates/kredi/fiyatlar.html:130
+msgid ""
+"Aşağıdaki formu kullanarak sınavınızın kaç kredi tutacağına dair bir "
+"tahmin elde edebilirsiniz"
+msgstr ""
+"You can gain an insight about how much credits you need using the price "
+"calculator below"
+
+#: src/templates/kredi/fiyatlar.html:221
+msgid "Kredi"
+msgstr "Credits"
+
+#: src/templates/kredi/promosyon_formu.html:14
+#: src/templates/main/iletisim.html:40
+msgid "ile öğretmenler kâğıtlara değil, öğrencilerine zaman ayırır"
+msgstr "teach more, grade less"
+
+#: src/templates/kredi/promosyon_formu.html:17
+msgid "Ücretsiz Kullanım İçin Başvurun"
+msgstr "Apply For Free Credits"
+
+#: src/templates/kredi/promosyon_formu.html:18
+msgid ""
+"Paper Grading'i ilk defa kullanan öğretmenlere <b>ücretsiz 20 kredi armağan "
+"etmekteyiz"
+msgstr "We give 20 credits to teacher who are using Paper Grading for the first time"
+
+#: src/templates/kredi/sinav_olustur.html:23
+msgid "Sınav Oluşturma"
+msgstr "Create An Exam"
+
+#: src/templates/kredi/sinav_olustur.html:26
+msgid "Sınavlar"
+msgstr "Exams"
+
+#: src/templates/kredi/sinav_olustur.html:28
+#: src/templates/kredi/sinavlar.html:16
+msgid "Yeni Sınav"
+msgstr "Create An Exam"
+
+#: src/templates/kredi/sinav_olustur.html:38
+msgid "Bu sınava özgü bir başlık girin"
+msgstr "Enter a title specific to this exam"
+
+#: src/templates/kredi/sinav_olustur.html:38
+#: src/templates/kredi/sinav_olustur.html:40
+#: src/templates/kredi/sinav_olustur.html:42
+#: src/templates/kredi/sinav_olustur.html:44
+msgid "Zorunlu"
+msgstr "Required"
+
+#: src/templates/kredi/sinav_olustur.html:39
+msgid "Sınav Başlığı"
+msgstr "Exam Title"
+
+#: src/templates/kredi/sinav_olustur.html:40
+#: src/templates/kredi/sinav_olustur.html:62
+#: src/templates/kredi/sinavlar_arsiv.html:90
+#: src/templates/rapor/sinav.html:63
+#: src/templates/rapor/sinavlar.html:40
+msgid "Sınıf"
+msgstr "Class"
+
+#: src/templates/kredi/sinav_olustur.html:42
+msgid "Ders seçiniz"
+msgstr "Choose a subject"
+
+#: src/templates/kredi/sinav_olustur.html:44
+msgid "Konu etiketleyiniz"
+msgstr "Tag a topic"
+
+#: src/templates/kredi/sinav_olustur.html:48
+msgid "Üst bilgi"
+msgstr "Header"
+
+#: src/templates/kredi/sinav_olustur.html:49
+msgid "Ör. 2021-2022 Fizik Yazılısı"
+msgstr "E.g. 2021-2022 Physics Quiz"
+
+#: src/templates/kredi/sinav_olustur.html:51
+msgid "Alt bilgi"
+msgstr "Footer"
+
+#: src/templates/kredi/sinav_olustur.html:52
+msgid "Ör."
+msgstr "E.g."
+
+#: src/templates/kredi/sinav_olustur.html:52
+msgid "Öğretmeni"
+msgstr "Teacher"
+
+#: src/templates/kredi/sinav_olustur.html:56
+#: src/templates/kredi/sinav_olustur.html:131
+msgid "Logo Seç"
+msgstr "Choose a logo"
+
+#: src/templates/kredi/sinav_olustur.html:58
+msgid "Seçilen Logo"
+msgstr "Logo"
+
+#: src/templates/kredi/sinav_olustur.html:58
+msgid "Yok"
+msgstr "None"
+
+#: src/templates/kredi/sinav_olustur.html:64
+msgid "Ders"
+msgstr "Subject"
+
+#: src/templates/kredi/sinav_olustur.html:66
+#: src/templates/kredi/sinavlar_arsiv.html:93
+msgid "Konular"
+msgstr "Topics"
+
+#: src/templates/kredi/sinav_olustur.html:69
+msgid "Sayfa düzeni"
+msgstr "Layout"
+
+#: src/templates/kredi/sinav_olustur.html:78
+msgid "Sınavın adını değiştirin"
+msgstr "Change exam name"
+
+#: src/templates/kredi/sinav_olustur.html:81
+msgid "Değiştir"
+msgstr "Change"
+
+#: src/templates/kredi/sinav_olustur.html:86
+msgid "Bu sınavı herkes görebilir"
+msgstr "Everybody can see this exam"
+
+#: src/templates/kredi/sinav_olustur.html:87
+msgid ""
+"Diğer öğretmenlerin de bu sınavı görebilmesini istiyorsanız bu seçeneği "
+"işaretleyin"
+msgstr "If you want other teachers to be able to see this exam, click here"
+
+#: src/templates/kredi/sinav_olustur.html:93
+#: src/templates/rapor/sinav.html:91
+msgid "Bu sınavı sil"
+msgstr "Delete this exam"
+
+#: src/templates/kredi/sinav_olustur.html:97
+msgid "Ayarlar"
+msgstr "Preferences"
+
+#: src/templates/kredi/sinav_olustur.html:100
+msgid "Soru ekle"
+msgstr "Add a question"
+
+#: src/templates/kredi/sinav_olustur.html:105
+msgid ""
+"Sınav Oluşturma platformu hâlâ geliştirme aşamasındadır.\n"
+"                    Fark ettiğiniz hataları lütfen <a "
+"href=\"mailto:info@app.app\">info@app.app</a> adresine ekran \n"
+"                    görüntüsü alarak e-posta atınız"
+msgstr ""
+"We're still developing Paper Grading Exam Creator. Please send us e-mail at <a"
+" href=\"mailto:info@app.app\">info@app.app</a> with a screenshot "
+"should you encounter a problem."
+
+#: src/templates/kredi/sinav_olustur.html:120
+msgid "sample.pdf"
+msgstr "sample_en.pdf"
+
+#: src/templates/kredi/sinav_olustur.html:136
+msgid "önceden yüklediklerinizden seçin"
+msgstr "choose from existing"
+
+#: src/templates/kredi/sinav_olustur.html:140
+msgid "ya da yeni logo yükleyin"
+msgstr "or upload a new one"
+
+#: src/templates/kredi/sinav_olustur.html:161
+msgid "Sınavı Sil"
+msgstr "Delete This Exam"
+
+#: src/templates/kredi/sinav_olustur.html:164
+msgid "Bu sınavı silmek istiyor musunuz? Bu işlem geri alınamaz"
+msgstr "Do you really want to delete this exam? You can't undo this"
+
+#: src/templates/kredi/sinav_olustur.html:167
+msgid "Evet, sınavı sil"
+msgstr "Yes, delete this exam"
+
+#: src/templates/kredi/sinav_olustur.html:180
+#: src/templates/kredi/sinav_olustur.html:199
+msgid "Matematik / Kimya Formülü Ekle"
+msgstr "Add Maths / Chemistry Formula"
+
+#: src/templates/kredi/sinav_olustur.html:185
+msgid "Ekle"
+msgstr "Add"
+
+#: src/templates/kredi/sinav_olustur.html:208
+msgid "Şıkları temizle"
+msgstr "Clear the options"
+
+#: src/templates/kredi/sinav_olustur.html:208
+msgid "Tümünü sil"
+msgstr "Delete all"
+
+#: src/templates/kredi/sinav_olustur.html:212
+msgid "Şuna Ekle"
+msgstr "Add to"
+
+#: src/templates/kredi/sinav_olustur.html:215
+msgid "A Şıkkına"
+msgstr "To option A"
+
+#: src/templates/kredi/sinav_olustur.html:216
+msgid "B Şıkkına"
+msgstr "To option B"
+
+#: src/templates/kredi/sinav_olustur.html:217
+msgid "C Şıkkına"
+msgstr "To option C"
+
+#: src/templates/kredi/sinav_olustur.html:218
+msgid "D Şıkkına"
+msgstr "To option D"
+
+#: src/templates/kredi/sinav_olustur.html:219
+msgid "E Şıkkına"
+msgstr "To option E"
+
+#: src/templates/kredi/sinav_olustur.html:222
+msgid "Tümünü Kaydet"
+msgstr "Save All"
+
+#: src/templates/kredi/sinav_olustur.html:401
+#: src/templates/kredi/sinav_olustur.html:547
+#: src/templates/kredi/sinav_olustur.html:617
+#: src/templates/kredi/sinav_olustur.html:1391
+#: src/templates/kredi/sinav_olustur.html:1505
+#: src/templates/kredi/sinav_olustur.html:1599
+#: src/templates/kredi/sinav_olustur.html:1695
+#: src/templates/kredi/sinav_olustur.html:1805
+#: src/templates/kredi/sinav_olustur.html:1899
+#: src/templates/kredi/sinav_olustur.html:2034
+#: src/templates/kredi/sinav_olustur.html:2134
+#: src/templates/kredi/sinav_olustur.html:2191
+msgid "kazanımla ilişkili"
+msgstr "associated learning objectives"
+
+#: src/templates/kredi/sinav_olustur.html:406
+#: src/templates/kredi/sinav_olustur.html:550
+#: src/templates/kredi/sinav_olustur.html:1388
+#: src/templates/kredi/sinav_olustur.html:1508
+#: src/templates/kredi/sinav_olustur.html:1692
+#: src/templates/kredi/sinav_olustur.html:1808
+#: src/templates/kredi/sinav_olustur.html:1960
+#: src/templates/kredi/sinav_olustur.html:2037
+#: src/templates/kredi/sinav_olustur.html:2188
+msgid "Bu ders için kazanım bulunamadı"
+msgstr "No learning objectives available for this subject"
+
+#: src/templates/kredi/sinav_olustur.html:543
+msgid "Çoktan Seçmeli Sorusu"
+msgstr "Multiple Choice Question"
+
+#: src/templates/kredi/sinav_olustur.html:565
+#: src/templates/kredi/sinav_olustur.html:1523
+#: src/templates/kredi/sinav_olustur.html:1823
+#: src/templates/kredi/sinav_olustur.html:2053
+#: src/templates/kredi/sinav_olustur.html:2525
+msgid "Lütfen en az bir ders seçiniz"
+msgstr "Please choose at least one subject"
+
+#: src/templates/kredi/sinav_olustur.html:571
+#: src/templates/kredi/sinav_olustur.html:1529
+#: src/templates/kredi/sinav_olustur.html:1829
+#: src/templates/kredi/sinav_olustur.html:2059
+msgid "Lütfen bir sınıf seçiniz"
+msgstr "Please choose a grade"
+
+#: src/templates/kredi/sinav_olustur.html:610
+#: src/templates/kredi/sinav_olustur.html:1590
+#: src/templates/kredi/sinav_olustur.html:1890
+#: src/templates/kredi/sinav_olustur.html:2125
+msgid "Kazanım Ekleyin"
+msgstr "Add A Learning Objective"
+
+#: src/templates/kredi/sinav_olustur.html:637
+msgid "Soru Gövdesi (Zorunlu)"
+msgstr "Question Statement (Required)"
+
+#: src/templates/kredi/sinav_olustur.html:646
+#: src/templates/kredi/sinav_olustur.html:1611
+#: src/templates/kredi/sinav_olustur.html:2146
+msgid "Soru Tümcesi"
+msgstr "Question Statement"
+
+#: src/templates/kredi/sinav_olustur.html:647
+#: src/templates/kredi/sinav_olustur.html:1612
+#: src/templates/kredi/sinav_olustur.html:1912
+#: src/templates/kredi/sinav_olustur.html:2147
+msgid "Soru Tümcesi (Zorunlu)"
+msgstr "Question Sentence (Required)"
+
+#: src/templates/kredi/sinav_olustur.html:671
+#: src/templates/kredi/sinav_olustur.html:922
+#: src/templates/kredi/sinav_olustur.html:1176
+#: src/templates/kredi/sinav_olustur.html:2363
+#: src/templates/kredi/sinav_olustur.html:2492
+msgid "Lütfen bir başlık giriniz"
+msgstr "Please enter a title"
+
+#: src/templates/kredi/sinav_olustur.html:681
+#: src/templates/kredi/sinav_olustur.html:1186
+#: src/templates/kredi/sinav_olustur.html:2514
+msgid "Başlık 100 karakterden fazla olamaz"
+msgstr "The title can not be more than 100 characters"
+
+#: src/templates/kredi/sinav_olustur.html:705
+#: src/templates/kredi/sinav_olustur.html:1036
+msgid "Formül tanımlanamadı"
+msgstr "Formula can not be defined"
+
+#: src/templates/kredi/sinav_olustur.html:757
+msgid "Görsel silindi"
+msgstr "Image has been deleted"
+
+#: src/templates/kredi/sinav_olustur.html:866
+msgid "Görsel Yükleyin"
+msgstr "Add An Image"
+
+#: src/templates/kredi/sinav_olustur.html:881
+msgid "Lütfen 4 veya 5 görsel yükleyiniz"
+msgstr "Please choose at least 4 images"
+
+#: src/templates/kredi/sinav_olustur.html:916
+msgid "Görseller yüklendi"
+msgstr "Images have been uploaded"
+
+#: src/templates/kredi/sinav_olustur.html:926
+#: src/templates/kredi/sinav_olustur.html:2366
+msgid "Dosya yüklenemedi"
+msgstr "File could not be uploaded"
+
+#: src/templates/kredi/sinav_olustur.html:932
+msgid "Her bir dosya maksimum 1.5 MB olabilir"
+msgstr "Each file should be smaller than 1.5 MB"
+
+#: src/templates/kredi/sinav_olustur.html:939
+msgid "Formül Yükleyin"
+msgstr "Add A Formula"
+
+#: src/templates/kredi/sinav_olustur.html:1013
+msgid "eklendi"
+msgstr "added"
+
+#: src/templates/kredi/sinav_olustur.html:1069
+msgid "Şık Düzeni"
+msgstr "Options Layout"
+
+#: src/templates/kredi/sinav_olustur.html:1234
+msgid "Diğer seçenekler"
+msgstr "Other settings"
+
+#: src/templates/kredi/sinav_olustur.html:1484
+msgid "Eşleştirme"
+msgstr "Matching"
+
+#: src/templates/kredi/sinav_olustur.html:1501
+msgid "Eşleştirme Sorusu"
+msgstr "Matching Question"
+
+#: src/templates/kredi/sinav_olustur.html:1564
+#: src/templates/kredi/sinav_olustur.html:1864
+#: src/templates/kredi/sinav_olustur.html:2096
+msgid "Geç"
+msgstr "Pass"
+
+#: src/templates/kredi/sinav_olustur.html:1635
+msgid "Sorular alt alta gelsin"
+msgstr "Put the questions one under the other"
+
+#: src/templates/kredi/sinav_olustur.html:1785
+msgid "Doğru Yanlış"
+msgstr "True False"
+
+#: src/templates/kredi/sinav_olustur.html:1801
+msgid "Doğru Yanlış Sorusu"
+msgstr "True False Question"
+
+#: src/templates/kredi/sinav_olustur.html:2030
+msgid "Boşluk Doldurma Sorusu"
+msgstr "Gap Filling Question"
+
+#: src/templates/kredi/sinav_olustur.html:2155
+msgid "Sözcük Kutucuğu"
+msgstr "Helper Words"
+
+#: src/templates/kredi/sinav_olustur.html:2170
+msgid "Paragraf"
+msgstr "Paragraph"
+
+#: src/templates/kredi/sinav_olustur.html:2229
+msgid "Ayarlar için tıklayınız"
+msgstr "Click here for settings"
+
+#: src/templates/kredi/sinav_olustur.html:2249
+msgid "Boyut seçin"
+msgstr "Choose size"
+
+#: src/templates/kredi/sinav_olustur.html:2270
+msgid "En küçük"
+msgstr "Smallest"
+
+#: src/templates/kredi/sinav_olustur.html:2291
+msgid "Boyutun yarısı"
+msgstr "Half"
+
+#: src/templates/kredi/sinav_olustur.html:2313
+msgid "Tam boyut"
+msgstr "Original"
+
+#: src/templates/kredi/sinav_olustur.html:2371
+msgid "Dosya en fazla 1.5 MB olabilir"
+msgstr "The file should be smaller than 1.5 MB"
+
+#: src/templates/kredi/sinav_olustur.html:2482
+msgid "Lütfen en az bir soru giriniz"
+msgstr "Please add at least one question"
+
+#: src/templates/kredi/sinav_olustur.html:2503
+msgid "Lütfen en az bir sınıf seçiniz"
+msgstr "Please specify at least one grade"
+
+#: src/templates/kredi/sinav_olustur.html:2536
+msgid "Lütfen en az bir konu seçiniz"
+msgstr "Please specify at least one topic"
+
+#: src/templates/kredi/sinav_olustur.html:2547
+msgid "Lütfen geçerli bir açıklama giriniz"
+msgstr "Please enter a valid comment"
+
+#: src/templates/kredi/sinav_olustur.html:2604
+msgid "Aynı başlığı daha önce kullanmışsınız"
+msgstr "You have used the same title before"
+
+#: src/templates/kredi/sinav_olustur.html:2614
+msgid "Sınav en fazla 6 sayfa olabilir"
+msgstr "The exam can not be longer than 6 pages"
+
+#: src/templates/kredi/sinav_olustur.html:2624
+msgid "Bir hata oluştu, tüm soruları doldurduğunuzdan emin misiniz"
+msgstr "An error has occured. Are you sure that you have filled all the questions"
+
+#: src/templates/kredi/sinavlar.html:7
+#: src/templates/kredi/sinavlar.html:150
+msgid "/pg/sinavlar/arsiv"
+msgstr "/pg/exams/archive"
+
+#: src/templates/kredi/sinavlar.html:21
+msgid "Dakikalar içinde sınavınızı Paper Grading kurallarına göre hazırlayın"
+msgstr "Create your exam in a few minutes in accordance with Paper Grading template"
+
+#: src/templates/kredi/sinavlar.html:29
+msgid "/pg/sinav/yeni"
+msgstr "/pg/exam/create"
+
+#: src/templates/kredi/sinavlar.html:32
+msgid "Oluştur"
+msgstr "Create An Exam"
+
+#: src/templates/kredi/sinavlar.html:49
+msgid "Sınavı"
+msgstr "Exam"
+
+#: src/templates/kredi/sinavlar.html:54
+msgid "Özel"
+msgstr "Private"
+
+#: src/templates/kredi/sinavlar.html:58
+msgid "Açık"
+msgstr "Visible"
+
+#: src/templates/kredi/sinavlar.html:61
+msgid "/pg/sinav/"
+msgstr "/pg/exam/"
+
+#: src/templates/kredi/sinavlar.html:64
+#: src/templates/kredi/sinavlar_arsiv.html:48
+msgid "Düzenle"
+msgstr "Edit"
+
+#: src/templates/kredi/sinavlar.html:142
+msgid "Hazır Sınavları Kullanın"
+msgstr "Choose From Exam Archive"
+
+#: src/templates/kredi/sinavlar.html:152
+msgid "Gözat"
+msgstr "Browse"
+
+#: src/templates/kredi/sinavlar_arsiv.html:12
+msgid "Hazırladığım Sınavlar"
+msgstr "My Exams"
+
+#: src/templates/kredi/sinavlar_arsiv.html:14
+msgid "Sıralama ölçütü"
+msgstr "Order By"
+
+#: src/templates/kredi/sinavlar_arsiv.html:16
+msgid "Puana göre"
+msgstr "Score"
+
+#: src/templates/kredi/sinavlar_arsiv.html:17
+msgid "Tarihe göre"
+msgstr "Date"
+
+#: src/templates/kredi/sinavlar_arsiv.html:37
+msgid "Siz Hazırladınız"
+msgstr "Created by you"
+
+#: src/templates/kredi/sinavlar_arsiv.html:37
+msgid "Hazırladı"
+msgstr "Created"
+
+#: src/templates/kredi/sinavlar_arsiv.html:42
+msgid "Kişi alkışladı"
+msgstr "Likes"
+
+#: src/templates/kredi/sinavlar_arsiv.html:53
+msgid "İncele"
+msgstr "Browse"
+
+#: src/templates/kredi/sinavlar_arsiv.html:85
+msgid "Sınavları Filtreleyin"
+msgstr "Filter Exams"
+
+#: src/templates/kredi/sinavlar_arsiv.html:116
+#: src/templates/kredi/sinavlar_arsiv.html:125
+#: src/templates/kredi/sinavlar_arsiv.html:137
+msgid "Hepsi"
+msgstr "All"
+
+#: src/templates/main/about.html:5
+msgid "EKİBİMİZ"
+msgstr "OUR TEAM"
+
+#: src/templates/main/about.html:17
+msgid "Kurucu"
+msgstr "Founder"
+
+#: src/templates/main/about.html:20
+msgid "Tam donanımlı geliştirici, İngilizce öğretmeni, girişimci"
+msgstr "Full stack developer, entrepreneur, English teacher"
+
+#: src/templates/main/about.html:21
+msgid "Derin öğrenme, bilgisayarlı görü, eğitim programları"
+msgstr "Deep learning, computer vision, curriculum"
+
+#: src/templates/main/about.html:37
+#: src/templates/main/about.html:57
+msgid "Kurucu Ortak"
+msgstr "Co-Founder"
+
+#: src/templates/main/about.html:40
+msgid "Yıldız Teknik Üniversitesi Eğitim Programları ve Öğretim Doktora öğrencisi"
+msgstr ""
+"PhD student at Yildiz Technical University in Curriculum and Instruction "
+"department"
+
+#: src/templates/main/about.html:41
+msgid ""
+"2017'den beri Eğitim Programları ve Öğretim üzerine araştırmalar "
+"yapmaktadır. Uluslararası hakemli dergilerde çeşitli yayınları vardır"
+msgstr ""
+"She has been conducting research on Curriculum and Instruction since "
+"2017. She has several publications in international peer-reviewed "
+"journals."
+
+#: src/templates/main/about.html:60
+msgid "Agile Partners</a> Kurucu Ortağı"
+msgstr "Co-Founder of Agile Partners</a>"
+
+#: src/templates/main/about.html:61
+msgid "Nar Eğitim & Danışmalık Liderlik Eğitim Uzmanı"
+msgstr "Learning Agility Trainer at Nar Education & Consultancy"
+
+#: src/templates/main/about.html:62
+msgid "Millî Savunma Üniversitesi'nde Öğretim Görevlisi"
+msgstr "Lecturer at National Defence University"
+
+#: src/templates/main/iletisim.html:15
+msgid ""
+"İletiniz bize ulaştı. En yakın zamanda sizinle iletişime geçeceğiz, "
+"ilginiz için teşekkürler."
+msgstr ""
+"We've got your message. We'll get in touch with you as soon as possible. "
+"Thank you for your interest."
+
+#: src/templates/main/iletisim.html:43
+msgid ""
+"Bize ulaşmak için <a href=\"mailto:info@app.app\">info@app.app</a> "
+"adresine e-posta gönderebilir, ya da aşağıdaki formu kullanabilirsiniz"
+msgstr ""
+"To reach us, you can send an email to <a "
+"href=\"mailto:info@app.app\">info@app.app</a> or you can use the form"
+" below"
+
+#: src/templates/main/sidebar.html:38
+msgid "/okul_paneli"
+msgstr "/institution_panel"
+
+#: src/templates/main/sidebar.html:44
+msgid "/iletisim/promosyon"
+msgstr "/contact/free-credit"
+
+#: src/templates/posts/home.html:12
+msgid "Henüz bu dilde yazı yok"
+msgstr "No blog post for this language yet"
+
+#: src/templates/posts/home.html:14
+msgid "/yazilar/yeni"
+msgstr "/blog/new"
+
+#: src/templates/posts/home.html:14
+msgid "Yazı Ekle"
+msgstr "Add A Blog Post"
+
+#: src/templates/posts/home.html:73
+msgid "Yazıları Filtreleyin"
+msgstr "Filter Lesson Plans"
+
+#: src/templates/posts/post.html:17
+msgid "Gönderiyi Sil"
+msgstr "Delete The Post"
+
+#: src/templates/posts/post.html:146
+msgid "Yorumlar"
+msgstr "Comments"
+
+#: src/templates/rapor/index.html:23
+msgid "Okutulan Kâğıtlar"
+msgstr "Graded Papers"
+
+#: src/templates/rapor/index.html:43
+msgid "Okutulan Sorular"
+msgstr "Graded Questions"
+
+#: src/templates/rapor/index.html:63
+msgid "Kalan Kredi"
+msgstr "Remaining credits"
+
+#: src/templates/rapor/index.html:89
+msgid "Kazanılan Zaman"
+msgstr "Time Gained"
+
+#: src/templates/rapor/index.html:90
+msgid "saat"
+msgstr "hours"
+
+#: src/templates/rapor/index.html:112
+msgid "Son Sınav Ortalamaları"
+msgstr "Recent Exam Averages"
+
+#: src/templates/rapor/index.html:129
+msgid "Son Kullanılan Sınavlar"
+msgstr "Recently Graded Exams"
+
+#: src/templates/rapor/ogrenci.html:21
+msgid "Bu öğrenci"
+msgstr "This student"
+
+#: src/templates/rapor/ogrenci.html:42
+msgid "Sınıf ortalamasından"
+msgstr "Compared to average"
+
+#: src/templates/rapor/ogrenci.html:42
+msgid "Ortalama ile"
+msgstr "Compared to average"
+
+#: src/templates/rapor/ogrenci.html:43
+msgid "Aynı puan"
+msgstr "Same score"
+
+#: src/templates/rapor/ogrenci.html:43
+msgid "puan aşağıda"
+msgstr "points lower"
+
+#: src/templates/rapor/ogrenci.html:43
+msgid "puan yukarıda"
+msgstr "points higher"
+
+#: src/templates/rapor/ogrenci.html:58
+msgid "Geri Dön"
+msgstr "Go Back"
+
+#: src/templates/rapor/ogrenci.html:72
+msgid "Detaylı Sonuç"
+msgstr "Detailed Report"
+
+#: src/templates/rapor/ogrenci.html:77
+#: src/templates/rapor/sinav.html:98
+msgid "Kazanım Analizleri"
+msgstr "Learning Objectives Analyses"
+
+#: src/templates/rapor/ogrenci.html:83
+msgid "Rapor Çıktısı"
+msgstr "Report"
+
+#: src/templates/rapor/ogrenci.html:94
+msgid "Soru Tipi"
+msgstr "Type"
+
+#: src/templates/rapor/ogrenci.html:96
+msgid "Beklenen Cevaplar"
+msgstr "Correct Answers"
+
+#: src/templates/rapor/ogrenci.html:97
+msgid "Öğrenci Cevapları"
+msgstr "Student Answers"
+
+#: src/templates/rapor/ogrenci.html:98
+msgid "Sonuç"
+msgstr "Result"
+
+#: src/templates/rapor/ogrenci.html:99
+#: src/templates/rapor/sinav.html:108
+msgid "Önizleme"
+msgstr "Preview"
+
+#: src/templates/rapor/ogrenci.html:110
+#: src/templates/rapor/sinav.html:119
+msgid "En çok doğru yanıt verilen kazanımlar"
+msgstr "Most successful learning objectives"
+
+#: src/templates/rapor/sinav.html:24
+msgid "Öğrenci"
+msgstr "Student"
+
+#: src/templates/rapor/sinav.html:80
+msgid "Tüm Sınavlar"
+msgstr "Exams"
+
+#: src/templates/rapor/sinav.html:95
+msgid "Sınıf Sonucu"
+msgstr "Class Result"
+
+#: src/templates/rapor/sinav.html:132
+#: src/templates/rapor/sinav.html:209
+msgid "Emin Misiniz"
+msgstr "Are you sure"
+
+#: src/templates/rapor/sinav.html:138
+msgid ""
+"Bu sınavı silerseniz bu sınavla ilgili tüm bilgiler geri dönülmez bir "
+"şekilde yok olacaktır"
+msgstr ""
+"If you continue, all of the information related to this exam will be "
+"deleted"
+
+#: src/templates/rapor/sinav.html:139
+#: src/templates/rapor/sinav.html:216
+msgid "Devam etmek istiyor musunuz"
+msgstr "Do you want to proceed"
+
+#: src/templates/rapor/sinav.html:160
+msgid "Bu Sınav Hangi Sınıfa Ait"
+msgstr "Associate This Exam With A Class"
+
+#: src/templates/rapor/sinav.html:185
+msgid "Öğrenci Bilgilerini Düzenle"
+msgstr "Edit Student Information"
+
+#: src/templates/rapor/sinav.html:215
+msgid ""
+"Bu sınav kâğıdını silerseniz bu sınav kâğıdı ile ilgili tüm bilgiler geri"
+" dönülmez bir şekilde yok olacaktır"
+msgstr ""
+"If you continue, all of the information related to this exam will be "
+"deleted"
+
+#: src/templates/rapor/sinavlar.html:17
+msgid "Siz işinize odaklanın, sınavlarınızı Paper Grading okusun"
+msgstr "You focus on your work, let Paper Grading grade your papers"
+
+#: src/templates/rapor/sinavlar.html:35
+msgid "Sınav Adı"
+msgstr "Exam"
+
+#: src/templates/rapor/sinavlar.html:36
+msgid "Ne Zaman Yapıldı"
+msgstr "When"
+
+#: src/templates/rapor/sinavlar.html:37
+#: src/templates/rapor/siniflar.html:35
+msgid "Öğrenci Sayısı"
+msgstr "# of Students"
+
+#: src/templates/rapor/sinavlar.html:38
+#: src/templates/rapor/sinif.html:70
+msgid "Ortalama Puan"
+msgstr "Average"
+
+#: src/templates/rapor/sinif.html:15
+msgid "Tüm Sınıflar"
+msgstr "Classes"
+
+#: src/templates/rapor/sinif.html:19
+msgid "Öğrencileri"
+msgstr "Students"
+
+#: src/templates/rapor/sinif.html:25
+msgid "Eylemler"
+msgstr "Actions"
+
+#: src/templates/rapor/sinif.html:31
+msgid "Öğrenci Ekle"
+msgstr "Add A Student"
+
+#: src/templates/rapor/sinif.html:35
+#: src/templates/rapor/sinif.html:133
+msgid "Sınıfı Sil"
+msgstr "Delete This Class"
+
+#: src/templates/rapor/sinif.html:40
+msgid "Rapor İste"
+msgstr "Request A Report"
+
+#: src/templates/rapor/sinif.html:47
+msgid "Bu sınıfta kimse yok"
+msgstr "Nobody in this class"
+
+#: src/templates/rapor/sinif.html:50
+msgid ""
+"Okuttuğunuz sınav kâğıtlarını eşleştireceğiniz öğrencileri buraya girin. "
+"Bu sınıftaki öğrencilerin dönem ya da yıl boyunca nasıl performans "
+"sergilediğini gözleyin"
+msgstr ""
+"Enter the class list here and track how students perform throughout the "
+"year."
+
+#: src/templates/rapor/sinif.html:55
+msgid "Sınıf Listesi"
+msgstr "Class List"
+
+#: src/templates/rapor/sinif.html:58
+msgid "Raporlar"
+msgstr "Reports"
+
+#: src/templates/rapor/sinif.html:67
+msgid "Öğrenci Adı"
+msgstr "Student Name"
+
+#: src/templates/rapor/sinif.html:68
+msgid "Numarası"
+msgstr "Number"
+
+#: src/templates/rapor/sinif.html:69
+msgid "Girdiği Sınavlar"
+msgstr "Exams Taken"
+
+#: src/templates/rapor/sinif.html:93
+msgid "Öğrenci Listesi"
+msgstr "Student List"
+
+#: src/templates/rapor/sinif.html:101
+msgid "Her bir satıra numara ve öğrencinin adı ve soyadını yazınız"
+msgstr "Write the number and the student's name on each line."
+
+#: src/templates/rapor/sinif.html:140
+msgid "Gerçekten bu sınıfı silmek istiyor musunuz"
+msgstr "Do you want to delete this class"
+
+#: src/templates/rapor/sinif.html:141
+msgid ""
+"Bu sınıfın girdiği sınavlar silinmeyecek fakat sınavlar ile ilişkisi "
+"kesilecek"
+msgstr "Exams linked with this class will not be deleted but they will be unlinked"
+
+#: src/templates/rapor/sinif.html:163
+msgid "Öğrenci Bilgilerini Güncelle"
+msgstr "Update Student Information"
+
+#: src/templates/rapor/sinif.html:170
+msgid "Öğrenci adı"
+msgstr "Student name"
+
+#: src/templates/rapor/sinif.html:176
+msgid "Öğrenci numarası"
+msgstr "Number"
+
+#: src/templates/rapor/sinif.html:200
+msgid "Öğrenciyi Sil"
+msgstr "Delete This Student"
+
+#: src/templates/rapor/sinif.html:206
+msgid "Bu öğrenci kaydını gerçekten silmek istiyor musunuz"
+msgstr "Do you want to delete this student"
+
+#: src/templates/rapor/sinif.html:207
+msgid "Öğrencinin girdiği tüm sınavlar ile ilişkisi kesilecek"
+msgstr "Exams taken by this students will be unlinked"
+
+#: src/templates/rapor/sinif.html:228
+msgid "Rapor İsteği"
+msgstr "Request A Report"
+
+#: src/templates/rapor/siniflar.html:16
+#: src/templates/rapor/siniflar.html:54
+msgid "Yeni Sınıf"
+msgstr "Create A Class"
+
+#: src/templates/rapor/siniflar.html:20
+msgid "İlk sınıfınızı oluşturun"
+msgstr "Create Your First Class"
+
+#: src/templates/rapor/siniflar.html:34
+msgid "Sınıf Adı"
+msgstr "Class Name"
+
+#: src/templates/rapor/siniflar.html:37
+msgid "Sınıf Ortalaması"
+msgstr "Average"
+
+#: src/templates/rapor/siniflar.html:62
+msgid "Sınıfınıza bir ad verelim"
+msgstr "Let's give your class a name"
+
+#: src/templates/rapor/siniflar.html:64
+msgid "Hatırlatma: her sınıfın kendine özgü bir adı olmalıdır"
+msgstr "Reminder: All class names should be unique"
+
+#: src/users/forms.py:12 src/users/forms.py:32
+msgid "Ad ve Soyad"
+msgstr "Name and Surname"
+
+#: src/users/forms.py:13 src/users/forms.py:25
+#: src/users/forms.py:41
+msgid "E-Posta"
+msgstr "E-Mail"
+
+#: src/users/forms.py:14 src/users/forms.py:26
+#: src/users/forms.py:51
+msgid "Şifre"
+msgstr "Password"
+
+#: src/users/forms.py:15 src/users/forms.py:52
+#: src/users/forms.py:59
+msgid "Şifreyi Doğrulayın"
+msgstr "Confirm the password"
+
+#: src/users/forms.py:17 src/users/routes.py:42
+msgid "Kayıt Ol"
+msgstr "Sign Up"
+
+#: src/users/forms.py:22 src/users/forms.py:67
+msgid "Bu e-posta adresi alınmış. Lütfen giriş yapmayı deneyin."
+msgstr "This email was taken. Please log in."
+
+#: src/users/forms.py:27
+msgid "Beni Hatırla"
+msgstr "Remember Me"
+
+#: src/users/forms.py:28 src/users/routes.py:57
+#: src/users/routes.py:81
+msgid "Giriş Yap"
+msgstr "Log In"
+
+#: src/users/forms.py:33
+msgid "Profil Görselinizi Güncelleyin"
+msgstr "Update Your Profile Image"
+
+#: src/users/forms.py:34
+msgid "Kısaca Kendinizden Bahsedin"
+msgstr "Tell Us About Yourself Briefly"
+
+#: src/users/forms.py:35
+msgid "İlgi/Uzmanlık Alanlarınız"
+msgstr "Interests/Proficiencies"
+
+#: src/users/forms.py:36
+msgid "Branşınız"
+msgstr "Subject Area"
+
+#: src/users/forms.py:37
+msgid "LinkedIn Bağlantısı"
+msgstr "LinkedIn"
+
+#: src/users/forms.py:43
+msgid "Şifre Sıfırlama İsteği Gönder"
+msgstr "Send Reset Request"
+
+#: src/users/forms.py:48
+msgid "Bu e-posta ile bağlantılı bir hesap bulunamadı."
+msgstr "No account has found associated with this e-mail."
+
+#: src/users/forms.py:53
+msgid "Şifreyi Sıfırla"
+msgstr "Reset Password"
+
+#: src/users/forms.py:56
+msgid "Yeni E-Posta"
+msgstr "New E-Mail"
+
+#: src/users/forms.py:61
+msgid "E-Posta Adresini Güncelle"
+msgstr "Update E-Mail"
+
+#: src/users/routes.py:40
+msgid ""
+"Hesabınızı etkinleştirmek için e-posta adresine gönderilen bağlantıya "
+"tıklayınız. Lütfen \"Spam\" klasörünüzü kontrol ediniz."
+msgstr ""
+"In order to activate your account, click the link we've sent you. Don't "
+"forget to check your Spam folder."
+
+#: src/users/routes.py:56
+msgid "Çok fazla başarısız giriş denemesi yaptınız."
+msgstr "You have failed to login too many times."
+
+#: src/users/routes.py:62
+msgid ""
+"Engellendiğiniz için Paper Grading'e giriş yapamazsınız. Lütfen İletişim "
+"sayfasından yönetim ile iletişime geçiniz."
+msgstr ""
+"You can't log in because you are banned. Please get in touch with "
+"administration via Contact Us page."
+
+#: src/users/routes.py:75
+msgid "Giriş başarısız. Bu son giriş denemesi."
+msgstr "Invalid login. This is the last login attempt."
+
+#: src/users/routes.py:78
+msgid "Çok fazla yanlış giriş yaptınız. Bir süre giriş yapamazsınız."
+msgstr ""
+"You have failed to to login too many times. You can't attempt for some "
+"time."
+
+#: src/users/routes.py:80
+msgid "Giriş başarısız. Lütfen bilgilerinizi kontrol edin."
+msgstr "Log in failed. Please check your information."
+
+#: src/users/routes.py:116
+msgid "Geçerli bir LinkedIn bağlantısı giriniz."
+msgstr "Please submit a valid LinkedIn link."
+
+#: src/users/routes.py:124
+msgid "Profiliniz güncellendi."
+msgstr "Your profile has been updated."
+
+#: src/users/routes.py:182 src/users/routes.py:190
+msgid "Giriş başarılı."
+msgstr "Successfully logged in."
+
+#: src/users/routes.py:195
+msgid "Google hesabınız etkinleştirilmemiş."
+msgstr "Your Google login attempt failed."
+
+#: src/users/routes.py:215
+msgid ""
+"E-Posta güncelleme isteği yeni adresinize gönderilmiştir. Lütfen \"Spam\""
+" klasörünü kontrol ediniz."
+msgstr "We've sent a code to your e-mail. Don't forget to check your Spam folder."
+
+#: src/users/routes.py:218
+msgid "Geçersiz şifre veya e-posta adresi."
+msgstr "Invalid attempt to log in."
+
+#: src/users/routes.py:220
+msgid "E-Posta Değiştirme İsteği"
+msgstr "Reset E-Mail Request"
+
+#: src/users/routes.py:227
+msgid "E-Posta adresiniz güncellendi."
+msgstr "Your e-mail has been updated."
+
+#: src/users/routes.py:229
+msgid "Geçersiz istek."
+msgstr "Invalid request."
+
+#: src/users/routes.py:244
+msgid ""
+"Doğrulama kodu e-posta adresinize gönderilmiştir. Lütfen \"Spam\" "
+"klasörünüzü kontrol ediniz."
+msgstr "We've sent a code to your e-mail. Don't forget to check your Spam folder."
+
+#: src/users/routes.py:253 src/users/routes.py:269
+msgid "Tek kullanımlık şifreniz geçerli değil."
+msgstr "Invalid code."
+
+#: src/users/routes.py:258
+msgid "Hesabınız etkinleştirildi. Giriş yapabilirsiniz."
+msgstr "Your account has been activated. You can log in."
+
+#: src/users/routes.py:260 src/users/routes.py:278
+#: src/users/routes.py:296
+msgid "Şifre Sıfırla"
+msgstr "Reset Password"
+
+#: src/users/routes.py:276
+msgid "Şifreniz güncellendi. Giriş yapabilirsiniz."
+msgstr "Your password has been updated. You can log in."
+
+#: src/users/routes.py:294
+msgid ""
+"Tek kullanımlık şifreniz e-posta adresinize gönderilmiştir. Lütfen "
+"\"Spam\" klasörünüzü kontrol ediniz."
+msgstr "We've sent a code to your e-mail. Don't forget to check your Spam folder."

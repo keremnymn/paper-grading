@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+{% block betikozel %}
+<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+<link rel="stylesheet" type="text/css" href='{{ url_for("static", filename="cssler/kilavuz.css") }}'>
+
+<body data-spy="scroll" data-target=".idocs-navigation" data-offset="150">
+  <div id="content">
+    
+	<div class="idocs-navigation bg-light">
+      <ul class="nav flex-column ">
+        <li class="nav-item ana"><a class="nav-link active" href="#whatis">What Is Paper Grading?</a>
+        </li>
+        <li class="nav-item ana"><a class="nav-link" href="#creating_exam">Creating An Exam</a>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="#ce_multiple_choice">Adding Multiple Choice Question</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_matching">Adding Matching Question</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_true_false">Adding True False Question</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_gap_filling">Adding Gap Filling Question</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_image">Adding An Image</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_order">Changing The Order</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_objective">Entering A Learning Objective</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ce_archive">Using Exam Archive</a></li>
+          </ul>
+        </li>
+        <li class="nav-item ana"><a class="nav-link" href="#during_exam">During Exam</a>
+		    </li>
+        <li class="nav-item ana"><a class="nav-link" href="#scanning">Scanning The Documents</a>
+          <ul class="nav flex-column">
+            <div class="kategori">
+              <p class="text-muted">Android</p>
+              <hr />
+            </div>
+            <li class="nav-item"><a class="nav-link" href="#galaxy_cam">Using Samsung Galaxy Camera</a></li>
+            <li class="nav-item"><a class="nav-link" href="#android_gs">Using Genius Scan</a></li>
+            <div class="kategori">
+              <p class="text-muted">iOS</p>
+              <hr />
+            </div>
+            <li class="nav-item"><a class="nav-link" href="#ios_photo">Using "Live" Feature</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ios_gs">Using Genius Scan</a></li>
+          </ul>
+        </li>
+        <li class="nav-item ana"><a class="nav-link" href="#answer_key">Entering An Answer Key</a></li>
+        <li class="nav-item ana"><a class="nav-link" href="#detailed_report">Getting The Reports</a>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="#report_class">Associating The Exam With A Class</a></li>
+            <li class="nav-item"><a class="nav-link" href="#report_student">Viewing Detailed Reports Of Students</a></li>
+            <li class="nav-item"><a class="nav-link" href="#report_export">Exporting The Student Report </a></li>
+          </ul>
+        </li>
+        {% if current_user.is_authenticated %}<li class="nav-item border-top mt-2 pt-4"><a class="nav-link" onclick="window.location.href='/pg/panel'"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg> Return To Panel</a>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="idocs-content">
+        <div class="container">
+          <h2 class="baslik display-4 text-center my-4" id="whatis">What Is Paper Grading?</h2>
+          <div class="icerik">
+            {% include '/kilavuzlar/en/guides/main_guide.html' %}
+          </div>
+          <h2 class="baslik display-4 text-center my-4" id="creating_exam">Creating An Exam</h2>
+          <div class="icerik">
+            {% include '/kilavuzlar/en/guides/creating_exam.html' %}
+          </div>
+          <h2 class="baslik display-4 text-center my-4" id="during_exam">During Exam</h2>
+          <div class="icerik">
+            {% include '/kilavuzlar/en/guides/during_exam.html' %}
+          </div>
+          <h2 class="baslik display-4 text-center my-4" id="scanning">Scanning The Documents</h2>
+          <div class="icerik">
+            {% include '/kilavuzlar/en/guides/scanning_exam.html' %}
+          </div>
+          <h2 class="baslik display-4 text-center my-4" id="answer_key">Entering An Answer Key</h2>
+          <div class="icerik">
+            {% include '/kilavuzlar/en/guides/answer_key.html' %}
+          </div>
+          <h2 class="baslik display-4 text-center my-4" id="detailed_report">Getting The Reports</h2>
+          <div class="icerik">
+            {% include '/kilavuzlar/en/guides/detailed_report.html' %}
+          </div>
+        </div>
+    </div>
+  </body>
+<script>
+  const sidebarCollapseButton = document.createElement('button')
+  sidebarCollapseButton.id = 'sidebarCollapse'
+  sidebarCollapseButton.type = "button"
+  sidebarCollapseButton.className = "btn"
+
+  const sidebarSpan = document.createElement('span')
+  sidebarSpan.className = "navbar-toggler-icon"
+  
+  sidebarCollapseButton.appendChild(sidebarSpan)
+  let ekle = document.getElementById("sidebar-button-ekle")
+  let logo = document.getElementById("logo-a")
+  ekle.insertBefore(sidebarCollapseButton, logo)
+
+  const adres = window.location.href
+  let tum = document.getElementsByClassName('ana')
+  if (! adres.includes('#') ) {
+    tum = Array.from(tum).slice(1)
+    for (i=0; i < tum.length; i++) {
+      let adres = tum[i].childNodes[0].href
+      let gizle = document.getElementById(adres.split('#')[1])
+      gizle.style = 'display:none; opacity:0'
+      gizle.nextElementSibling.style = 'display:none; opacity:0'
+    }
+  }
+  else {
+    var olmayanlar = []
+    for (i=0; i < tum.length; i++) {
+      let bu_adres = tum[i].childNodes[0].href
+      if (bu_adres.split('#')[1] != adres.split('#')[1]) {
+        let adres = tum[i].childNodes[0].href
+        let gizle = document.getElementById(adres.split('#')[1])
+        gizle.style = 'display:none; opacity:0'
+        gizle.nextElementSibling.style = 'display:none; opacity:0'
+      }
+    }
+  }
+
+
+  $( ".ana" ).each(function() {
+        $(this).on("click", function(){
+          this.childNodes[0].className = 'nav-link active'
+          let adres = this.childNodes[0].href
+          let goster = document.getElementById(adres.split('#')[1])
+          goster.style = 'display:block; opacity:1'
+          goster.nextElementSibling.style = 'display:block; opacity:1'
+
+          const tum = document.getElementsByClassName('ana')
+          for (i=0; i<tum.length; i++) {
+            if (tum[i] != this) {
+              tum[i].childNodes[0].className = 'nav-link'
+              let adres = tum[i].childNodes[0].href
+              let gizle = document.getElementById(adres.split('#')[1])
+              gizle.style = 'display:none; opacity:0'
+              gizle.nextElementSibling.style = 'display:none; opacity:0'
+            }
+          }
+      });
+  });
+  $('#sidebarCollapse').on('click', function () {
+    $('.idocs-navigation').toggleClass('active');
+  });
+  $('.smooth-scroll,.idocs-navigation a').on('click', function() {
+      event.preventDefault();
+      var sectionTo = $(this).attr('href');
+        $('html, body').stop().animate({
+            scrollTop: $(sectionTo).offset().top - 120}, 200, 'easeInSine');
+      });
+    $( ".editor_img" ).wrap(function() {
+        var yol = $(this).attr('src');
+        return '<div class="text-center"><a href="'+ yol + '" data-fancybox class="fancybox-area"></a><div>';}).parent();
+</script>
+{% endblock betikozel %}

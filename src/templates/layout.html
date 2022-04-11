@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="{{ session['lang_code'] }}">
+
+<head>
+  <!-- KEREM NAYMAN TARAFINDAN GELİŞTİRİLMİŞTİR ~2020~ -->
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Nunito Font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <!-- JavaScript CDN -->
+  <!-- jQuery, Popper.js, Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous" defer></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous" defer></script>
+  {% if current_user.is_authenticated %}<script src="{{ url_for('static', filename='jsler/notifications.js') }}" defer></script>{% endif %}
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="cssler/main.css") }}">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+  
+  <!-- Cookie Alert CSS -->
+  <link loading="lazy" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Wruczek/Bootstrap-Cookie-Alert@gh-pages/cookiealert.css">
+  
+  <title> {% if baslik != 'Paper Grading' %} {{ baslik }} - Paper Grading {% else %} {{ baslik }} {% endif %} </title>
+  {% if baslik == 'Ders Planları' or baslik == 'Lesson Plans' %}
+  <meta name="description" content="{{_('Öğretmenlerin uzaktan eğitimden farklılaştırılmış öğretime kadar
+  günlük ders planları bulabileceği ve paylaşabileceği tek platform')}}">
+  {% elif baslik == 'Yazılar' or baslik == 'Blog' %}
+  <meta name="description" content="{{_('Öğretmenlerin fikirlerini özgürce dile getirdiği makale paylaşım
+  platformu.')}}">
+  {% endif %}
+
+  <meta name="description" content="{{_('Sınav kâğıtlarını okuyabilen yapay zekâ ile tanışın! Paper Grading; doğru yanlış, eşleştirme, çoktan seçmeli ve boşluk doldurma sorularını okuyabilir.')}}">
+  <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', filename='icons/pg_favicon.png') }}"/>
+  {% if post and baslik %}
+    <meta name="description" content="{{ post.ozet }}">
+    <meta name="keywords" content="{% for konu in post.konular %} {{ konu.name }} {% endfor %}">
+    <meta name="author" content="{{ post.author.username }}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="{{ config['S3_BUCKET_NAME'] }}/{{ post.image }}" />
+    <meta property="og:site_name" content="Paper Grading" />
+    <link rel="canonical" href="https://www.pg.com/{{_('yazilar')}}/{{ post.author.id }}/{{ post.slug }}" />
+  {% elif dersplani and baslik %}
+    <meta name="description" content="{{ dersplani.ozet }}">
+    <meta name="keywords" content="{% for ilke in dersplani.ilkeler %}{{ ilke.name }},{% endfor %}{% for tag in dersplani.tags %}{{ tag.name }}{{ ', ' if not loop.last else '' }}{% endfor %}">
+    <meta name="addsearch-category" content="{{ dersplani.ders_adi.name }}" />
+    <meta name="author" content="{{ dersplani.author.name }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.pg.com/{{_('dersplanlari')}}/{{ dersplani.author.id }}/{{ dersplani.slug }}" />
+  {% else %}
+  {% endif %}
+  {% if config['PROD'] %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9BVLHRY2C"></script>
+    <!-- <script data-ad-client="ca-pub-9980177518561342" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  {% endif %}
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T9BVLHRY2C');
+    var csrf_token = "{{ csrf_token() }}";
+    $.ajaxSetup({beforeSend: function(xhr, settings) {if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {xhr.setRequestHeader("X-CSRFToken", csrf_token);}}});
+    jQuery.event.special.touchstart = {setup: function( _, ns, handle ) {this.addEventListener("touchstart", handle, { passive: !ns.includes("noPreventDefault") });}};
+    jQuery.event.special.touchmove = {setup: function( _, ns, handle ) {this.addEventListener("touchmove", handle, { passive: !ns.includes("noPreventDefault") });}};
+    function langDegis(id){$.ajax({method:'POST', type:'text', url: '/lang_degis', data:{'id': id},success:setTimeout(() => {location.href = "/"}, 300)})}
+  </script>
+  {% if cookies_check() %}
+    {# then user has already consented so no requirement for consent banner #}
+  {% else %}
+    {# show a cookie consent banner #}
+    <div class="alert text-center cookiealert" id="cookie-consent-container" role="alert" style="z-index: 1000;">
+      {{_("<b>Çerez Kullanımı</b> &#x1F36A; Sitemizde en iyi deneyimi yaşamanız için çerez kullanmaktayız.") | safe}} 
+      <a href="https://www.pg.com/gizlilik-politikasi" style="color:#95c8d8;" target="_blank">{{_("Gizlilik Politikası")}}</a>
+
+      <button type="button" class="btn btn-primary btn-sm acceptcookies" id="cookie-consent">
+          {{_("Anladım")}}
+      </button>
+  </div>
+    <script>
+        var fn = function () {document.cookie = "cookie_consent=true";document.getElementById('cookie-consent-container').hidden = true;};
+        document.getElementById('cookie-consent').onclick = fn;
+    </script>
+  {% endif %}
+  <!-- Cookie Alert JS -->
+  <script src="https://cdn.jsdelivr.net/gh/Wruczek/Bootstrap-Cookie-Alert@gh-pages/cookiealert.js"></script>
+</head>
+{% if not gosterme %}
+<body>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-light bg-white fixed-top">
+      <div class="container-fluid" id="sidebar-button-ekle">
+        <a class="navbar-brand mr-4" id="logo-a" href="/"><img src="{{ url_for('static', filename='icons/g-plus.svg') }}" id="logo" height="27" class="d-inline-block align-top"> <span id="logo-content">Paper Grading</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+          aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" href="{{_('/pg/sinavlar')}}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-file-plus" viewBox="0 0 16 16">
+              <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"/>
+              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+            </svg> {{ _('Hazırla') }}</a>
+            <a class="nav-item nav-link" href="{{_('/pg/giris/')}}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-file-check" viewBox="0 0 16 16">
+              <path d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+              <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+            </svg> {{ _('Okut') }}</a>
+            {% if not current_user.is_authenticated %}
+            <a class="nav-item nav-link" href="{{_('/nasilyapilir')}}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-question-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+            </svg> {{ _('Nasıl Yapılır?') }}</a>
+            {% else %}
+            <a class="nav-item nav-link" href="{{ url_for('rapor.dashboard') }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-card-heading" viewBox="0 0 16 16">
+              <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+              <path d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-1z"/>
+              </svg> Panel</a>
+            {% endif %}
+            {% if current_user.isadmin %} <a class="nav-item nav-link" href="/admin">Admin Panel</a> {% endif %}
+          </div>
+        </div>
+          <!-- Navbar Right Side -->
+            {% if current_user.is_authenticated %}
+            <div class="navbar-brand sticky-top" id="bildirim-ikonu-div">
+              <div class="dropdown" id="bildirim-ikonu">
+                <a class="nav-item nav-link dropdown-toggle" role="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="bildirim-ikonu"  ><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                  </svg>
+                  <span class="badge badge-pill badge-secondary" id="message_count"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" id="bildirim_ekle" aria-labelledby="dropdownMenuButton2">
+                </div>
+              </div>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav ml-auto" id="collapsednav">
+                <a class="nav-item nav-link" href="{{_('/profil-guncelle')}}"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="mb-1 bi bi-person" viewBox="0 0 16 16">
+                  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                </svg><span class="nav-mobilgoster"> {{_("Profil")}}</span></a>
+                <a class="nav-item nav-link" href="{{_('/cikis')}}"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="mb-1 bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                  <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg><span class="nav-mobilgoster"> {{_("Çıkış Yap")}}</span>
+                </a>
+              </div>
+            </div>
+            <script>
+              let x = (window.matchMedia("(max-width: 767px)").matches) ? document.getElementsByClassName('navbar-toggler')[0].getBoundingClientRect() : document.getElementById('collapsednav').getBoundingClientRect()
+              document.getElementById('bildirim-ikonu-div').style.left = (x.left - 70) + 'px'
+            </script>
+            {% else %}
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link" href="{{_('/giris')}}"><svg xmlns="http://www.w3.org/2000/svg" class="mb-1" width="22" height="22" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+                  <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                </svg> {{_("Giriş")}}</a>
+                <a class="nav-item nav-link" href="{{_('/kayit')}}">{{_("Üye Ol")}}</a>
+              </div>
+            </div>
+            {% endif %}
+      </div>
+    </nav>
+  </header>
+  {% else %}
+  {% endif %}
+  {% block betikozel %}{% endblock %}
+  {% if isIndex %}
+</body>
+</html>
+  {% else %}
+  <main role="main" class="container">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="row" id="mainRow">
+      <div class="col-md-8" style="width:100%;height:auto;">
+        {% block icerik %}{% endblock %}
+      </div>
+      <div class="col-md-4" id="sticky-sidebar" style="z-index: 999;">
+      <div class="sticky-top"  style="top: 8em;">
+        {% block eksidebar %}{% endblock %}
+        {% if not current_user.is_authenticated %}
+        <div class="card dp-header">
+          <div class="card-header">
+            {{_("Henüz üye değil misiniz?")}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{_("Aramıza katılın.")}}</h5>
+            <p class="card-text"><p>{{_("Sınav, ödev, quiz kâğıtlarını okuyabilen yapay zekâ uygulaması Paper Grading'i kullanmaya başlayın!")}}</p>
+            <p>{{_("Ayrıntılı bilgi için <a href='/nasilyapilir'>tıklayınız.")}}</a></p>
+            <a href="{{_('/kayit')}}" class="btn btn-info">{{_("Üye Ol")}}</a>
+          </div>
+        </div>
+        {% endif %}
+        <div class="container" style="background: #ffffff; padding: 10px 20px; border: 1px solid #dddddd; border-radius: 15px; box-shadow: 0px 9px 10px -10px rgb(199, 199, 199);">
+          <h3>{{_("Göz Atın")}}</h3>
+          <p class='text-muted'>{{_("Kılavuzları incelemek ister misiniz?")}}
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-light"><a href="{{_('/nasilyapilir')}}">What is Paper Grading?</a></li>
+            <li class="list-group-item list-group-item-light" ><a href="{{_('/nasilyapilir#sinav_olusturmak')}}">{{_("Nasıl Sınav Hazırlanır?")}}</a></li>
+            <li class="list-group-item list-group-item-light"><a href="{{_('/nasilyapilir#sinav_taratma')}}">{{_("Nasıl Sınav Okutulur?")}}</a></li>
+          </ul>
+          </p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+</body>
+</body>
+</html>
+{% endif %}

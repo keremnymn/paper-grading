@@ -1,0 +1,248 @@
+{% extends "layout.html" %}
+{% block betikozel %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/4.3.0/jquery.bootstrap-touchspin.min.js"></script>
+<script src="{{ url_for('static', filename='jsler/openseadragon-bin-2.4.2/openseadragon.js')}}"></script>
+<script src="{{ url_for('static', filename='jsler/openseadragon-bin-2.4.2/htmlelement.js')}}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='cssler/betik_show_img.css') }}">
+{% if eslestirme_uyarisi %}
+  {% include 'paper_grading/ihtimaller/kazanim_eslestirme_uyarisi.html' %}
+{% endif %}
+  <main role="main" class="container">
+    <div class="row">
+      <div class="col-md-8">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% block script %} {% endblock %}
+            <div class="content-section">
+                <form method="POST" id="cevaplar">
+                {{ form.hidden_tag() }} 
+                <h3 class="text-center" id="_baslik">{{ kagit }}</h3>
+                <div id="myimage" alt="{{ kagit }}" style="width: 100%; height: 600px;"></div>
+                {% for soru in form.sorular %}
+                  {% if kagit == 'Kâğıt 1' or kagit == 'Paper 1' %}
+                    {% set dongu = loop.index0 + 1 %}
+                  {% else %}
+                    {% set dongu = loop.index0 + ksayi %}
+                  {% endif %}
+                <div class="modal" id="{{ soru.label | safe}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{_('Soru')}} {{ dongu }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        {{ st[loop.index0] }}
+                        {{ soru(class="table table-hover", id="tablo") }} 
+                        {% if eslestirme_uyarisi == False %}
+                          <a role="button" id="ayarlar" class="mt-4 d-flex justify-content-between collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <p>{{_('Kazanımlar')}}</p><div class="hr-line"><hr></div></a>  
+                          <div class="collapse" id="collapseExample" aria-expanded="false">
+                            <ul class="list-group list-group-flush">
+                            {% if kazanimlar[dongu - 1] == 'null' %}
+                              <li class="list-group-item">{{_('Bir kazanım ile ilişkili değil')}}.</li>
+                            {% else %}
+                              {% if kazanimlar[dongu - 1] is iterable and (kazanimlar[dongu - 1] is not string and kazanimlar[dongu - 1] is not mapping) %}
+                                  {% for kazanim in kazanimlar[dongu - 1] %}
+                                    {% if kazanim == 'null' %}
+                                      <li class="list-group-item">{{_('Bir kazanım ile ilişkili değil')}}.</li>
+                                      {% else %}
+                                      <li class="list-group-item">{{ kazanim }}</li>
+                                    {% endif %}
+                                  {% endfor %}
+                                  </ul>
+                              {% else %}
+                                <li class="list-group-item">{{ kazanimlar[dongu - 1]}}</li>
+                              {% endif %}
+                            </ul>
+                            {% endif %}
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary"data-dismiss="modal">{{_('Kaydet')}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+                <button class="btn btn-info btn-block" class="mt-2" type="submit">{{_('Kaydet ve İlerle')}} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg></button>
+              </form>
+            </div>
+            <style>
+              #soru_sayisi {
+                font-size: 20px;
+              }
+            </style>
+      </div>
+      <div class="col-md-4" style="text-align:center;" id="mobildesakla">
+        <div class="card">
+        <div class="card-header" style="border-radius: 15px 15px 0 0;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-file-earmark-check" viewBox="0 0 16 16">
+            <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+          </svg> {{_('Cevap Anahtarı Oluşturma')}}
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{_("Kâğıt üzerinde yakınlaştırma yaparak <b>tüm sorulara</b> beklediğiniz yanıtları ve soru değerini girin.") | safe}}</p>
+          <a class="btn btn-info" href="https://pg.com/nasilyapilir#cevap_anahtari">{{_('Cevap Anahtarı Girme Kılavuzu')}}</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" style="border-radius: 15px 15px 0 0; background-color:azure;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-clipboard-data" viewBox="0 0 16 16">
+            <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z"/>
+            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+          </svg> {{_('MEB Kazanımları Analizi')}}
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom: -1px; margin-top: -10px;">{{_('Kazanım analizi durumu')}}</p>
+          {% if eslestirme_uyarisi == '' %}
+          <span class="badge badge-secondary">{{_('Eşleşen sınav bulunamadı')}}</span>
+          {% elif eslestirme_uyarisi == True %}
+          <span class="badge badge-danger">{{_('Girilen sınav kodu kazanımlar ile uyuşmuyor')}}</span>
+          {% else %}
+          <span class="badge badge-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+          </svg> {{_('Kazanım analizi yapılacak')}}</span>
+          {% endif %}
+        </div>
+      </div>
+        <div class="card">
+        <div class="card-header" style="border-radius: 15px 15px 0 0; background-color: aliceblue;">
+          {{_('Lejant')}}
+        </div>
+        <div class="card-body">
+          <h6>{{_('Soru tiplerinin kodları')}}:</h6>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">AS: {{_('Ad Soyad')}}</li>
+            <li class="list-group-item">BD: {{_('Boşluk Doldurma')}}</li>
+            <li class="list-group-item">CS: {{_('Çoktan seçmeli')}}</li>
+            <li class="list-group-item">DY: {{_("Doğru Yanlış / Eşleştirme")}}</li>
+          </ul>
+        </div>
+      </div>
+      {% for i in range(1, magic_num + 1) %}
+        <a href='{{ url_for("paper_grading.cevap_anahtarlari", sayi=i) }}' class="btn btn-secondary btn-sm" role="button">{{_('Kâğıt')}} {{i}}</a>
+      {% endfor %}
+      </div>
+      </div>
+
+      <script defer>
+        var d = new Date(); 
+        var yol = "{{ img_path }}" + "?=ver" + d.getTime();
+        var viewer = OpenSeadragon({
+              id: "myimage",
+              prefixUrl: "{{ url_for('static', filename='jsler/openseadragon-bin-2.4.2/images/')}}",
+              tileSources: {
+                type: 'image',
+                url:  yol,
+                buildPyramid: false
+              },
+              zoomPerClick: 1.3,
+              animationTime: 1.1
+          });
+          viewer.gestureSettingsMouse.clickToZoom = false;
+        viewer.addHandler('open', function() {
+        });
+        var hEl = viewer.HTMLelements()
+        {{ gond | safe}}
+
+        function silinemez_sayi(deger_area) {
+          const sayiArea = document.getElementById(deger_area)
+          sayiArea.addEventListener("keyup", event => {
+            const sayiTarget = event.currentTarget;
+            const sayiCurrentLength = sayiTarget.value.length;
+            if (sayiCurrentLength == 0){
+              sayiArea.value = 0;
+            }
+            if (sayiTarget.value[0] == 0){
+              sayiTarget.value = Number(sayiTarget.value)
+            }
+            if (sayiTarget.value > 50){
+              sayiTarget.value = 50
+            }
+          })
+        }
+        function karaktersay(clicked_id) {
+          var numb = clicked_id.match(/\d/g);
+          numb = numb.join("");
+          numb = parseInt(numb) + 2
+          var kgt = "{{ kagit }}"
+          if (kgt.slice(-1) != 1) {
+            numb = numb + (parseInt({{ksayi}}) - 1)
+          }
+          numb = '#GomuluSoru' + numb
+          const gomuludiv = document.getElementById(numb)
+          const textarea = document.getElementById(clicked_id)
+          textarea.addEventListener("input", event => {
+            const target = event.currentTarget;
+            const currentLength = target.value.length;
+
+            if (currentLength != 0) {
+              gomuludiv.style.backgroundColor = 'rgba(40,200,100,0)'
+            }
+            else {
+              gomuludiv.style.backgroundColor = 'rgba(40,200,100,0.2)'
+            }
+        });
+      }
+      </script>
+      </div>
+      
+        <script>
+          $('body').on('shown.bs.modal', '.modal', function () {
+              $('input:visible:enabled:first', this).focus();
+          })
+        var ilk = document.getElementById("sorular-0-deger")
+        ilk.setAttribute("role","button")
+        ilk.setAttribute("data-toggle","popover")
+        ilk.setAttribute("data-trigger","focus")
+        ilk.setAttribute("data-placement","bottom")
+        ilk.setAttribute("data-content","Soru Değerini Giriniz")
+        $(ilk).popover({
+          trigger: 'focus'
+        })
+        var ilk_cevap = document.getElementById("sorular-0-soru")
+        ilk_cevap.setAttribute("role","button")
+        ilk_cevap.setAttribute("title","İpucu")
+        ilk_cevap.setAttribute("data-toggle","popover")
+        ilk_cevap.setAttribute("data-trigger","focus")
+        ilk_cevap.setAttribute("data-placement","top")
+        ilk_cevap.setAttribute("data-content","{{_('Birden fazla yanıt doğruysa virgül ile ayırabilirsiniz.')}}")
+        $(ilk_cevap).popover({
+          trigger: 'focus'
+        })
+        // mobilde cevap anahtarını sakla.
+        if (screen.width < 768) {
+          var inputs, index;
+
+            inputs = document.getElementsByClassName('yanit');
+            for (index = 0; index < inputs.length; ++index) {
+              inputs[index].setAttribute('placeholder', '{{_("Beklenen Yanıt")}}')
+            };
+          var puanlar, index;
+            
+            puanlar = document.getElementsByClassName('puan');
+            for (index = 0; index < puanlar.length; ++index) {
+              puanlar[index].setAttribute('placeholder', 'Soru Puanı')
+              puanlar[index].setAttribute('style', "font-weight: bold;")
+            };
+        }
+        $('.puan').TouchSpin({
+          min: 0,
+          max: 50,
+          initval: 0
+        });
+        </script>
+  </main>
+{% endblock betikozel %}

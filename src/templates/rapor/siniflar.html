@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% block betikozel %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.2/b-2.0.0/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.2/b-2.0.0/datatables.min.js"></script>
+<script src="{{ url_for('static', filename='jsler/rapor/siniflar.js') }}" defer></script>
+
+<div id="content">
+    
+    {% include 'main/sidebar.html' %}
+    <div class="idocs-content">
+    <div class="container">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">{{_('Sınıflar')}}</h1>
+            <button class="btn btn-primary" type="button" id="yenisinif-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-plus-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" fill="#fff"/>
+              </svg> {{_('Yeni Sınıf')}}</button>
+        </div>
+            {% if current_user.siniflar | length == 0 %}
+            <div class="dp-body text-center">
+                <h2 class="display-5">{{_('İlk sınıfınızı oluşturun')}}.</h2>
+                <img src="{{ url_for('static', filename='icons/undraw_Meet_the_team_re_4h08.svg') }}" loading="lazy" width="40%" class="my-4 illustration">
+                <br>
+                {% if session['lang_code'] == 'tr' %}
+                  <small class="text-muted">Sınıflar, öğrencilerin dönem veya yıl boyunca gösterdiği performansı takip etmek için kullanılır. Bu özelliği kullanmak <span class="vurgu">isteğe bağlıdır.</span></small>
+                {% else %}
+                <small class="text-muted">Classes are for tracking students' performance throughout the year. This feature is totally <span class="vurgu">optional.</span></small>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="col dp-body cell-border compact" style="overflow-x: auto;">
+                <table id="data" class="table">
+                    <thead>
+                        <tr>
+                            <th>{{_('Sınıf Adı')}}</th>
+                            <th>{{_('Öğrenci Sayısı')}}</th>
+                            <th>{{_('Yapılan Sınavlar')}}</th>
+                            <th>{{_('Sınıf Ortalaması')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sinifModal" tabindex="-1" role="dialog" aria-labelledby="sinifModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sinifModalLongTitle">{{_('Yeni Sınıf')}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="POST" id="yenisinif-form">
+                <div class="form-group">
+                    <label for="sinifinput">{{_("Sınıfınıza bir ad verelim")}}.</label>
+                    <input type="text" id="sinifinput" class="form-control" max="150" name="ad" required>
+                    <small class="text-muted">{{_('Hatırlatma: her sınıfın kendine özgü bir adı olmalıdır')}}.</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-x-lg" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#fff"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#fff"/>
+          </svg> {{_('Vazgeç')}}</button>
+          <button type="submit" form="yenisinif-form" class="btn btn-primary" id="gonder"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" fill="#fff"/>
+          </svg> {{_('Kaydet')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock betikozel %}

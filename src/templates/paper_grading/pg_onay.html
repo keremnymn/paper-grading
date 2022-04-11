@@ -1,0 +1,164 @@
+{% extends "layout.html" %}
+{% block icerik %}
+<div class="content-section">
+    <div class="media">
+        <img class="rounded-circle account-img" loading=lazy src="{{ image_file }}">
+        <div class="media-body">
+            <h3>{{_("Cevap anahtarını kontrol edelim")}}.</h2>
+            <p>{{_('Cevap anahtarını son kez kontrol ediniz. Eğer her şey iyi gözüküyorsa, devam edebilirsiniz')}}.</p>
+        </div>
+    </div>
+    <div style="overflow-x:auto;">
+        <a href="{{ url_for("paper_grading.cevap_anahtarlari", sayi=1) }}" class="btn btn-secondary"> <-- {{_('Yanlışlık var, düzeltmek istiyorum')}}. </a>
+        <button class="btn btn-info float-right {% if bekle or not kredi_yetiyor_mu %} disabled" aria-disabled="true" style="margin-bottom: 10px; cursor:default;"{% else %}" onclick=myfunc() style="margin-bottom: 10px;" {% endif %}> {{_("Her şey yolunda, devam edelim")}} --> </button>
+        {{ tablo|safe }}
+    </div>
+</div>
+
+<script>
+  let ths = document.getElementsByTagName('th')
+  let trs = ['Type', 'Points', 'Expected Answers']
+  switch (lang) {
+    case 'en':
+      for (i=0; i < trs.length; i++) {
+       ths[i+2].innerHTML = trs[i]
+      }
+      break;
+  }
+</script>
+
+{% if not bekle %}
+<script>
+    var myfunc = function(){
+    $.ajax({
+          url: "/siraya_al",
+          data: {aydi: '{{current_user.id}}', bekle: '{{ bekle }}', kredi_yetiyor_mu: '{{ kredi_yetiyor_mu }}'},
+          dataType: "text",
+          type: 'POST',
+          success: function() {
+            window.location.href = '/'
+          }
+        });
+    };
+</script>
+{% else %}
+    <!-- Modal -->
+    <div class="modal fade" id="uyari" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header justify-content-center">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{_('Dosyalar İşlemde')}}</h5>
+          </div>
+          <div class="modal-body">
+          <center>
+            <div class="spinner-border text-info" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          <br>
+          {{_('Beklettiğimiz için özür dileriz. Birazdan devam edebileceksiniz')}}.</center>
+          </div>
+      </div>
+      </div>
+  </div>
+<script>
+$(window).on('load', function() {
+  $('#uyari').modal('show');
+});
+$(document).ready(setInterval(function()
+{ 
+    $.ajax({
+      url:"/durum_guncelleme",
+      data: {aydi: '{{ current_user.id }}'},
+      dataType:"text",
+      type: 'POST',
+      success:function(data){
+        console.log(data)
+        if (data == 'tamamlandi'){
+              location.reload();
+            }
+          }
+    });
+}, 3200))//time in milliseconds 
+</script>
+
+{% endif %}
+
+{% if not kredi_yetiyor_mu %}
+    <!-- Modal -->
+    <div class="modal fade" id="uyari" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="exampleModalLongTitle"><center>{{_('Yetersiz Kredi')}}</center></h5>
+          </div>
+          <div class="modal-body">
+            <center>{{_("Üzgünüz, bu kâğıtları okutmak için yeterli krediniz yok")}}.</center>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-primary btn-block ml-1">{{_('Fiyatlandırma')}}</a>
+          </div>
+      </div>
+      </div>
+  </div>
+<script>
+$(window).on('load', function() {
+  $('#uyari').modal('show');
+});
+</script>
+{% endif %}
+
+{% endblock icerik %}
+
+{% block eksidebar %}
+<style>
+  #rov {
+    margin-left: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+  }
+  div.gallery {
+    margin: 5px;
+    align-content: center;
+    border: 1px solid #ccc;
+    float: left;
+    width: 130px;
+  }
+  
+  div.gallery:hover {
+    border: 1px solid #777;
+  }
+  
+  div.gallery img {
+    width: 100%;
+    height: auto;
+  }
+  
+  div.desc {
+    padding: 15px;
+    text-align: center;
+  }
+  </style>
+<div class="row" id="rov">
+    <div class="content-section">
+      <div class="desc">{{_('Cevap anahtarları')}}</div>
+      {% for resim in img_path %}
+      <div class="gallery">
+        <a data-fancybox="gallery" class="fancy_box" href="{{ resim }}" id="kagit">
+          <img class="kagit" loading=lazy src="{{ resim }}" width="100" height="150">
+        </a>
+      </div>
+      {% endfor %}
+      <script language="javascript" type="text/javascript">
+        var d = new Date(); 
+        var goruntuler = document.getElementsByClassName('kagit')
+        var fancy_goruntuler = document.getElementsByClassName('fancy_box')
+        var i;
+        for (i = 0; i < goruntuler.length; i++) {
+          fancy_goruntuler[i].href =  fancy_goruntuler[i].href + "?=ver" + d.getTime();
+          goruntuler[i].src =  goruntuler[i].src + "?=ver" + d.getTime();
+        }
+      </script>
+    </div>
+</div>
+{% endblock eksidebar %}

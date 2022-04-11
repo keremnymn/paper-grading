@@ -1,0 +1,155 @@
+{% extends 'layout.html' %}
+{% block icerik %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/tr.min.js" integrity="sha512-4h/paApp7jGj1wjt7xHsUYfnRGH38LE2DzQWIsflmkTFJdiGBakOBjucqVyjkcrnOsqJ6ow41sJnLVAuXAnpdw==" crossorigin="anonymous"></script>
+
+<h1 class="text-center">{{_('Hazırladığınız Sınavlar')}}</h1>
+<a href="{{_('/pg/sinavlar/arsiv')}}" id="geri" class="float-right">{{_('Sınav Arşivi')}} -></a>
+
+<div class="container dp-body mt-5">
+    <div class="row" style="margin-top:30px">
+        <div class="col-md-4">
+            <div class="card-sl">
+                <div class="card-sl-image">
+                </div>
+                <div class="card-sl-heading">
+                    {{_('Yeni Sınav')}} <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 5px;" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                      </svg>
+                </div>
+                <div class="card-sl-text" style="margin-bottom: -15px;">
+                    Prepare your exam according to Paper Grading rules in minutes
+                </div>
+                <div class="card-sl-text">
+                    <script>
+                        //sonra
+                        moment("20120620", "YYYYMMDD").fromNow();
+                    </script>
+                </div>
+                <a href="{{_('/pg/sinav/yeni')}}" class="card-sl-button btn-primary"><svg style="margin-top: 3px; margin-right: 5px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                    <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                    <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z"/>
+                  </svg> {{_('Oluştur')}}</a>
+            </div>
+        </div>
+    {% if sinavlar.items | length > 0 %}
+        {% for sinav in sinavlar.items %}
+            {% if loop.index == 3 or loop.index == 6 %}
+            </div>
+            <div class="row" style="margin-top:30px">
+                {% endif %}
+                <div class="col-md-4">
+                    <div class="card-sl">
+                        <div class="card-sl-image">
+                        </div>
+                        <div class="card-sl-heading">
+                            {{ sinav.baslik | truncate(15) }}
+                        </div>
+                        <div class="card-sl-text" style="margin-top: -10px;">
+                            <h6>{{ sinav.ders_adi.name | truncate(15) }} {{_('Sınavı')}}</h6>
+                            <p style="margin-bottom: 7px;">{{_('Sınav Kodu')}}: <b>{{ sinav.uuid }}</b></p>
+                            {% if sinav.ozel_mi %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                            </svg> {{_('Özel')}}
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+                                <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"/>
+                            </svg> {{_('Açık')}}
+                            {% endif %}
+                        </div>
+                        <a href="{{_('/pg/sinav/')}}{{ sinav.id }}" class="card-sl-button btn-info"><svg style="margin-top: 3px; margin-right: 5px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg> {{_('Düzenle')}}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<center>
+    {% for page_num in sinavlar.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if sinavlar.page == page_num %}
+          <a class='btn btn-info mb-4', href="{% if session['lang_code'] == 'en' %} {{ url_for('kredi.sinavlar_en', page=page_num) }} {% else %}{{ url_for('kredi.sinavlar', page=page_num) }} {% endif %}"> {{ page_num }} </a>
+        {% else %}
+          <a class='btn btn-outline-info mb-4', href="{% if session['lang_code'] == 'en' %} {{ url_for('kredi.sinavlar_en', page=page_num) }} {% else %}{{ url_for('kredi.sinavlar', page=page_num) }} {% endif %}"> {{ page_num }} </a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+</center>
+
+<style>
+    #geri:hover {
+        color: blueviolet;
+        text-decoration: underline;
+    }
+/* Card Styles */
+.card-sl {
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #dddddd; 
+    border-radius: 15px; 
+    box-shadow: 0px 9px 10px -10px rgb(199, 199, 199);
+    transition: 0.5s;
+}
+.card-sl:hover {
+    transform: translateY(-10px);
+}
+
+.card-sl-image img {
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 15px 15px 0 0;
+}
+
+.card-sl-heading {
+    border-radius: 15px 15px 0 0;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+.card-sl-text {
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.card-sl-button {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+}
+
+.card {
+    text-align: center;
+}
+
+</style>
+{% endblock icerik %}
+{% block eksidebar %}
+<div class="card" style="background: #ffffff;
+    border: 1px solid #dddddd; 
+    border-radius: 15px; 
+    box-shadow: 0px 9px 10px -10px rgb(199, 199, 199);
+    margin-bottom: 20px;">
+        <div class="card-header" style="border-radius: 15px 15px 0 0">
+            <h5 class="mb-0">{{_('Hazır Sınavları Kullanın')}}</h5>
+        </div>
+    <div class="card-body">
+        {% if session['lang_code'] == 'en' %}
+            <p class="card-text">Choose, edit or download exams from our exam archive which has {{ acik_sinavlar }} exams.</p>
+        {% else %}
+            <p class="card-text">Sınav arşivimizde bulunan {{ acik_sinavlar }} sınavdan seçim yapın, düzenleyin ve indirin.</p>
+        {% endif %}
+        <a href="{{_("/pg/sinavlar/arsiv")}}" class="btn btn-secondary btn-block" style="border-radius: 15px;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-folder2-open mb-1 mr-1" viewBox="0 0 16 16">
+            <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.856 1.546l-.64 5.124A2.5 2.5 0 0 1 12.733 15H3.266a2.5 2.5 0 0 1-2.481-2.19l-.64-5.124A1.5 1.5 0 0 1 1 6.14V3.5zM2 6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3H2.5a.5.5 0 0 0-.5.5V6zm-.367 1a.5.5 0 0 0-.496.562l.64 5.124A1.5 1.5 0 0 0 3.266 14h9.468a1.5 1.5 0 0 0 1.489-1.314l.64-5.124A.5.5 0 0 0 14.367 7H1.633z"/>
+          </svg> {{_('Gözat')}}</a>
+    </div>
+</div>
+{% endblock eksidebar %}

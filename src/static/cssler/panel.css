@@ -1,0 +1,91 @@
+.border-left {
+    border-left: 1px solid #e3e6f0 !important;
+}
+.border-left-0 {
+    border-left: 0 !important;
+}
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-secondary {
+    border-left: 0.25rem solid #858796 !important;
+}
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+.text-primary {
+    color: var(--yale) !important;
+}
+
+a.text-primary:hover, a.text-primary:focus {
+    color: var(--steel) !important;
+}
+.text-xs {
+    font-size: .7rem;
+}
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+.text-gray-300 {
+    color: #dddfeb !important;
+}
+.sinavAdi:hover {
+    cursor: auto;
+}
+tr:hover {
+    background-color: aliceblue !important;
+    cursor: pointer;
+    color: black;
+}
+tr {
+    background-color: white !important;
+    color: #003151;
+}
+.degistir:hover {
+    cursor: auto;
+}
+.card-body {
+    padding: 3px;
+}
+.ad-onizleme {
+    transition: 0.3s;
+}
+.ad-onizleme:hover {
+    cursor: pointer;
+    background-color: aliceblue !important;
+}
+.form-control-inline {
+    min-width: 0;
+    max-width: 10rem;
+}
+.input-group-text:hover {
+    cursor: pointer;
+}
+.dikkat {
+    background-color: rgba(255, 255, 0, 0.377) !important;
+}
+.kucuk-card {
+    height: 4rem;
+}
+#baslik-degistir {
+    width: 300px;
+    font-size: 20px;
+    margin-top: -11px;
+}
+.bg-light {
+    height: 100vh;
+}
+@media (max-width: 768px) {
+    .illustration {
+        width: 100%;
+    }
+}

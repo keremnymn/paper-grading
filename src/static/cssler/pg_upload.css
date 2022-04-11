@@ -1,0 +1,58 @@
+#betik_upload {
+    font-size: large;
+ }
+.file-drop-area {
+    background-color: aliceblue;
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    padding: 25px;
+    border: 1px dashed var(--sky);
+    border-radius: 10px;
+    transition: 1s;
+    }
+.file-drop-area:hover{
+    border: 1px solid var(--steel);
+}
+.file-drop-area:hover .fake-btn {
+    background-color: var(--yale);
+}
+.fake-btn {
+    flex-shrink: 0;
+    background-color: var(--steel);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 15px;
+    margin-right: 10px;
+    transition: 0.5s;
+}
+.file-msg {
+    font-weight: 300;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    opacity: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+-moz-appearance: textfield;
+}

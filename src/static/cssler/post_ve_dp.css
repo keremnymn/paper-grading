@@ -1,0 +1,135 @@
+  table.comment-tree .comment a { 
+    overflow: hidden; 
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+  }
+  .yorum-inner-div0{width: 560px;}
+  .yorum-inner-div1{width: 535px;}
+  .yorum-inner-div2{width: 510px;}
+  .yorum-div {
+    margin-top:1px; 
+  }
+  .yorum-img {
+    transform: translateY(10%);
+  }
+  .votelinks {
+    padding-right: 5px; text-align: center;
+  }
+  #yorumgostergizle:hover {
+    opacity: 80%;
+  }
+  .kisitla-dugme:hover {
+    cursor: pointer;
+  }
+    .votearrow {
+      width:      30px;
+      height:     30px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      margin-right: 10px;
+      transition: 0.3s;
+      background: url("/static/icons/clap.svg")
+      no-repeat;
+    }
+  
+    .votearrow-alkislanmis {
+      width:      30px;
+      height:     30px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      margin-right: 10px;
+      background: url("/static/icons/clap-hands.svg")
+      no-repeat;
+    }
+  
+    .votearrow:hover {
+      background: url("/static/icons/clap-hands.svg");
+    }
+  
+    .upvote {
+      width:      20px;
+      height:     20px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      background: url("/static/icons/yes.svg")
+      no-repeat;
+    }
+  
+    .upvote:hover {
+      opacity: 0.5;
+    }
+  
+    .copy-icon {
+      width:      30px;
+      height:     30px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      margin-left: 20px;
+      margin-right: 10px;
+      transition: 0.3s;
+      background: url("/static/icons/copy-button.svg")
+      no-repeat;
+    }
+  
+    .copy-icon:hover {
+      background: url("/static/icons/copy-button-black.svg");
+    }
+  
+    .yorum-icon {
+      width:      30px;
+      height:     30px;
+      border:     0px;
+      margin:     3px 2px 6px;
+      margin-left: 20px;
+      margin-right: 10px;
+      transition: 0.3s;
+      background: url("/static/icons/speech-bubble.svg")
+      no-repeat;
+    }
+    
+    .yorum-icon:hover {
+      background: url("/static/icons/speech-bubble-black.svg");
+    }
+    #alkis-yorum-kayit {
+      margin-top: -10px;
+    }
+
+    #trigger_toggle {
+      float: right;
+    }
+    @media only screen and (max-width: 768px) {
+      #trigger_toggle { max-width: 300px; float: left; display: inline; }
+      #postcard {margin-bottom: 40px;}
+      #mustedited { display: none; }
+      .comment-tree { display: inline; max-width: 300px; overflow: auto; size: 70%;}
+      #yorumyazi {max-width: 300px; display: inline-block;}
+      #alkis-yorum-kayit {position: fixed; bottom:0; width: 100%;-webkit-transition: bottom 2s; transition: bottom 2s; margin-bottom: 0px; margin-left:-14px; border-radius: 0px;box-shadow:0px 0px 0px 0px; z-index: 100;}
+      table {
+        display: block;
+        max-width: -moz-fit-content;
+        max-width: fit-content;
+        margin: 0 auto;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+        /* For mobile phones: */
+        td tr table .comment, .reply {
+          width: 100%;
+          max-width: 300px;
+          display: inline;
+          overflow: auto;
+        }
+        .yorum-inner-div0{width: 70vw;}
+        .yorum-inner-div1{width: 60vw;}
+        .yorum-inner-div2{width: 55vw;}
+    }
+    @media only screen and (min-width: 768px) and (max-width: 1360px) {
+      .yorum-inner-div0{width: 42vw;}
+      .yorum-inner-div1{width: 39vw;}
+      .yorum-inner-div2{width: 36vw;}
+     }
+     @media only screen and (min-width: 280px) and (max-width: 359px) {
+      .yorum-inner-div0{width: 60vw;}
+      .yorum-inner-div1{width: 57vw;}
+      .yorum-inner-div2{width: 50vw;}
+     }

@@ -1,0 +1,269 @@
+{% extends 'layout.html' %}
+{% block icerik %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/tr.min.js" integrity="sha512-4h/paApp7jGj1wjt7xHsUYfnRGH38LE2DzQWIsflmkTFJdiGBakOBjucqVyjkcrnOsqJ6ow41sJnLVAuXAnpdw==" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
+
+<h1 class="text-center">{{ baslik }}</h1>
+
+<div class="row d-flex justify-content-between px-4">
+    <a href="{{_('/pg/sinavlar')}}" id="geri" class="mt-2"><- {{_('Hazırladığım Sınavlar')}}</a>
+    <form class="form-inline">
+        <label for="ölçüt" class="mr-3">{{_('Sıralama ölçütü')}}:</label>
+        <select class="form-control" onchange="olcutDegistir(this)" name="olcut" id="olcut">
+            <option value="puan">{{_('Puana göre')}}</option>
+            <option value="tarih">{{_('Tarihe göre')}}</option>
+        </select>
+    </form>
+</div>
+
+<div class="container dp-body mt-2">
+    <div class="row" style="margin-top:30px">
+    {% if sinavlar.items | length > 0 %}
+        {% for sinav in sinavlar.items %}
+            {% if loop.index == 4 or loop.index == 7 %}
+            </div>
+            <div class="row" style="margin-top:30px">
+                {% endif %}
+                <div class="col-md-4">
+                    <div class="card-sl">
+                        <div class="card-sl-image">
+                        </div>
+                        <div class="card-sl-heading">
+                            {{ sinav.baslik | truncate(15) }}
+                        </div>
+                        <p style="font-size: small;">{% if sinav.sinavi_hazirlayan.id == current_user.id %} {{_('Siz Hazırladınız')}} {% else %}{{ sinav.sinavi_hazirlayan.username }} {{_('Hazırladı')}} {% endif %}</p>
+                        <p style="margin-bottom: 7px; margin-top: -10px;">{{_('Sınav Kodu')}}: <b>{{ sinav.uuid }}</b></p>
+                        <div class="card-sl-text">
+                            <h6>{{ sinav.ders_adi.name | truncate(15) }} Sınavı</h6>
+                            {% for tag in sinav. tags %}{{ tag.name |truncate(5)}} {{ ', ' if not loop.last else '' }}{% endfor %} <br>
+                            {% if sinav.alkis_sayi != 0 %}{{ sinav.alkis_sayi }} {{_('Kişi alkışladı')}} {% endif %}
+                        </div>
+                        {% if sinav.sinavi_hazirlayan.id == current_user.id %}
+                        <a href="/pg/sinav/{{ sinav.id }}" class="card-sl-button btn-info"><svg style="margin-top: 3px; margin-right: 5px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg> {{_('Düzenle')}}</a>
+                        {% else %}
+                        <a href="/pg/sinav/{{ sinav.id }}" class="card-sl-button btn-info"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" fill="currentColor" class="bi bi-eye mr-1" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                          </svg> {{_('İncele')}}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<center>
+    {% for page_num in sinavlar.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+      {% if filtreler != {} %}
+          {% set _dersadi = filtreler['dersler'][0] if 'dersler' in filtreler else '' %}
+          {% set _konular = filtreler['konular'] if 'konular' in filtreler else '' %}
+          {% set _sinif = filtreler['sinif'] if 'sinif' in filtreler else '' %}
+          {% set _olcu = filtreler['olcu'] if 'olcu' in filtreler else '' %}
+      {% endif %}
+        {% if sinavlar.page == page_num %}
+          <a class='btn btn-info mb-4', href="{{ url_for('kredi.sinavlar_arsiv', dersadi=_dersadi, konular=_konular, sinif=_sinif, olcu=_olcu, page=page_num) }}"> {{ page_num }} </a>
+        {% else %}
+          <a class='btn btn-outline-info mb-4', href="{{ url_for('kredi.sinavlar_arsiv', dersadi=_dersadi, konular=_konular, sinif=_sinif, olcu=_olcu, page=page_num) }}"> {{ page_num }} </a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+</center>
+
+{% endblock icerik %}
+{% block eksidebar %}
+<center>
+    <div class="dp-body">
+      <h4>{{_('Sınavları Filtreleyin')}}</h4>
+    <form id="filtre" method="POST">
+        <label for="dersler" onchange="konularFunc(this.value)" style="margin-top: 5px;">{{_('Ders Adı')}}</label>
+        <select id="dersler" name="ders" class="select2" style="width: 100%;"></select>
+
+        <label for="kademeler" style="margin-top: 5px;">{{_('Sınıf')}}</label>
+        <select id="kademeler" name="sınıf" class="select2" style="width: 100%;"></select>
+
+        <label for="konular" id="konular_label" style="display:none;">{{_('Konular')}}</label>
+        <select id="konular" name="konular" class="select2" style="display: none;"></select>
+        
+        <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-outline-info mt-2">{{_('Filtrele')}}</button>
+    </form>
+  </div>
+  </center>
+
+<script>
+    var filtre_form = document.getElementById('filtre')
+    var hidden = document.createElement('input')
+    hidden.name = 'olcut'
+    hidden.style = 'display:none;'
+    filtre_form.appendChild(hidden)
+
+    function olcutDegistir(e) {
+        hidden.value = e.value
+        filtre_form.submit();
+    }
+
+    var kademeler = {{ kademeler | safe }}
+    var kademeler_input = document.getElementById("kademeler");
+    kademeler_input .innerHTML = '<option value="">-- {{_("Hepsi")}} --</option>'
+    for(var i = 0; i < kademeler.length; i++) {
+        var opt = kademeler[i];
+        kademeler_input.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+    }
+    $('#kademeler').select2({language: "tr"});
+
+    var dersler = {{ dersler | safe }}
+    var dersler_input = document.getElementById("dersler"); 
+    dersler_input.innerHTML = '<option value="">-- {{_("Hepsi")}} --</option>'
+    for(var i = 0; i < dersler.length; i++) {
+        var opt = dersler[i];
+        dersler_input.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+    }
+    $('#dersler').select2({language: "tr"});
+
+    var konular_input = document.getElementById("konular"); 
+    var konular_label = document.getElementById('konular_label');
+    var konu_olmayan_dersler = {{ konu_olmayan_dersler | safe }}
+    $('#dersler').on("change", function () {
+        let secilen = $('#dersler').val()
+        if (secilen != '-- {{_("Hepsi")}} --' && secilen.length > 0 && ! konu_olmayan_dersler.includes(secilen)) {
+            $.ajax({
+                url:"/konu_getir",
+                data: {'secilen': secilen},
+                dataType:"text",
+                type: 'POST',
+                success:function(data){
+                    var konular = data
+                    konular = JSON.parse(konular)
+                    konular_input.innerHTML = ''
+                    konular.sort();
+                    for(var i = 0; i < konular.length; i++) {
+                        var opt = konular[i];
+                        konular_input.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+                    }
+                    konular_label.style = 'margin-top:5px;display:inline-block;'
+                    konular_input.style = 'display:inline-block;width:100%;'
+                    $('#konular').select2({
+                        multiple:true,
+                        language: "tr"
+                    });
+                    if (typeof filtreler !== 'undefined' && typeof filtreler['konular'] !== 'undefined' && filtreler['konular'].length > 0) {
+                        $('#konular').val(filtreler['konular']);
+                    }
+                    else {
+                        $('#konular').val(null);
+                    }
+                    $('#konular').trigger('change');
+                    }
+                });
+        }
+        else {
+            if ($("#konular").data('select2')) {
+                $("#konular").select2('destroy');    
+            }
+            konular_input.setAttribute('style', 'display:none;')
+            konular_label.setAttribute('style', 'display:none;')
+        }
+    })
+
+    var filtreler = {{ filtreler | safe }}
+
+    $(function () {
+        if (filtreler.length != 0) {
+            let anahtarlar = Object.keys(filtreler)
+            if (! anahtarlar.includes('konular')) {
+                konular_input.setAttribute('style', 'display:none;')
+                konular_label.setAttribute('style', 'display:none;')
+            }
+            for (i=0; i < anahtarlar.length; i++) {
+                if(anahtarlar[i] == 'olcu') {
+                    let olcu = document.getElementById('olcut')
+                    if (filtreler[anahtarlar[i]] == 'tarih') {
+                        olcu.selectedIndex = 1
+                        hidden.value = 'tarih'
+                    }
+                    else {
+                        hidden.value = 'puan'
+                        olcu.selectedIndex = 0
+                    }
+                    hidden.style = 'display:none;'
+                }
+                else if (anahtarlar[i] == 'dersler') {
+                    let key = anahtarlar[i]
+                    $('#dersler').val(filtreler[key][0])
+                    $('#dersler').trigger('change');
+                }
+                else if (anahtarlar[i] == 'kademeler') {
+                    let key = anahtarlar[i]
+                    $('#kademeler').val(filtreler[key])
+                    $('#kademeler').trigger('change');
+                }
+                else {
+                    let key = anahtarlar[i]
+                    $('#konular').val(filtreler[key])
+                    $('#konular').trigger('change');
+                }
+            }
+        }
+    })
+</script>
+<style>
+    #geri:hover {
+        color: blueviolet;
+        text-decoration: underline;
+    }
+    
+    /* Card Styles */
+    .card-sl {
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #dddddd; 
+        border-radius: 15px; 
+        box-shadow: 0px 9px 10px -10px rgb(199, 199, 199);
+        transition: 0.5s;
+    }
+    .card-sl:hover {
+        transform: translateY(-10px);
+    }
+    
+    .card-sl-image img {
+        max-height: 100%;
+        max-width: 100%;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .card-sl-heading {
+        border-radius: 15px 15px 0 0;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px 15px;
+    }
+    
+    .card-sl-text {
+        padding: 10px 15px;
+        font-size: 12px;
+        margin-top:-10px;
+    }
+    
+    .card-sl-button {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+        width: 100%;
+        border-radius: 0 0 8px 8px;
+    }
+    
+    .card {
+        text-align: center;
+    }
+    
+    </style>
+{% endblock eksidebar %}

@@ -1,0 +1,247 @@
+{% extends 'layout.html' %}
+{% block betikozel %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.2/b-2.0.0/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.2/b-2.0.0/datatables.min.js"></script>
+<script src="{{ url_for('static', filename='jsler/rapor/sinif.js') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='cssler/rapor_eylem_btns.css') }}">
+
+<div id="content">
+    {% include 'main/sidebar.html' %}
+    <div class="idocs-content">
+      <div class="container">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <a href="{{ url_for('rapor.siniflar') }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+              </svg> {{_('Tüm Sınıflar')}}</a>
+              <h1 class="h3 mb-0 text-gray-800" id="baslik"><svg xmlns="http://www.w3.org/2000/svg" id="editBtn" width="24" height="24" fill="currentColor" style="display:none;" class="mb-2 bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                </svg><span onclick="spanSwitch(this)">{{ sinif.name }}</span> {{_('Öğrencileri')}}</h1>
+              <div>
+                <div class="btn-group dropleft">
+                  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter-right" viewBox="0 0 16 16">
+                      <path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z"/>
+                    </svg> {{_('Eylemler')}}
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" id="yeniogrenci-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 mr-1 bi bi-person-plus" viewBox="0 0 16 16">
+                      <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                      <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                    </svg>{{_('Öğrenci Ekle')}}</a>
+                    <a class="dropdown-item" id="sinifisil-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-trash" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>{{_('Sınıfı Sil')}}</a>
+                    <a class="dropdown-item" onclick="raporIstekGonder(this)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-clipboard-data" viewBox="0 0 16 16">
+                      <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z"/>
+                      <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                      <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                    </svg> {{_('Rapor İste')}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% if sinif.ogrenciler | length == 0 %}
+          <div class="dp-body text-center">
+            <h2>{{_('Bu sınıfta kimse yok')}}.</h2>
+            <img src="{{ url_for('static', filename='icons/undraw_Loading_re_5axr.svg') }}" loading="lazy" width="20%" class="my-4 illustration">
+            <br>
+            <small class="text-muted">{{_("Okuttuğunuz sınav kâğıtlarını eşleştireceğiniz öğrencileri buraya girin. Bu sınıftaki öğrencilerin dönem ya da yıl boyunca nasıl performans sergilediğini gözleyin")}}.</small>
+          </div>
+          {% else %}
+          <ul class="nav nav-tabs justify-content-center" style="margin-top: -20px;">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="sinif-tab" data-toggle="tab" href="#sinif" role="tab" aria-controls="sinif" aria-selected="true">{{_('Sınıf Listesi')}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="rapor-tab" data-toggle="tab" href="#rapor" role="tab" aria-controls="rapor" aria-selected="false">{{_("Raporlar")}}</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="sinif" role="tabpanel" aria-labelledby="sinif-tab">
+              <div class="col dp-body cell-border compact" style="overflow-x: auto;">
+                <table id="data" class="table">
+                    <thead>
+                        <tr>
+                            <th>{{_('Öğrenci Adı')}}</th>
+                            <th>{{_('Numarası')}}</th>
+                            <th>{{_('Girdiği Sınavlar')}}</th>
+                            <th>{{_('Ortalama Puan')}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade d-flex justify-content-center" id="rapor" role="tabpanel" aria-labelledby="rapor-tab">
+              <div class="dp-body text-center col-12" id="rapor-col">
+              </div>
+            </div>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+</div>
+
+<!-- Öğrenci Ekle Modal -->
+<div class="modal fade" id="ogrenciEkleModal" tabindex="-1" role="dialog" aria-labelledby="ogrenciEkleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ogrenciEkleModalLongTitle">{{_('Öğrenci Listesi')}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="ogrenciListesiForm">
+          <div class="form-group">
+            <label for="sinifListeInput">{{_("Her bir satıra numara ve öğrencinin adı ve soyadını yazınız")}}.</label>
+            <br>
+            {% if session['lang_code'] == 'tr' %}
+              <small class="text-muted"><span class="vurgu">Numara ve ad soyad arasına tire</span> koyunuz. Örneğin:</small>
+              <textarea class="form-control mt-2" id="sinifListeInput" rows="6" placeholder="412 - Alper Yılmaz&#10;425 - Özge Özdemir&#10;540 - Yaren Türkdemir"></textarea>
+              <small class="text-muted font-italic">Hatırlatma: Eğer alt alta yazılmış sınıf listeniz elinizdeyse, kopyala yapıştır yapabilirsiniz.</small>
+            {% else %}
+              <small class="text-muted"><span class="vurgu">Put a dash between student number and their name</span>. For example:</small>
+              <textarea class="form-control mt-2" id="sinifListeInput" rows="6" placeholder="412 - Alice Harris&#10;425 - Cara Anderson&#10;540 - Albert Howard"></textarea>
+              <small class="text-muted font-italic">Reminder: If you have a class list with this format, you can simply copy and paste.</small>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-x-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#fff"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#fff"/>
+        </svg> {{_('Vazgeç')}}</button>
+        <button type="submit" form="ogrenciListesiForm" class="btn btn-primary" id="sinifListeGonder"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+          <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" fill="#fff"/>
+        </svg> {{_('Kaydet')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sınıfı Sil Modal -->
+<div class="modal fade" id="sinifiSilModal" tabindex="-1" role="dialog" aria-labelledby="sinifiSilModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sinifiSilModalLongTitle">{{_('Sınıfı Sil')}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="ogrenciListesiForm">
+          <p>{{_('Gerçekten bu sınıfı silmek istiyor musunuz')}}?</p>
+          <p>{{_('Bu sınıfın girdiği sınavlar silinmeyecek fakat sınavlar ile ilişkisi kesilecek')}}.</p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-x-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#fff"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#fff"/>
+        </svg> {{_('Vazgeç')}}</button>
+        <button type="submit" class="btn btn-primary" id="sinifSilGonderBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+        </svg> {{_('Sil')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Öğrenci Bilgilerini Güncelle Modal -->
+<div class="modal fade" id="editOgrenciModal" tabindex="-1" role="dialog" aria-labelledby="editOgrenciModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editOgrenciModalLongTitle">{{_('Öğrenci Bilgilerini Güncelle')}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="editOgrenciBody">
+        <div class="form-group row">
+          <label for="isiminput" class="col-sm-4 col-form-label">{{_('Öğrenci adı')}}</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="isiminput" maxlength="70">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="numarainput" class="col-sm-4 col-form-label">{{_('Öğrenci numarası')}}</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="numarainput" maxlength="20">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-x-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#fff"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#fff"/>
+        </svg> {{_('Vazgeç')}}</button>
+        <button type="button" class="btn btn-primary" id="ogrenciBilgileriDegisBtn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+          <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" fill="#fff"/>
+        </svg> {{_('Kaydet')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Öğrenci Sil Modal -->
+<div class="modal fade" id="delOgrenciModal" tabindex="-1" role="dialog" aria-labelledby="delOgrenciModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delOgrenciModalLongTitle">{{_('Öğrenciyi Sil')}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="editOgrenciBody">
+        <p>{{_('Bu öğrenci kaydını gerçekten silmek istiyor musunuz')}}?</p>
+        <p>{{_('Öğrencinin girdiği tüm sınavlar ile ilişkisi kesilecek')}}.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-x-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#fff"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#fff"/>
+        </svg> {{_('Vazgeç')}}</button>
+        <button type="button" class="btn btn-primary" id="ogrenciSilBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+        </svg> {{_('Sil')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Rapor İstek Modal -->
+<div class="modal fade" id="raporIstekModal" tabindex="-1" role="dialog" aria-labelledby="raporIstekModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg text-center role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title w-100" id="raporIstekModalLongTitle">{{_('Rapor İsteği')}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="raporOnayBody">
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mb-1 bi bi-x-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#fff"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#fff"/>
+        </svg> {{_('Vazgeç')}}</button>
+        <button type="button" class="btn btn-primary" id="raporIstekOnay"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+          <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+        </svg> {{_('Onayla')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock betikozel %}
