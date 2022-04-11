@@ -44,7 +44,7 @@ There are some files that you need to configure with your information:
 **Please change the files below according to your information and delete `default` from the filename. For example `.env_default` --> `.env`**
 
 1. [config_default.py](https://github.com/keremnymn/paper-grading/tree/main/src/config_default.py)
-2. [__init___default.py](https://github.com/keremnymn/paper-grading/tree/main/src/__init___default.py)
+2. [__init___default.py](https://github.com/keremnymn/paper-grading/blob/main/src/__init__%20default.py)
 3. [.env_default](https://github.com/keremnymn/paper-grading/tree/main/src/.env_default.py)
 4. [google_vision_api_credentials_default.json](https://github.com/keremnymn/paper-grading/tree/main/src/paper_grading/google_vision_api_credentials_default.json)
 
