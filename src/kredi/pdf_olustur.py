@@ -1669,8 +1669,8 @@ def pdf_yazdir(path, sorular, user_id, pdf_fn, sinav, lang):
     pdf.logo_ad = logo_ad
     dummy.logo_ad = logo_ad
   
-  pdf.set_title('GraidApp')
-  dummy.set_title('GraidApp')
+  pdf.set_title('Paper Grading')
+  dummy.set_title('Paper Grading')
 
   pdf.add_font('ArialUnicode',fname=os.path.join(path,'fonts/arial.ttf'),uni=True)
   pdf.add_font('ArialUnicode',style="I",fname=os.path.join(path,'fonts/ariali.ttf'),uni=True)
@@ -1694,7 +1694,7 @@ def pdf_yazdir(path, sorular, user_id, pdf_fn, sinav, lang):
       pdf.text(x=-80, y=-32, txt=kod_ifadesi + str(sinav.uuid))
       pdf.set_font('ArialUnicode', '', 10)
   
-  pdf.set_author('GraidApp')
+  pdf.set_author('Paper Grading')
   pdf.adsoyad('en' if sorular['ders'] == 'İngilizce' or lang == 'en' else 'tr')
 
   for soru in liste:
