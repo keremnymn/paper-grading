@@ -408,10 +408,6 @@ def onizleme_yukle(path, kagit_adi, _ad, roi):
     return onizleme_adi, onizleme_yol
 
 def koordinat_goster(j, baslangic_sayisi, path, ca):
-    '''
-    gelen listedeki koordinatları openseadragon'a göre düzenle,
-    javascript formatında olarak yazdır. iğrenç oldu ama çalışıyor :)
-    '''
     js = ''
     path = pathlib.Path(os.path.join(path, ca))
 
