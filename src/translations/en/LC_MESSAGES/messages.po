@@ -88,7 +88,7 @@ msgstr "I Agree With Paper Grading Terms Of Use"
 
 #: src/paper_grading/forms.py:16
 msgid "Sınavı Paper Grading Şablonuna Göre Hazırladım"
-msgstr "I prepared the exam according to the GraidaApp template"
+msgstr "I prepared the exam according to the Paper Grading template"
 
 #: src/paper_grading/forms.py:17
 msgid "Yükle ve devam et"

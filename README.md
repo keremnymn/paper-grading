@@ -8,7 +8,7 @@ Paper Grading can evaluate:
 * Gap Filling *(handwritten answers)*
 * Matching
 
-type of questions. After you print an exam paper using Exam Creator in the app, fill the examination and take a photo of it and Paper Grading will evaluate the paper for you.
+type of questions. You can use two exam papers in `examples` folder that were filled by real students to test the AI. Or, you can print an exam paper using Exam Creator in the app, fill the examination and take a photo of it and test Paper Grading AI.
 
 For details, please see [Guides.](src/templates/kilavuzlar/en) *(To take a quick peek, you can use an online HTML editor to prettify the HTMLs)*
 
@@ -21,7 +21,7 @@ There are 5 different AI models. One of them is an object detection model, other
 
 I uploaded AI models to Kaggle, [please find them here](https://www.kaggle.com/datasets/keremnayman/paper-grading-computer-vision-models). After downloading, move the content to `src/paper_grading/modeller`.
 
-Unfortunately I won't provide my dataset for the models, so if you want to continue using them, you need to collect your own data and write your own training script. If you want, you can create an issua and I can try to help.
+Unfortunately I won't provide my dataset for the models, so if you want to continue using them, you need to collect your own data and write your own training script. If you want, you can create an issue and I can try to help.
 
 ## Prerequisites
 * AWS S3 Bucket
